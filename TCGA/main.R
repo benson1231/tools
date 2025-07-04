@@ -5,6 +5,7 @@ library(tibble)
 library(stringr)
 library(ggplot2)
 library(org.Hs.eg.db)
+library(ComplexHeatmap)
 
 
 # load utils --------------------------------------------------------------
@@ -62,8 +63,6 @@ clinical_data <- clinical_file_path %>%
   readRDS()
 
 
-
-
 # RNAseq ------------------------------------------------------------------
 gene_expression <- SummarizedExperiment::assay(exp_data) %>% as.data.frame()
 
@@ -92,6 +91,12 @@ gene_df <- gene_expression %>%
 
 
 
+ComplexHeatmap::Heatmap(gene_df[1:50, 1:50])
+
+
+plot_TN_plot(exp_df = gene_df, target = "TP53")
+
+
 # plot miRNA TN plot ------------------------------------------------------
 exp_df <- exp_data %>% 
   as.data.frame() %>% 
@@ -100,7 +105,7 @@ exp_df <- exp_data %>%
   rename_with(~ str_remove(., "^reads_per_million_miRNA_mapped_"))
 
 
-plot_miRNA_TN_plot(exp_df = exp_df, target = target)
+plot_TN_plot(exp_df = exp_df, target = target)
 
 
 

@@ -1,7 +1,7 @@
 
-# plot_miRNA_TN_plot ------------------------------------------------------------
+# plot_TN_plot ------------------------------------------------------------
 
-plot_miRNA_TN_plot <- function(exp_df, target, log_transform = FALSE, palette = c("normal" = "grey40", "tumor" = "salmon")) {
+plot_TN_plot <- function(exp_df, target, log_transform = FALSE, palette = c("normal" = "grey40", "tumor" = "salmon")) {
   library(dplyr)
   library(tibble)
   library(ggplot2)
@@ -18,7 +18,7 @@ plot_miRNA_TN_plot <- function(exp_df, target, log_transform = FALSE, palette = 
   # Extract sample IDs and determine their sample type code (14th–15th characters)
   sample_info <- colnames(exp_df) %>%
     as_tibble() %>%
-    rename(sample_id = value) %>%
+    setNames("sample_id") %>%
     mutate(sample_type_code = substr(sample_id, 14, 15))
   
   # Print distribution of sample type codes
