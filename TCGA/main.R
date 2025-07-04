@@ -4,6 +4,7 @@ library(dplyr)
 library(tibble)
 library(stringr)
 library(ggplot2)
+library(org.Hs.eg.db)
 
 
 # load utils --------------------------------------------------------------
@@ -17,12 +18,21 @@ TCGA_project_name <- "COAD"
 data_type <- "miRNA_Expression"
 target <- "hsa-mir-8077"
 
-
+data_type <- "Gene_Expression"
 # check input -------------------------------------------------------------
 
 
 # download raw data -------------------------------------------------------
-if(data_type == "miRNA_Expression"){
+message("For more details on query parameters, please refer to: https://www.bioconductor.org/packages/devel/bioc/vignettes/TCGAbiolinks/inst/doc/query.html#Harmonized_data_options")
+
+if(data_type == "Gene_Expression"){
+  query_exp <- GDCquery(
+    project = paste0("TCGA-", TCGA_project_name),
+    data.category = "Transcriptome Profiling",
+    data.type = "Gene Expression Quantification",
+    workflow.type = "STAR - Counts"
+  )
+}else if(data_type == "miRNA_Expression"){
   query_exp <- GDCquery(
     project = paste0("TCGA-", TCGA_project_name),
     data.category = "Transcriptome Profiling",
@@ -51,6 +61,34 @@ exp_data <- exp_file_path %>%
 clinical_data <- clinical_file_path %>% 
   readRDS()
 
+
+
+
+# RNAseq ------------------------------------------------------------------
+gene_expression <- SummarizedExperiment::assay(exp_data) %>% as.data.frame()
+
+# Mapping Ensembl ID to gene symbol
+gene_anno <- AnnotationDbi::select(
+  org.Hs.eg.db,
+  keys = gsub("\\..*", "", rownames(gene_expression)),  # Remove version number
+  columns = c("SYMBOL", "GENENAME"),
+  keytype = "ENSEMBL"
+) %>% 
+  as.data.frame() %>% 
+  filter(!is.na(SYMBOL)) %>%
+  group_by(ENSEMBL) %>%
+  slice_head(n = 1)%>%
+  ungroup()
+
+gene_df <- gene_expression %>% 
+  rownames_to_column("ENSEMBL") %>% 
+  mutate(ENSEMBL = gsub("\\..*", "", ENSEMBL)) %>% 
+  left_join(., gene_anno[,c("ENSEMBL", "SYMBOL")], by = "ENSEMBL") %>% 
+  filter(!is.na(SYMBOL)) %>%
+  dplyr::select(-ENSEMBL) %>%
+  group_by(SYMBOL) %>%
+  summarise(across(where(is.numeric), sum)) %>%    # Aggregate (sum) each SYMBOL
+  column_to_rownames("SYMBOL")
 
 
 
