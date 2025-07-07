@@ -14,15 +14,10 @@ source(utils_path)
 # source("https://raw.githubusercontent.com/benson1231/tools/main/TCGA/utils.R")
 
 
-
 # define variable ---------------------------------------------------------
 output_path <- here("test")
 TCGA_project_name <- "TCGA-OV"
 data_type <- "Gene_Expression"
-target <- ""
-
-
-# check input -------------------------------------------------------------
 
 
 # download raw data -------------------------------------------------------
@@ -73,7 +68,8 @@ gene_df <- gene_expression %>%
   column_to_rownames("SYMBOL")
 
 # sample_info
-sample_info <- get_TCGA_sample_info(colnames(gene_df)) %>%
+meta_data <- get_TCGA_sample_info(colnames(gene_df)) 
+sample_info <- meta_data%>%
   left_join(., clinical_data, by = "submitter_id") %>% 
   mutate(stage = case_when(
     grepl("^Stage I[A-C]?$", figo_stage)     ~ "Stage I",
@@ -88,7 +84,7 @@ sample_info <- get_TCGA_sample_info(colnames(gene_df)) %>%
 
 # These are named vectors where names correspond to sample IDs, and values correspond to the annotation category (e.g., stage or group).
 stage_labels <- setNames(sample_info$stage, sample_info$sample_id)
-group_labels <- setNames(sample_info$group, sample_info$sample_id)
+risk_labels <- setNames(sample_info$risk_group, sample_info$sample_id)
 
 # Define annotation colors
 ann_colors <- list(
@@ -99,15 +95,15 @@ ann_colors <- list(
     "Stage IV" = "#33A02C",
     "Unknown" = "lightgrey"
   ),
-  Group = c(
-    "tumor" = "salmon",
-    "normal" = "grey40"
+  Risk = c(
+    "高" = "salmon",
+    "低" = "grey40"
   )
 )
 
 # Create top annotation
 top_annotation <- HeatmapAnnotation(
-  Group = group_labels,
+  Risk = risk_labels,
   Stage = stage_labels,
   col = ann_colors,
   annotation_name_side = "left"
@@ -119,21 +115,6 @@ plot_TCGA_heatmap(gene_df, top_annotation = top_annotation, target_genes, cluste
 
 # plot TN plot
 plot_TN_plot(exp_df = gene_df, target = "TP53")
-
-
-# plot miRNA TN plot ------------------------------------------------------
-exp_df <- exp_data %>% 
-  as.data.frame() %>% 
-  dplyr::select(miRNA_ID, starts_with("reads_per_million_miRNA_mapped")) %>% 
-  tibble::column_to_rownames("miRNA_ID") %>% 
-  rename_with(~ str_remove(., "^reads_per_million_miRNA_mapped_"))
-
-# sample_info
-sample_info <- get_TCGA_sample_info(colnames(exp_df))
-
-# plot TN plot
-plot_TN_plot(exp_df = exp_df, target = target)
-
 
 
 

@@ -23,11 +23,14 @@ download_TCGA <- function(TCGA_project_name,
     stop("Invalid 'TCGA_project_name'. It must start with 'TCGA-', e.g., 'TCGA-OV'")
   }
   
+  message("Initializing query for TCGA project: ", TCGA_project_name)
+  message("Data type selected: ", data_type)
   message("For details on query parameters, refer to:")
   message("https://www.bioconductor.org/packages/devel/bioc/vignettes/TCGAbiolinks/inst/doc/query.html#Harmonized_data_options")
   
   # Construct query
   if (data_type == "Gene_Expression") {
+    message("Constructing query for gene expression data...")
     query_exp <- GDCquery(
       project = TCGA_project_name,
       data.category = "Transcriptome Profiling",
@@ -35,6 +38,7 @@ download_TCGA <- function(TCGA_project_name,
       workflow.type = "STAR - Counts"
     )
   } else if (data_type == "miRNA_Expression") {
+    message("Constructing query for miRNA expression data...")
     query_exp <- GDCquery(
       project = TCGA_project_name,
       data.category = "Transcriptome Profiling",
