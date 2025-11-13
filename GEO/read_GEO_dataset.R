@@ -2,10 +2,34 @@
 # Function: read_GEO_dataset
 # Author: Benson Lee
 # Description:
-#   Download a GEO dataset by GSE ID, extract expression matrix,
-#   phenotype metadata, and automatically parse "characteristics"
-#   fields into clean variables.
+#   Download a GEO dataset by GSE ID, extract the expression
+#   matrix and phenotype metadata, and automatically parse the
+#   "characteristics" fields into clean variables.
+#
+# Usage:
+#   # Load this function directly from GitHub:
+#   source("https://raw.githubusercontent.com/benson1231/tools/main/GEO/read_GEO_dataset.R")
+#
+#   # Read any GEO dataset (example: GSE53963)
+#   data <- read_GEO_dataset("GSE53963")
+#
+#   # Extract expression matrix and metadata
+#   expr  <- data$expression
+#   pheno <- data$phenotype
+#
+#   # Quick checks
+#   dim(expr)
+#   head(pheno)
+#
+# Note:
+#   This function automatically:
+#     - Downloads the GEO Series Matrix
+#     - Loads the expression matrix (exprs)
+#     - Loads phenotype metadata (pData)
+#     - Detects all 'characteristics_ch1' fields
+#     - Parses them into separate clean variables
 # -----------------------------------------------------------
+
 
 read_GEO_dataset <- function(GSE_id) {
   
