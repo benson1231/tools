@@ -33,8 +33,9 @@
 
 read_GEO_dataset <- function(GSE_id) {
   
-  # Load required package
-  library(GEOquery)
+    if (!requireNamespace("GEOquery", quietly = TRUE)) {
+    stop("Package 'GEOquery' is required but not installed.")
+    }
   
   message("--------------------------------------------------")
   message("Downloading GEO dataset: ", GSE_id)
