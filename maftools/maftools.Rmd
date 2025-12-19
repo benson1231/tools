@@ -1,0 +1,196 @@
+---
+title: "maftools"
+author: "benson1231"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    self_contained: yes
+    css: corp-styles.css
+    highlight: pygments
+vignette: >
+  %\VignetteIndexEntry{01: Summarize, Analyze, and Visualize MAF Files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+`maftools` is an R suite tool for analyzing and visualizing MAF files.
+
+The following analysis and testing are performed according to the official documentation:
+https://bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html
+
+> Mayakonda A, Lin DC, Assenov Y, Plass C, Koeffler HP. 2018. Maftools: efficient and comprehensive analysis of somatic variants in cancer. Genome Research. PMID: 30341162
+
+### Download maftools and create `results/` folder
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+if (!requireNamespace("maftools", quietly = TRUE)) {
+    BiocManager::install("maftools", update = FALSE, ask = FALSE)
+}
+
+# create `results/` folder
+if (!dir.exists("results")) dir.create("results", recursive = TRUE)
+```
+
+### Read the MAF files
+
+```{r}
+library(maftools)
+
+#path to TCGA LAML MAF file
+laml.maf = system.file('extdata', 'tcga_laml.maf.gz', package = 'maftools') 
+#clinical information containing survival information and histology. This is optional
+laml.clin = system.file('extdata', 'tcga_laml_annot.tsv', package = 'maftools') 
+
+laml = read.maf(maf = laml.maf, clinicalData = laml.clin)
+```
+
+### Show MAF object
+
+```{r}
+#Typing laml shows basic summary of MAF file.
+laml
+```
+
+### Write maf summary
+
+```{r}
+#Shows sample summry.
+getSampleSummary(laml)
+#Shows gene summary.
+getGeneSummary(laml)
+#shows clinical data associated with samples
+getClinicalData(laml)
+#Shows all fields in MAF
+getFields(laml)
+#Writes maf summary to an output file with basename laml.
+write.mafSummary(maf = laml, basename = 'results/laml')
+```
+
+
+### MAF summary
+
+```{r}
+plotmafSummary(maf = laml, rmOutlier = TRUE, addStat = 'median', dashboard = TRUE, titvRaw = FALSE)
+```
+
+### oncoplot
+
+```{r}
+#oncoplot for top ten mutated genes.
+oncoplot(maf = laml, top = 10)
+```
+
+### Transition and Transversions
+
+```{r}
+laml.titv = titv(maf = laml, plot = FALSE, useSyn = TRUE)
+#plot titv summary
+plotTiTv(res = laml.titv)
+```
+
+### Lollipop plots for amino acid changes
+
+```{r}
+#lollipop plot for DNMT3A, which is one of the most frequent mutated gene in Leukemia.
+lollipopPlot(
+  maf = laml,
+  gene = 'DNMT3A',
+  AACol = 'Protein_Change',
+  showMutationRate = TRUE,
+  labelPos = 882
+)
+```
+
+### Custom data as an input
+
+```{r}
+#example data
+my_data = data.frame(pos = sample.int(912, 15, replace = TRUE), count = sample.int(30, 15, replace = TRUE))
+head(my_data)
+
+lollipopPlot(data = my_data, gene = "DNMT3A")
+
+plotProtein(gene = "TP53", refSeqID = "NM_000546")
+```
+
+### Rainfall plots
+
+
+```{r}
+brca <- system.file("extdata", "brca.maf.gz", package = "maftools")
+brca = read.maf(maf = brca, verbose = FALSE)
+
+rainfallPlot(maf = brca, detectChangePoints = TRUE, pointSize = 0.4)
+```
+
+### Compare mutation load against TCGA cohorts
+
+```{r}
+laml.mutload = tcgaCompare(maf = laml, cohortName = 'Example-LAML', logscale = TRUE, capture_size = 50)
+```
+
+
+### Plotting VAF
+
+```{r}
+plotVaf(maf = laml, vafCol = 'i_TumorVAF_WU')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
