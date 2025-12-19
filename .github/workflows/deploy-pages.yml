@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - '**/*.html'
+      - 'scripts/**'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
