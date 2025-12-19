@@ -4,9 +4,10 @@ set -euo pipefail
 OUTPUT_DIR="public"
 REPORT_DIR="$OUTPUT_DIR/reports"
 
+echo "==> Creating output directories..."
 mkdir -p "$REPORT_DIR"
 
-echo "Generating index.html..."
+echo "==> Starting index.html generation..."
 
 cat <<EOF > $OUTPUT_DIR/index.html
 <!DOCTYPE html>
@@ -29,31 +30,41 @@ cat <<EOF > $OUTPUT_DIR/index.html
 <hr>
 EOF
 
-# 尋找所有專案資料夾，例如 maftools/、WGS/、RNAseq/
+echo "==> Scanning project directories..."
+
+# Find all project-level directories at the repo root
 PROJECTS=$(find . -maxdepth 1 -type d \
           -not -path "." -not -path "./public" -not -path "./scripts")
 
 for project in $PROJECTS; do
   PROJ_NAME=$(basename "$project")
-  
-  # 搜索該專案的 HTML
+  echo "----> Checking project: $PROJ_NAME"
+
+  # Find HTML files inside the project
   HTML_FILES=$(find "$project" -name "*.html")
-  
+
   if [[ -z "$HTML_FILES" ]]; then
+    echo "     No HTML files found in $PROJ_NAME -> skipping"
     continue
   fi
 
+  echo "     Found HTML files, adding section to index..."
+
+  # Add header section for this project
   echo "<h2>$PROJ_NAME</h2>" >> $OUTPUT_DIR/index.html
 
-  # 建立 reports/${project}/
-  mkdir -p "$REPORT_DIR/$PROJ_NAME"
-  
-  # 複製整個專案資料夾（包含 .css / .html / .png 等）
-  cp -r "$project/"* "$REPORT_DIR/$PROJ_NAME" 2>/dev/null || true
+  # Create output folder: public/reports/<project>/
+  TARGET_PROJ_DIR="$REPORT_DIR/$PROJ_NAME"
+  mkdir -p "$TARGET_PROJ_DIR"
+  echo "     Copying project files into $TARGET_PROJ_DIR"
 
-  # 為 index 建立連結
+  # Copy all project files (HTML, CSS, PNG, TSV, JS, etc.)
+  cp -r "$project/"* "$TARGET_PROJ_DIR" 2>/dev/null || true
+
+  # Add HTML links for this project
   for f in $HTML_FILES; do
     NAME=$(basename "$f")
+    echo "     Adding link: $NAME"
     echo "<div class='card'><a href='./reports/$PROJ_NAME/$NAME'>$NAME</a></div>" >> $OUTPUT_DIR/index.html
   done
 
@@ -61,4 +72,12 @@ done
 
 echo "</body></html>" >> $OUTPUT_DIR/index.html
 
-echo "index.html generated successfully."
+echo "==> index.html generated successfully!"
+
+echo ""
+echo "==> Listing deployed contents under public/:"
+echo "-------------------------------------------------"
+ls -R $OUTPUT_DIR
+echo "-------------------------------------------------"
+
+echo "==> Done."
