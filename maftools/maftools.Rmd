@@ -46,6 +46,8 @@ if (!dir.exists("results")) dir.create("results", recursive = TRUE)
 
 # 讀取與總結 maf 檔
 
+- 可以使用 [vcf2maf](https://github.com/mskcc/vcf2maf) 將 vcf 轉 maf
+
 ## 讀取 maf 檔
 
 ```{r}
@@ -154,13 +156,77 @@ plotVaf(maf = laml, vafCol = 'i_TumorVAF_WU')
 ```
 
 
+# 處理 copy-number 資料
+
+## 讀取 GISTIC 的輸出檔
+
+```{r}
+gistic_res_folder <- system.file("extdata", package = "maftools")
+laml.gistic = readGistic(gisticDir = gistic_res_folder, isTCGA = TRUE)
+
+#GISTIC object
+laml.gistic
+```
+
+## 視覺化 GISTIC 結果
+
+### 繪製 GISTIC Chrom Plot
+
+```{r}
+gisticChromPlot(gistic = laml.gistic, markBands = "all")
+
+# Co-gisticChromPlot
+coGisticChromPlot(gistic1 = laml.gistic, gistic2 = laml.gistic, g1Name = "AML-1", g2Name = "AML-2", type = 'Amp')
+```
 
 
+### 繪製 Bubble Plot
+
+```{r}
+gisticBubblePlot(gistic = laml.gistic)
+```
+
+### 繪製 Onco Plot
+
+```{r}
+gisticOncoPlot(gistic = laml.gistic, clinicalData = getClinicalData(x = laml), clinicalFeatures = 'FAB_classification', sortByAnnotation = TRUE, top = 10)
+```
+
+## CBS segments
+
+### 總結 chromosomal arm level CN
+
+```{r}
+laml.seg <- system.file("extdata", "LAML_CBS_segments.tsv.gz", package = "maftools")
+segSummarize_results = segSummarize(seg = laml.seg)
+```
+
+### 視覺化 CBS segments
+
+```{r}
+tcga.ab.009.seg <- system.file("extdata", "TCGA.AB.3009.hg19.seg.txt", package = "maftools")
+plotCBSsegments(cbsFile = tcga.ab.009.seg)
+```
 
 
+# 綜合分析
 
+## 體細胞相互作用
 
+```{r}
+#exclusive/co-occurance event analysis on top 10 mutated genes. 
+somaticInteractions(maf = laml, top = 25, pvalue = c(0.05, 0.1))
+```
 
+## 使用 cluster 偵測 cancer driver genes
+
+```{r}
+laml.sig = oncodrive(maf = laml, AACol = 'Protein_Change', minMut = 5, pvalMethod = 'zscore')
+
+head(laml.sig)
+
+plotOncodrive(res = laml.sig, fdrCutOff = 0.1, useFraction = TRUE, labelSize = 0.5)
+```
 
 
 
