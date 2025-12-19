@@ -9,7 +9,7 @@ output:
     toc_float: true
     number_sections: true
     self_contained: yes
-    css: corp-styles.css
+    css: styles.css
     highlight: pygments
 vignette: >
   %\VignetteIndexEntry{01: Summarize, Analyze, and Visualize MAF Files}
@@ -17,14 +17,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-`maftools` is an R suite tool for analyzing and visualizing MAF files.
+# 基本介紹與參考資料
 
-The following analysis and testing are performed according to the official documentation:
-https://bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html
+`maftools` 是一個用於分析並視覺化 MAF 檔案的套件。
 
-> Mayakonda A, Lin DC, Assenov Y, Plass C, Koeffler HP. 2018. Maftools: efficient and comprehensive analysis of somatic variants in cancer. Genome Research. PMID: 30341162
+以下指令是根據[官方文檔](https://bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html)範例撰寫，並新增個人的筆記內容，所有相關著作權屬於原作者(如下):
 
-### Download maftools and create `results/` folder
+------------------------------------------------------------------------
+
+***Mayakonda A, Lin DC, Assenov Y, Plass C, Koeffler HP. 2018. Maftools: efficient and comprehensive analysis of somatic variants in cancer. [Genome Research. PMID: 30341162](https://doi.org/10.1101/gr.239244.118)***
+
+------------------------------------------------------------------------
+
+# 下載 maftools 套件
 
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
@@ -39,7 +44,9 @@ if (!requireNamespace("maftools", quietly = TRUE)) {
 if (!dir.exists("results")) dir.create("results", recursive = TRUE)
 ```
 
-### Read the MAF files
+# 讀取與總結 maf 檔
+
+## 讀取 maf 檔
 
 ```{r}
 library(maftools)
@@ -52,14 +59,14 @@ laml.clin = system.file('extdata', 'tcga_laml_annot.tsv', package = 'maftools')
 laml = read.maf(maf = laml.maf, clinicalData = laml.clin)
 ```
 
-### Show MAF object
+## 查看 MAF object
 
 ```{r}
 #Typing laml shows basic summary of MAF file.
 laml
 ```
 
-### Write maf summary
+## 匯出 maf summary 檔案
 
 ```{r}
 #Shows sample summry.
@@ -75,20 +82,22 @@ write.mafSummary(maf = laml, basename = 'results/laml')
 ```
 
 
-### MAF summary
+# 視覺化
+
+## 繪製 maf summary plot
 
 ```{r}
 plotmafSummary(maf = laml, rmOutlier = TRUE, addStat = 'median', dashboard = TRUE, titvRaw = FALSE)
 ```
 
-### oncoplot
+## 繪製 oncoplot plot
 
 ```{r}
 #oncoplot for top ten mutated genes.
 oncoplot(maf = laml, top = 10)
 ```
 
-### Transition and Transversions
+## 繪製 Transition and Transversions
 
 ```{r}
 laml.titv = titv(maf = laml, plot = FALSE, useSyn = TRUE)
@@ -96,7 +105,7 @@ laml.titv = titv(maf = laml, plot = FALSE, useSyn = TRUE)
 plotTiTv(res = laml.titv)
 ```
 
-### Lollipop plots for amino acid changes
+## 繪製胺基酸變化的 Lollipop plots
 
 ```{r}
 #lollipop plot for DNMT3A, which is one of the most frequent mutated gene in Leukemia.
@@ -109,7 +118,7 @@ lollipopPlot(
 )
 ```
 
-### Custom data as an input
+### 自訂資料作為輸入
 
 ```{r}
 #example data
@@ -121,7 +130,7 @@ lollipopPlot(data = my_data, gene = "DNMT3A")
 plotProtein(gene = "TP53", refSeqID = "NM_000546")
 ```
 
-### Rainfall plots
+## 繪製 Rainfall plots
 
 
 ```{r}
@@ -131,14 +140,14 @@ brca = read.maf(maf = brca, verbose = FALSE)
 rainfallPlot(maf = brca, detectChangePoints = TRUE, pointSize = 0.4)
 ```
 
-### Compare mutation load against TCGA cohorts
+## 與 TCGA cohorts 比較 mutation load
 
 ```{r}
 laml.mutload = tcgaCompare(maf = laml, cohortName = 'Example-LAML', logscale = TRUE, capture_size = 50)
 ```
 
 
-### Plotting VAF
+## 繪製 VAF plot
 
 ```{r}
 plotVaf(maf = laml, vafCol = 'i_TumorVAF_WU')
