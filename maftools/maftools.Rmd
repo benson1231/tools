@@ -42,6 +42,7 @@ if (!requireNamespace("maftools", quietly = TRUE)) {
 
 # create `results/` folder
 if (!dir.exists("results")) dir.create("results", recursive = TRUE)
+setwd("./results")
 ```
 
 # 讀取與總結 maf 檔
@@ -140,6 +141,7 @@ brca <- system.file("extdata", "brca.maf.gz", package = "maftools")
 brca = read.maf(maf = brca, verbose = FALSE)
 
 rainfallPlot(maf = brca, detectChangePoints = TRUE, pointSize = 0.4)
+file.rename(list.files(pattern="\\.tsv$"), file.path("results", list.files(pattern="\\.tsv$")))
 ```
 
 ## 與 TCGA cohorts 比較 mutation load
@@ -414,7 +416,7 @@ pheatmap::pheatmap(mat = laml.og30.cosm$cosine_similarities, cluster_rows = FALS
 maftools::plotSignatures(nmfRes = laml.sig, title_size = 1.2, sig_db = "SBS")
 
 
-# #  3D 長條圖
+# #  3D bar plot
 # library("barplot3d")
 # #Visualize first signature
 # sig1 = laml.sig$signatures[,1]
@@ -423,21 +425,199 @@ maftools::plotSignatures(nmfRes = laml.sig, title_size = 1.2, sig_db = "SBS")
 
 # 變體註釋
 
+## 將 annovar 輸出轉換為 MAF
+
+```{r}
+var.annovar = system.file("extdata", "variants.hg19_multianno.txt", package = "maftools")
+var.annovar.maf = annovarToMaf(annovar = var.annovar, Center = 'CSI-NUS', refBuild = 'hg19', 
+                               tsbCol = 'Tumor_Sample_Barcode', table = 'ensGene')
+```
+
+## 將 ICGC Simpale Somatic Mutation Format 轉換為 MAF
+
+```{r}
+#Read sample ICGC data for ESCA
+esca.icgc <- system.file("extdata", "simple_somatic_mutation.open.ESCA-CN.sample.tsv.gz", package = "maftools")
+esca.maf <- icgcSimpleMutationToMAF(icgc = esca.icgc, addHugoSymbol = TRUE)
+
+#Printing first 16 columns for display convenience.
+print(esca.maf[1:5,1:16, with = FALSE])
+```
+
+## 準備用於 MutSigCV 分析的 MAF 文件
+
+```{r}
+laml.mutsig.corrected = prepareMutSig(maf = laml)
+# Converting gene names for 1 variants from 1 genes
+#    Hugo_Symbol MutSig_Synonym N
+# 1:    ARHGAP35          GRLF1 1
+# Original symbols are preserved under column OG_Hugo_Symbol.
+```
+
+# 集合運算
+
+## 子集 MAF
+
+```{r}
+#Extract data for samples 'TCGA.AB.3009' and 'TCGA.AB.2933'  (Printing just 5 rows for display convenience)
+subsetMaf(maf = laml, tsb = c('TCGA-AB-3009', 'TCGA-AB-2933'), mafObj = FALSE)[1:5]
+
+##Same as above but return output as an MAF object (Default behaviour)
+subsetMaf(maf = laml, tsb = c('TCGA-AB-3009', 'TCGA-AB-2933'))
+```
+
+## 指定查詢和控制輸出欄位
+
+```{r}
+#Select all Splice_Site mutations from DNMT3A and NPM1
+subsetMaf(maf = laml, genes = c('DNMT3A', 'NPM1'), mafObj = FALSE,query = "Variant_Classification == 'Splice_Site'")
+
+#Same as above but include only 'i_transcript_name' column in the output
+subsetMaf(maf = laml, genes = c('DNMT3A', 'NPM1'), mafObj = FALSE, query = "Variant_Classification == 'Splice_Site'", fields = 'i_transcript_name')
+```
+
+## 按臨床資料進行子集劃分
+
+```{r}
+#Select all samples with FAB clasification M4 in clinical data 
+laml_m4 = subsetMaf(maf = laml, clinQuery = "FAB_classification %in% 'M4'")
+```
+
+# 樣品交換識別
+
+```{r, eval=FALSE}
+#Path to BAM files
+bams = c(
+  "DBW-40-N.bam",
+  "DBW-40-1T.bam",
+  "DBW-40-2T.bam",
+  "DBW-40-3T.bam",
+  "DBW-43-N.bam",
+  "DBW-43-1T.bam"
+)
+
+res = maftools::sampleSwaps(bams = bams, build = "hg19")
+# Fetching readcounts from BAM files..
+# Summarizing allele frequncy table..
+# Performing pairwise comparison..
+# Done!
+
+res$pairwise_comparison
+```
+
+The returned results is a list containing:
+
+  * a `matrix` of allele frequency table for every genotyped SNP
+  * a `data.frame` of readcounts for ref and alt allele for every genotyped SNP
+  * a table with pair-wise concordance among samples
+  * a list with potentially matched samples
+
+```{r pairwise_comparison, eval=FALSE}
+ res$pairwise_comparison
+```
+
+```{r}
+# X_bam     Y_bam concordant_snps discordant_snps fract_concordant_snps  cor_coef XY_possibly_paired
+#  1: DBW-40-1T DBW-40-2T            5488             571             0.9057600 0.9656484                Yes
+#  2: DBW-40-1T DBW-40-3T            5793             266             0.9560984 0.9758083                Yes
+#  3: DBW-40-1T  DBW-43-N            5534             525             0.9133520 0.9667620                Yes
+#  4: DBW-40-2T DBW-40-3T            5853             206             0.9660010 0.9817475                Yes
+#  5: DBW-40-2T  DBW-43-N            5131             928             0.8468394 0.9297096                Yes
+#  6: DBW-40-3T  DBW-43-N            5334             725             0.8803433 0.9550670                Yes
+#  7:  DBW-40-N DBW-43-1T            5709             350             0.9422347 0.9725684                Yes
+#  8: DBW-40-1T  DBW-40-N            2829            3230             0.4669087 0.3808831                 No
+#  9: DBW-40-1T DBW-43-1T            2796            3263             0.4614623 0.3755364                 No
+# 10: DBW-40-2T  DBW-40-N            2760            3299             0.4555207 0.3641647                 No
+# 11: DBW-40-2T DBW-43-1T            2736            3323             0.4515597 0.3579747                 No
+# 12: DBW-40-3T  DBW-40-N            2775            3284             0.4579964 0.3770581                 No
+# 13: DBW-40-3T DBW-43-1T            2753            3306             0.4543654 0.3721022                 No
+# 14:  DBW-40-N  DBW-43-N            2965            3094             0.4893547 0.3839140                 No
+# 15: DBW-43-1T  DBW-43-N            2876            3183             0.4746658 0.3797829                 No
+```
 
 
+```{r BAM_matches, eval=FALSE}
+res$BAM_matches
+```
 
+```{r}
+# [[1]]
+# [1] "DBW-40-1T" "DBW-40-2T" "DBW-40-3T" "DBW-43-N" 
+# 
+# [[2]]
+# [1] "DBW-40-2T" "DBW-40-3T" "DBW-43-N" 
+# 
+# [[3]]
+# [1] "DBW-40-3T" "DBW-43-N" 
+# 
+# [[4]]
+# [1] "DBW-40-N"  "DBW-43-1T"
+```
 
+Results can be visualized with the correlation plot.
 
+```{r cor, eval=FALSE}
+cor_table = cor(res$AF_table)
+```
 
+```{r cortable, echo=FALSE}
+cor_table = structure(c(1, 0.971671361359591, 0.982608032160979, 0.381966662753787, 
+0.380812832617918, 0.97246945978859, 0.971671361359591, 1, 0.988268712494756, 
+0.365843547670381, 0.364768267525972, 0.933880555972565, 0.982608032160979, 
+0.988268712494756, 1, 0.376165783421095, 0.375700923176265, 0.959717559987264, 
+0.381966662753787, 0.365843547670381, 0.376165783421095, 1, 0.979259788301874, 
+0.385257303482557, 0.380812832617918, 0.364768267525972, 0.375700923176265, 
+0.979259788301874, 1, 0.384975386482912, 0.97246945978859, 0.933880555972565, 
+0.959717559987264, 0.385257303482557, 0.384975386482912, 1), .Dim = c(6L, 
+6L), .Dimnames = list(c("DBW-40-1T", "DBW-40-2T", "DBW-40-3T", 
+"DBW-40-N", "DBW-43-1T", "DBW-43-N"), c("DBW-40-1T", "DBW-40-2T", 
+"DBW-40-3T", "DBW-40-N", "DBW-43-1T", "DBW-43-N")))
+```
 
+```{r pheatmap2, fig.width=6, fig.height=4}
+pheatmap::pheatmap(cor_table, breaks = seq(0, 1, 0.01))
+```
 
+# TCGA cohort
 
+## 可用 cohort
 
+```{r}
+tcga_avail = tcgaAvailable()
+head(tcga_avail, 3)
+```
 
+## 載入 TCGA 佇列
 
+```{r}
+# By default MAF from MC3 project will be loaded
+laml_mc3 = tcgaLoad(study = "LAML")
 
+laml_mc3
 
+# Change the source to Firehose
+laml_fh = tcgaLoad(study = "LAML", source = "Firehose")
 
+laml_fh
+```
+
+```{r, eval=FALSE}
+BiocManager::install(pkgs = "PoisonAlien/TCGAmutations")
+```
+
+# 多重檢測實驗
+
+```{r}
+laml_mae = maf2mae(m = laml)
+
+laml_mae
+```
+
+# 套件資訊
+
+```{r}
+sessionInfo()
+```
 
 
 
