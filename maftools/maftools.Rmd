@@ -17,9 +17,68 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# 基本介紹與參考資料
+# 基本介紹
+
+## 什麼是 `maf` 格式 (Mutation Annotation Format)?
+
+[MAF](https://docs.gdc.cancer.gov/Data/File_Formats/MAF_Format/)（Mutation Annotation Format）是一種廣泛使用的突變註解檔格式，常見於 TCGA、ICGC 與各大癌症基因體研究專案。  
+每一列代表一個 somatic variant，並包含以下主要欄位：
+
+- **Hugo_Symbol**：基因名稱  
+- **Entrez_Gene_Id**：Entrez 基因 ID  
+- **Chromosome / Start_Position / End_Position**：變異所在的基因組座標  
+- **Variant_Classification**：變異功能類型（Missense, Nonsense, Splice_Site...）  
+- **Variant_Type**：SNP / INS / DEL  
+- **Tumor_Seq_Allele1 / Tumor_Seq_Allele2**：腫瘤樣本的等位基因  
+- **Tumor_Sample_Barcode**：樣本 ID  
+- **Protein_Change**：蛋白層級變異（如 p.R1517H）  
+- **i_TumorVAF_WU**：突變的 variant allele frequency  
+
+```{r echo=FALSE}
+library(DT)
+
+maf_demo <- data.frame(
+  Hugo_Symbol = c("ABCA10", "ABCA4", "ABCB11", "ABCC3"),
+  Entrez_Gene_Id = c(10349, 24, 8647, 8714),
+  Center = rep("genome.wustl.edu", 4),
+  NCBI_Build = rep(37, 4),
+  Chromosome = c("17", "1", "2", "17"),
+  Start_Position = c(67170917, 94490594, 169780250, 48760974),
+  End_Position = c(67170917, 94490594, 169780250, 48760974),
+  Strand = "+",
+  Variant_Classification = c("Splice_Site","Missense_Mutation","Missense_Mutation","Missense_Mutation"),
+  Variant_Type = "SNP",
+  Reference_Allele = c("T","C","G","C"),
+  Tumor_Seq_Allele1 = c("T","C","G","C"),
+  Tumor_Seq_Allele2 = c("C","T","A","T"),
+  Tumor_Sample_Barcode = c("TCGA-AB-2988","TCGA-AB-2869","TCGA-AB-3009","TCGA-AB-2887"),
+  Protein_Change = c("p.K960R","p.R1517H","p.A1283V","p.P1271S"),
+  i_TumorVAF_WU = c(45.66, 38.12, 46.97, 56.41),
+  i_transcript_name = c("NM_080282.3","NM_000350.2","NM_003742.2","NM_003786.1")
+)
+
+datatable(
+  maf_demo,
+  caption = "MAF File Example Rows",
+  options = list(
+    scrollX = TRUE,        # 允許左右滑動
+    pageLength = 5,        # 每頁顯示 5 列
+    autoWidth = TRUE       # 自動調整欄寬
+  )
+)
+```
+
+## 如何產生 `maf`
+
+- 原檔為 `VCF` 可以使用 [vcf2maf](https://github.com/mskcc/vcf2maf) 將 vcf 轉 maf
+- GATK的 [funcotator](https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Information-and-Tutorial)
+- ANNOVAR 註釋後，可使用 `maftools ` 中的 `annovarToMaf` 函數，將表格形式的 ANNOVAR 輸出轉換為 MAF。
+
+## 什麼是 `maftools`?
 
 `maftools` 是一個用於分析並視覺化 MAF 檔案的套件。
+
+## 參考資料
 
 以下指令是根據[官方文檔](https://bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html)範例撰寫，並新增個人的筆記內容，所有相關著作權屬於原作者(如下):
 
@@ -40,16 +99,13 @@ if (!requireNamespace("maftools", quietly = TRUE)) {
     BiocManager::install("maftools", update = FALSE, ask = FALSE)
 }
 
-# create `results/` folder
+# create `results/` folder for output data
 if (!dir.exists("results")) dir.create("results", recursive = TRUE)
-setwd("./results")
 ```
 
-# 讀取與總結 maf 檔
+# 讀取 maf 檔
 
-- 可以使用 [vcf2maf](https://github.com/mskcc/vcf2maf) 將 vcf 轉 maf
-
-## 讀取 maf 檔
+使用 `read.maf` 函數
 
 ```{r}
 library(maftools)
@@ -87,20 +143,53 @@ write.mafSummary(maf = laml, basename = 'results/laml')
 
 # 視覺化
 
-## 繪製 maf summary plot
+## summary plot
+
+`plotmafSummary` 可以繪製整體資料的摘要，用於快速釐清資料
 
 ```{r}
 plotmafSummary(maf = laml, rmOutlier = TRUE, addStat = 'median', dashboard = TRUE, titvRaw = FALSE)
 ```
 
-## 繪製 oncoplot plot
+## bar plot
+
+`mafbarplot` 用於繪製選定基因變異種類之比率
+
+```{r}
+mafbarplot(maf = laml, genes = c("DNMT3A", "IDH1", "IDH2"))
+```
+
+## oncoplot plot
+
+`oncoplot` 繪製樣本中的變異基因與變異種類 (Multi_Hit 是指在同一樣本中發生多次突變的基因)
 
 ```{r}
 #oncoplot for top ten mutated genes.
 oncoplot(maf = laml, top = 10)
 ```
 
-## 繪製 Transition and Transversions
+## Transition and Transversions
+
+在突變類型中，單一鹼基替換（Single Nucleotide Variant, SNV）可依照其替換的化學性質分為兩大類：
+
+**1. Transition (Ti)**
+Purine ↔ Purine 或 Pyrimidine ↔ Pyrimidine 的替換，包括：
+- A ↔ G（兩者皆為 purine）
+- C ↔ T（兩者皆為 pyrimidine）
+
+Transition 牽涉的化學變化較小，因此通常比 transversion 更常見。
+
+**2. Transversion (Tv)**
+Purine ↔ Pyrimidine 的替換，包括：
+- A ↔ C
+- A ↔ T
+- G ↔ C
+- G ↔ T
+
+由於涉及較大的化學結構變化，發生頻率通常較低。
+
+`maftools` 提供 `titv()` 函式來計算 [Transition 與 Transversion](http://www.mun.ca/biology/scarr/Transitions_vs_Transversions.html) 的數量與比例，  
+並可利用 `plotTiTv()` 將結果視覺化。
 
 ```{r}
 laml.titv = titv(maf = laml, plot = FALSE, useSyn = TRUE)
@@ -108,7 +197,7 @@ laml.titv = titv(maf = laml, plot = FALSE, useSyn = TRUE)
 plotTiTv(res = laml.titv)
 ```
 
-## 繪製胺基酸變化的 Lollipop plots
+## 胺基酸變化的 Lollipop plots
 
 ```{r}
 #lollipop plot for DNMT3A, which is one of the most frequent mutated gene in Leukemia.
@@ -123,6 +212,8 @@ lollipopPlot(
 
 ### 自訂資料作為輸入
 
+資料應包含變異位置(pos)與變異數量(count)兩個欄位
+
 ```{r}
 #example data
 my_data = data.frame(pos = sample.int(912, 15, replace = TRUE), count = sample.int(30, 15, replace = TRUE))
@@ -133,8 +224,10 @@ lollipopPlot(data = my_data, gene = "DNMT3A")
 plotProtein(gene = "TP53", refSeqID = "NM_000546")
 ```
 
-## 繪製 Rainfall plots
+## Rainfall plots
 
+`rainfallPlot` 繪製 Rainfall plots 觀察 mutation hot spot
+- Kataegis 定義為包含六個或更多連續突變的基因組片段，平均突變間距離小於或等於1,00 bp
 
 ```{r}
 brca <- system.file("extdata", "brca.maf.gz", package = "maftools")
@@ -144,14 +237,16 @@ rainfallPlot(maf = brca, detectChangePoints = TRUE, pointSize = 0.4)
 file.rename(list.files(pattern="\\.tsv$"), file.path("results", list.files(pattern="\\.tsv$")))
 ```
 
-## 與 TCGA cohorts 比較 mutation load
+## 與 33個 TCGA cohorts 比較 mutation load
 
 ```{r}
 laml.mutload = tcgaCompare(maf = laml, cohortName = 'Example-LAML', logscale = TRUE, capture_size = 50)
 ```
 
 
-## 繪製 VAF plot
+## VAF plot
+
+`plotVaf` 繪製 Variant Allele Frequencies，快速估計突變最嚴重的基因的克隆狀態
 
 ```{r}
 plotVaf(maf = laml, vafCol = 'i_TumorVAF_WU')
