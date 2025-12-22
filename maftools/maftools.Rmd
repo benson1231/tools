@@ -35,7 +35,7 @@ vignette: >
 - **i_TumorVAF_WU**：突變的 variant allele frequency  
 
 ```{r echo=FALSE}
-library(DT)
+suppressWarnings(library(DT))
 
 maf_demo <- data.frame(
   Hugo_Symbol = c("ABCA10", "ABCA4", "ABCB11", "ABCC3"),
