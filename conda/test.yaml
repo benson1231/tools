@@ -1,0 +1,10 @@
+name: quarto-test-env
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # Python
+  - conda-forge::python
+  - jupyter=1.1.1
+  - conda-forge::ipykernel
+  - pyyaml
