@@ -1,0 +1,24 @@
+---
+title: "quarto bash 測試"
+format: html
+engine: knitr
+---
+
+# bash 程式碼測試
+
+```{bash}
+fastp -v
+fastp --help
+```
+
+```{r}
+#| label: fig-airquality
+#| fig-cap: "Temperature and ozone level."
+#| warning: false
+
+library(ggplot2)
+
+ggplot(airquality, aes(Temp, Ozone)) + 
+  geom_point() + 
+  geom_smooth(method = "loess")
+```
