@@ -1,6 +1,6 @@
 # fastp
 
-[fastp]()
+[fastp github](https://github.com/OpenGene/fastp)
 
 ```bash
 # create conda environment

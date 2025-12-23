@@ -1,9 +1,9 @@
-name: fastp-env
+name: fastqc-env
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::fastp=1.0.1
+  - bioconda::fastqc=0.12.1
   - conda-forge::quarto=1.8.26
   - conda-forge::r-base=4.3.3
   - conda-forge::r-knitr=1.50

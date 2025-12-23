@@ -1,0 +1,68 @@
+---
+title: "fastqc 基本使用"
+format:
+  html:
+    toc: true
+    toc-location: left
+    sidebar:
+      style: "floating"
+      search: true
+number-sections: true
+engine: knitr
+---
+
+# 連結
+
+[create conda envs](https://github.com/benson1231/tools/tree/main/fastqc)  
+[fastqc official github](https://github.com/s-andrews/FastQC)  
+
+# fastqc 版本資訊
+
+使用 `-v` 參數確認 fastqc 是否成功安裝，並顯示版本號。
+
+```{bash}
+fastqc -v
+```
+
+# 執行 fastqc
+
+以下示範 fastqc 的基本用法：對單一或雙端 FASTQ 做品質檢查並輸出 HTML 與 ZIP 報告。
+
+請確認：
+
+* 測試 FASTQ 位於 `../.test/`
+
+輸出內容包含：
+
+* HTML QC 報告（互動式）
+* ZIP 壓縮資料（含 QC 原始數據）
+
+## pair-end FASTQ 檔案
+
+```{bash}
+mkdir results
+
+fastqc \
+../.test/a.chr21_R1.fastq.gz \
+../.test/a.chr21_R2.fastq.gz \
+--outdir results/
+```
+
+# fastqc 指令參考
+
+顯示 fastqc 提供的主要參數與使用說明，適合作為快速查詢指令用途。
+
+```{bash}
+fastqc --help
+```
+
+# Conda 環境資訊
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "======================================="
+conda list
+```

@@ -1,16 +1,24 @@
 ---
-title: "fastp"
+title: "fastp 基本使用"
 format:
   html:
     toc: true
     toc-location: left
-    sidebar: 
+    sidebar:
       style: "floating"
       search: true
+number-sections: true
 engine: knitr
 ---
 
-# fastp 版本
+# 連結
+
+[create conda envs](https://github.com/benson1231/tools/tree/main/fastp)  
+[fastp official github](https://github.com/OpenGene/fastp)  
+
+# fastp 版本資訊
+
+使用 `-v` 參數確認 fastp 是否成功安裝，並顯示版本號。
 
 ```{bash}
 fastp -v
@@ -18,19 +26,44 @@ fastp -v
 
 # 執行 fastp
 
+以下示範如何以 `fastp` 對 `FASTQ 檔案` 進行 adapters 修剪、過濾與 QC，並輸出：
+
+* 修剪後的 FASTQ
+* HTML QC 報告
+* JSON QC 統計
+
+執行前請確認：
+
+* 測試 FASTQ 位於 `../.test/`
+
 ```{bash}
+mkdir results
+
 fastp \
-  -i ../.test/a.chr21_R1.fastq.gz \
-  -I ../.test/a.chr21_R2.fastq.gz \
-  -o results/a.chr21_R1.trimmed.fastq.gz \
-  -O results/a.chr21_R2.trimmed.fastq.gz \
-  --html fastp_report.html \
-  --json fastp_report.json \
-  --thread 4
+-i ../.test/a.chr21_R1.fastq.gz \
+-I ../.test/a.chr21_R2.fastq.gz \
+-o results/a.chr21_R1.trimmed.fastq.gz \
+-O results/a.chr21_R2.trimmed.fastq.gz \
+--html results/fastp_report.html \
+--json results/fastp_report.json \
+--thread 4
 ```
 
-# fastp 指令
+# fastp 指令參考
+
+顯示 fastp 提供的主要參數與使用說明，適合作為快速查詢指令用途。
 
 ```{bash}
 fastp --help
+```
+
+# Conda 環境資訊
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "======================================="
+conda list
 ```
