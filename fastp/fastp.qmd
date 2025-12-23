@@ -1,0 +1,36 @@
+---
+title: "fastp"
+format:
+  html:
+    toc: true
+    toc-location: left
+    sidebar: 
+      style: "floating"
+      search: true
+engine: knitr
+---
+
+# fastp 版本
+
+```{bash}
+fastp -v
+```
+
+# 執行 fastp
+
+```{bash}
+fastp \
+  -i ../.test/a.chr21_R1.fastq.gz \
+  -I ../.test/a.chr21_R2.fastq.gz \
+  -o results/a.chr21_R1.trimmed.fastq.gz \
+  -O results/a.chr21_R2.trimmed.fastq.gz \
+  --html fastp_report.html \
+  --json fastp_report.json \
+  --thread 4
+```
+
+# fastp 指令
+
+```{bash}
+fastp --help
+```

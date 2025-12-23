@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>quarto bash 測試</title>
+<title>fastp</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,31 +58,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="quarto-bash_files/libs/clipboard/clipboard.min.js"></script>
-<script src="quarto-bash_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="quarto-bash_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="quarto-bash_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="quarto-bash_files/libs/quarto-html/popper.min.js"></script>
-<script src="quarto-bash_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="quarto-bash_files/libs/quarto-html/anchor.min.js"></script>
-<link href="quarto-bash_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="quarto-bash_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="quarto-bash_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="quarto-bash_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="quarto-bash_files/libs/bootstrap/bootstrap-91f297ac5b9b6094cb160b32f5ee6a0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="fastp_files/libs/clipboard/clipboard.min.js"></script>
+<script src="fastp_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="fastp_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="fastp_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="fastp_files/libs/quarto-html/popper.min.js"></script>
+<script src="fastp_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="fastp_files/libs/quarto-html/anchor.min.js"></script>
+<link href="fastp_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="fastp_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="fastp_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="fastp_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="fastp_files/libs/bootstrap/bootstrap-91f297ac5b9b6094cb160b32f5ee6a0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#fastp-版本" id="toc-fastp-版本" class="nav-link active" data-scroll-target="#fastp-版本">fastp 版本</a></li>
+  <li><a href="#執行-fastp" id="toc-執行-fastp" class="nav-link" data-scroll-target="#執行-fastp">執行 fastp</a></li>
+  <li><a href="#fastp-指令" id="toc-fastp-指令" class="nav-link" data-scroll-target="#fastp-指令">fastp 指令</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">quarto bash 測試</h1>
+<h1 class="title">fastp</h1>
 </div>
 
 
@@ -99,14 +111,81 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="bash-程式碼測試" class="level1">
-<h1>bash 程式碼測試</h1>
+<section id="fastp-版本" class="level1">
+<h1>fastp 版本</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="at">-v</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="at">-v</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>fastp 1.0.1
-usage: fastp [options] ... 
+<pre><code>fastp 1.0.1</code></pre>
+</div>
+</div>
+</section>
+<section id="執行-fastp" class="level1">
+<h1>執行 fastp</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-i</span> ../.test/a.chr21_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-I</span> ../.test/a.chr21_R2.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> results/a.chr21_R1.trimmed.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-O</span> results/a.chr21_R2.trimmed.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--html</span> fastp_report.html <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--json</span> fastp_report.json <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--thread</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Read1 before filtering:
+total reads: 4857
+total bases: 353935
+Q20 bases: 331626(93.6969%)
+Q30 bases: 305684(86.3673%)
+Q40 bases: 102509(28.9627%)
+
+Read2 before filtering:
+total reads: 4857
+total bases: 346145
+Q20 bases: 306292(88.4866%)
+Q30 bases: 281516(81.3289%)
+Q40 bases: 94336(27.2533%)
+
+Read1 after filtering:
+total reads: 4185
+total bases: 305344
+Q20 bases: 295293(96.7083%)
+Q30 bases: 275876(90.3492%)
+Q40 bases: 97465(31.9197%)
+
+Read2 after filtering:
+total reads: 4185
+total bases: 304434
+Q20 bases: 291349(95.7019%)
+Q30 bases: 270189(88.7513%)
+Q40 bases: 93042(30.5623%)
+
+Filtering result:
+reads passed filter: 8370
+reads failed due to low quality: 1344
+reads failed due to too many N: 0
+reads failed due to too short: 0
+reads with adapter trimmed: 82
+bases trimmed due to adapters: 1549
+
+Duplication rate: 1.62652%
+
+Insert size peak (evaluated by paired-end reads): 34
+
+JSON report: fastp_report.json
+HTML report: fastp_report.html
+
+fastp -i ../.test/a.chr21_R1.fastq.gz -I ../.test/a.chr21_R2.fastq.gz -o results/a.chr21_R1.trimmed.fastq.gz -O results/a.chr21_R2.trimmed.fastq.gz --html fastp_report.html --json fastp_report.json --thread 4 
+fastp v1.0.1, time used: 1 seconds</code></pre>
+</div>
+</div>
+</section>
+<section id="fastp-指令" class="level1">
+<h1>fastp 指令</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>usage: fastp [options] ... 
 options:
   -i, --in1                            read1 input file name (string [=])
   -o, --out1                           read1 output file name (string [=])
@@ -196,25 +275,6 @@ options:
       --cut_by_quality_aggressive      DEPRECATED, use --cut_right instead.
       --discard_unmerged               DEPRECATED, no effect now, see the introduction for merging.
   -?, --help                           print this message</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(airquality, <span class="fu">aes</span>(Temp, Ozone)) <span class="sc">+</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="fig-airquality" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-airquality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="quarto-bash_files/figure-html/fig-airquality-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-airquality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Temperature and ozone level.
-</figcaption>
-</figure>
-</div>
 </div>
 </div>
 </section>

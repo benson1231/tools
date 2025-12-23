@@ -1,6 +1,12 @@
 ---
 title: "quarto python 測試"
-format: html
+format:
+  html:
+    toc: true
+    toc-location: left
+    sidebar: 
+      style: "floating"
+      search: true
 jupyter: python3
 ---
 
