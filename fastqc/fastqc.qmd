@@ -40,12 +40,10 @@ fastqc -v
 ## pair-end FASTQ 檔案
 
 ```{bash}
-mkdir results
-
 fastqc \
 ../.test/a.chr21_R1.fastq.gz \
 ../.test/a.chr21_R2.fastq.gz \
---outdir results/
+--outdir ./
 ```
 
 # fastqc 指令參考

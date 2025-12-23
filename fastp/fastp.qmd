@@ -37,15 +37,13 @@ fastp -v
 * 測試 FASTQ 位於 `../.test/`
 
 ```{bash}
-mkdir results
-
 fastp \
 -i ../.test/a.chr21_R1.fastq.gz \
 -I ../.test/a.chr21_R2.fastq.gz \
--o results/a.chr21_R1.trimmed.fastq.gz \
--O results/a.chr21_R2.trimmed.fastq.gz \
---html results/fastp_report.html \
---json results/fastp_report.json \
+-o a.chr21_R1.trimmed.fastq.gz \
+-O a.chr21_R2.trimmed.fastq.gz \
+--html fastp_report.html \
+--json fastp_report.json \
 --thread 4
 ```
 

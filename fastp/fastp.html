@@ -141,19 +141,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>測試 FASTQ 位於 <code>../.test/</code></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> results</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="dt">\</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>-i ../.test/a.chr21_R1.fastq.gz <span class="dt">\</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>-I ../.test/a.chr21_R2.fastq.gz <span class="dt">\</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>-o results/a.chr21_R1.trimmed.fastq.gz <span class="dt">\</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>-O results/a.chr21_R2.trimmed.fastq.gz <span class="dt">\</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>--html results/fastp_report.html <span class="dt">\</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>--json results/fastp_report.json <span class="dt">\</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>--thread 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>-i ../.test/a.chr21_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>-I ../.test/a.chr21_R2.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>-o a.chr21_R1.trimmed.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>-O a.chr21_R2.trimmed.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>--html fastp_report.html <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>--json fastp_report.json <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>--thread 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>mkdir: cannot create directory ‘results’: File exists
-Read1 before filtering:
+<pre><code>Read1 before filtering:
 total reads: 4857
 total bases: 353935
 Q20 bases: 331626(93.6969%)
@@ -193,10 +190,10 @@ Duplication rate: 1.62652%
 
 Insert size peak (evaluated by paired-end reads): 34
 
-JSON report: results/fastp_report.json
-HTML report: results/fastp_report.html
+JSON report: fastp_report.json
+HTML report: fastp_report.html
 
-fastp -i ../.test/a.chr21_R1.fastq.gz -I ../.test/a.chr21_R2.fastq.gz -o results/a.chr21_R1.trimmed.fastq.gz -O results/a.chr21_R2.trimmed.fastq.gz --html results/fastp_report.html --json results/fastp_report.json --thread 4 
+fastp -i ../.test/a.chr21_R1.fastq.gz -I ../.test/a.chr21_R2.fastq.gz -o a.chr21_R1.trimmed.fastq.gz -O a.chr21_R2.trimmed.fastq.gz --html fastp_report.html --json fastp_report.json --thread 4 
 fastp v1.0.1, time used: 1 seconds</code></pre>
 </div>
 </div>
