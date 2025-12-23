@@ -28,3 +28,14 @@ ggplot(airquality, aes(Temp, Ozone)) +
   geom_point() + 
   geom_smooth(method = "loess")
 ```
+
+# Conda 環境資訊
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "======================================="
+conda list
+```

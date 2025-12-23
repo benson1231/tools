@@ -11,9 +11,9 @@ mamba activate quarto-test-env
 #### use quarto to render `html` file
 
 ```bash
-quarto render quarto/quarto-python/quarto-python.qmd
-quarto render quarto/quarto-r/quarto-r.qmd
-quarto render quarto/quarto-bash/quarto-bash.qmd
+quarto render quarto/quarto-python.qmd
+quarto render quarto/quarto-r.qmd
+quarto render quarto/quarto-bash.qmd
 ```
 
 ```bash
