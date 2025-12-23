@@ -1,0 +1,213 @@
+---
+title: "conda 基本使用"
+format:
+  html:
+    toc: true
+    toc-location: left
+    sidebar:
+      style: "floating"
+      search: true
+number-sections: true
+execute: 
+  enabled: false  
+engine: knitr
+---
+
+# 連結
+
+[create conda envs]()  
+[conda official github]()  
+
+# conda 版本資訊
+
+使用 `-V` 參數確認 conda 是否成功安裝，並顯示版本號。
+
+```{bash}
+conda -V
+```
+conda 25.11.0
+
+# 建立新 conda 環境
+
+`-n` 代表創建環境名稱， `-y` 代表直接確認下載 (yes)
+
+```{bash}
+conda create -n myenv python=3.10 -y
+```
+
+# 啟動 conda 環境
+
+```{bash}
+conda activate myenv
+```
+
+# 安裝套件
+
+```{bash}
+conda install numpy -y
+```
+
+## 匯出環境 YAML
+
+```{bash}
+conda env export > output.yaml
+```
+
+# 移除套件
+
+```{bash}
+conda remove numpy -y
+```
+
+# 離開環境
+
+```{bash}
+conda deactivate
+```
+
+## 由 YAML 建立環境
+
+```{bash}
+conda env create -f ./conda/envs.yaml
+```
+
+# 列出所有環境
+
+```{bash}
+conda env list
+```
+
+```
+# conda environments:
+#
+# * -> active
+# + -> frozen
+base                     /home/benson/miniforge3
+myenv                    /home/benson/miniforge3/envs/myenv
+quarto-test-env      *   /home/benson/miniforge3/envs/quarto-test-env
+```
+
+# 查看目前環境套件的來源
+
+```{bash}
+conda list --show-channel-urls
+```
+
+```
+# packages in environment at /home/benson/miniforge3/envs/quarto-test-env:
+#
+# Name                           Version          Build                 Channel
+_libgcc_mutex                    0.1              conda_forge           conda-forge
+_openmp_mutex                    4.5              2_gnu                 conda-forge
+_r-mutex                         1.0.1            anacondar_1           conda-forge
+alsa-lib                         1.2.15.1         hb03c661_0            conda-forge
+anyio                            4.12.0           pyhcf101f3_0          conda-forge
+argon2-cffi                      25.1.0           pyhd8ed1ab_0          conda-forge
+argon2-cffi-bindings             25.1.0           py310h7c4b9e2_2       conda-forge
+arrow                            1.4.0            pyhcf101f3_0          conda-forge
+asttokens                        3.0.1            pyhd8ed1ab_0          conda-forge
+async-lru                        2.0.5            pyh29332c3_0          conda-forge
+```
+
+```{bash}
+conda list --explicit
+```
+
+```
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+# created-by: conda 25.11.0
+@EXPLICIT
+https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/_r-mutex-1.0.1-anacondar_1.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2025.11.12-hbd8a1cb_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/dart-sass-1.59.1-ha770c72_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/esbuild-0.27.2-hfc2019e_0.conda
+https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/font-ttf-inconsolata-3.000-h77eed37_0.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/font-ttf-source-code-pro-2.038-h77eed37_0.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-h77eed37_3.conda
+https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-5.14.0-he073ed8_3.conda
+```
+
+# conda 環境資訊
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "======================================="
+conda list
+```
+
+```
+=======================================
+ Conda Environment: #
+quarto-test-env
+=======================================
+# packages in environment at /home/benson/miniforge3/envs/quarto-test-env:
+#
+# Name                           Version          Build                 Channel
+_libgcc_mutex                    0.1              conda_forge           conda-forge
+_openmp_mutex                    4.5              2_gnu                 conda-forge
+_r-mutex                         1.0.1            anacondar_1           conda-forge
+alsa-lib                         1.2.15.1         hb03c661_0            conda-forge
+anyio                            4.12.0           pyhcf101f3_0          conda-forge
+```
+
+# 刪除環境
+
+```{bash}
+conda env remove -n myenv -y
+```
+
+
+# 其他 conda 指令
+
+顯示 conda 的主要參數與使用說明，適合作為快速查詢用途。
+
+```{bash}
+conda --help
+```
+
+```
+usage: conda [-h] [-v] [--no-plugins] [-V] COMMAND ...
+
+conda is a tool for managing and deploying applications, environments and packages.
+
+options:
+  -h, --help            Show this help message and exit.
+  -v, --verbose         Can be used multiple times. Once for detailed output, twice for INFO logging, thrice for DEBUG logging, four times for TRACE logging.
+  --no-plugins          Disable all plugins that are not built into conda.
+  -V, --version         Show the conda version number and exit.
+
+commands:
+  The following built-in and plugins subcommands are available.
+
+  COMMAND
+    activate            Activate a conda environment.
+    clean               Remove unused packages and caches.
+    commands            List all available conda subcommands (including those from plugins). Generally only used by tab-completion.
+    compare             Compare packages between conda environments.
+    config              Modify configuration values in .condarc.
+    create              Create a new conda environment from a list of specified packages.
+    deactivate          Deactivate the current active conda environment.
+    doctor              Display a health report for your environment.
+    env                 Create and manage conda environments.
+    export              Export a given environment
+    info                Display information about current conda install.
+    init                Initialize conda for shell interaction.
+    install             Install a list of packages into a specified conda environment.
+    list                List installed packages in a conda environment.
+    menuinst            A subcommand for installing and removing shortcuts via menuinst.
+    notices             Retrieve latest channel notifications.
+    package             Create low-level conda packages. (EXPERIMENTAL)
+    remove (uninstall)  Remove a list of packages from a specified conda environment.
+    rename              Rename an existing environment.
+    repoquery           Advanced search for repodata.
+    run                 Run an executable in a conda environment.
+    search              Search for packages and display associated information using the MatchSpec format.
+    update (upgrade)    Update conda packages to the latest compatible version.
+```

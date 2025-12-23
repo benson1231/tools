@@ -3,7 +3,7 @@ set -euo pipefail
 
 FILTER_YAML="$1"
 FULL_YAML="$2"
-OUTPUT_YAML="my-output-filtered.yaml"
+OUTPUT_YAML="$3"
 
 # ============================================================
 # Step 1：讀取 filter.yaml 的 package 名稱（無論格式如何）

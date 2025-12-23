@@ -1,0 +1,238 @@
+---
+title: "mamba 基本使用"
+format:
+  html:
+    toc: true
+    toc-location: left
+    sidebar:
+      style: "floating"
+      search: true
+number-sections: true
+execute: 
+  enabled: false  
+engine: knitr
+---
+
+# 連結
+
+[create conda envs]()  
+[mamba official github]()  
+
+# mamba 版本資訊
+
+使用 `--version` 參數確認 conda 是否成功安裝，並顯示版本號。
+
+```{bash}
+mamba --version
+```
+2.4.0
+
+# 建立新 mamba 環境
+
+`-n` 代表創建環境名稱， `-y` 代表直接確認下載 (yes)
+
+```{bash}
+mamba create -n myenv python=3.10 -y
+```
+
+# 啟動 conda 環境
+
+```{bash}
+mamba activate myenv
+```
+
+# 安裝套件
+
+```{bash}
+mamba install numpy -y
+```
+
+## 匯出環境 YAML
+
+```{bash}
+mamba env export > output.yaml
+```
+
+# 移除套件
+
+```{bash}
+mamba remove numpy -y
+```
+
+# 離開環境
+
+```{bash}
+mamba deactivate
+```
+
+## 由 YAML 建立環境
+
+```{bash}
+mamba env create -f ./mamba/mamba-envs.yaml -y
+```
+
+# 列出所有環境
+
+```{bash}
+mamba env list
+```
+
+```
+  Name             Active  Path
+─────────────────────────────────────────────────────────────────────────
+  base                     /home/benson/miniforge3
+  mamba-envs               /home/benson/miniforge3/envs/mamba-envs
+  myenv                    /home/benson/miniforge3/envs/myenv
+  quarto-test-env  *       /home/benson/miniforge3/envs/quarto-test-env
+```
+
+# 查看目前環境套件的來源
+
+```{bash}
+mamba list
+```
+
+```
+List of packages in environment: "/home/benson/miniforge3/envs/quarto-test-env"
+
+  Name                           Version       Build                 Channel    
+──────────────────────────────────────────────────────────────────────────────────
+  _libgcc_mutex                  0.1           conda_forge           conda-forge
+  _openmp_mutex                  4.5           2_gnu                 conda-forge
+  _r-mutex                       1.0.1         anacondar_1           conda-forge
+  alsa-lib                       1.2.15.1      hb03c661_0            conda-forge
+  annotated-doc                  0.0.4         pypi_0                pypi
+  annotated-types                0.7.0         pypi_0                pypi
+  anyio                          4.12.0        pyhcf101f3_0          conda-forge
+  argon2-cffi                    25.1.0        pyhd8ed1ab_0          conda-forge
+  argon2-cffi-bindings           25.1.0        py310h7c4b9e2_2       conda-forge
+```
+
+```{bash}
+mamba list --explicit
+```
+
+```
+List of packages in environment: "/home/benson/miniforge3/envs/quarto-test-env"
+
+https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-2_gnu.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/_r-mutex-1.0.1-anacondar_1.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/alsa-lib-1.2.15.1-hb03c661_0.conda
+
+
+https://conda.anaconda.org/conda-forge/noarch/anyio-4.12.0-pyhcf101f3_0.conda
+https://conda.anaconda.org/conda-forge/noarch/argon2-cffi-25.1.0-pyhd8ed1ab_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/argon2-cffi-bindings-25.1.0-py310h7c4b9e2_2.conda
+https://conda.anaconda.org/conda-forge/noarch/arrow-1.4.0-pyhcf101f3_0.conda
+https://conda.anaconda.org/conda-forge/noarch/asttokens-3.0.1-pyhd8ed1ab_0.conda
+```
+
+# conda 環境資訊
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo " Mamba Environment: $(mamba env list | grep '*' | awk '{print $1}')"
+echo "======================================="
+mamba list
+```
+
+```
+echo " Mamba Environment: $(mamba env list | grep '*' | awk '{print $1}')"
+echo "======================================="
+mamba list
+=======================================
+ Mamba Environment: quarto-test-env
+=======================================
+List of packages in environment: "/home/benson/miniforge3/envs/quarto-test-env"
+
+  Name                           Version       Build                 Channel    
+──────────────────────────────────────────────────────────────────────────────────
+  _libgcc_mutex                  0.1           conda_forge           conda-forge
+  _openmp_mutex                  4.5           2_gnu                 conda-forge
+  _r-mutex                       1.0.1         anacondar_1           conda-forge
+  alsa-lib                       1.2.15.1      hb03c661_0            conda-forge
+  annotated-doc                  0.0.4         pypi_0                pypi
+  annotated-types                0.7.0         pypi_0                pypi
+  anyio                          4.12.0        pyhcf101f3_0          conda-forge
+  argon2-cffi                    25.1.0        pyhd8ed1ab_0          conda-forge
+  argon2-cffi-bindings           25.1.0        py310h7c4b9e2_2       conda-forge
+```
+
+# 刪除環境
+
+```{bash}
+mamba env remove -n myenv -y
+```
+
+# 其他 conda 指令
+
+顯示 conda 的主要參數與使用說明，適合作為快速查詢用途。
+
+```{bash}
+mamba --help
+```
+
+```
+Version: 2.4.0 
+
+
+
+/home/benson/miniforge3/bin/mamba [OPTIONS] [SUBCOMMAND]
+
+
+OPTIONS:
+  -h,     --help              Print this help message and exit
+          --version
+
+Configuration options:
+          --rc-file FILE1 FILE2...
+                              Paths to the configuration files to use
+          --no-rc             Disable the use of configuration files
+          --no-env            Disable the use of environment variables
+
+Global options:
+  -v,     --verbose           Set verbosity (higher verbosity with multiple -v, e.g. -vvv)
+          --log-level ENUM:value in {critical->5,debug->1,error->4,info->2,off->6,trace->0,warning->3} OR {5,1,4,2,6,0,3}
+                              Set the log level
+  -q,     --quiet             Set quiet mode (print less output)
+  -y,     --yes               Automatically answer yes on prompted questions
+          --json              Report all output as json
+          --offline           Force use cached repodata
+          --dry-run           Only display what would have been done
+          --download-only     Only download and extract packages, do not link them into
+                              environment.
+          --experimental      Enable experimental features
+          --use-uv            Whether to use uv for installing pip dependencies. Defaults to
+                              false.
+
+Prefix options:
+  -r,     --root-prefix PATH  Path to the root prefix
+  -p,     --prefix PATH       Path to the target prefix
+          --relocate-prefix PATH
+                              Path to the relocation prefix
+  -n,     --name NAME         Name of the target prefix
+
+SUBCOMMANDS:
+  shell                       Generate shell init scripts
+  create                      Create new environment
+  install                     Install packages in active environment
+  update                      Update packages in active environment
+  repoquery                   Find and analyze packages in active environment or channels
+  remove, uninstall           Remove packages from active environment
+  list                        List packages in active environment
+  package                     Extract a package or bundle files into an archive
+  clean                       Clean package cache
+  config                      Configuration of micromamba
+  info                        Information about micromamba
+  constructor                 Commands to support using micromamba in constructor
+  env                         See `mamba/micromamba env --help`
+  activate                    Activate an environment
+  run                         Run an executable in an environment
+  ps                          Show, inspect or kill running processes
+  auth                        Login or logout of a given host
+  search                      Find packages in active environment or channels
+                              This is equivalent to `repoquery search` command
+```

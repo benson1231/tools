@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+FULL_YAML="$1"
 
 # 取得目前 conda 環境名稱
 env_name="${CONDA_DEFAULT_ENV:-env}"
@@ -31,4 +32,4 @@ done
         echo "  - ${channel}::${pkg}=${ver}"
     done
 
-} > my-output-full.yaml
+} > $FULL_YAML
