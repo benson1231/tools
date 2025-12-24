@@ -1,0 +1,56 @@
+---
+title: "samtools 基本使用"
+format:
+  html:
+    toc: true
+    toc-location: left
+    sidebar:
+      style: "floating"
+      search: true
+number-sections: true
+engine: knitr
+---
+
+# 連結
+
+[create conda envs]()  
+[samtools official github]()  
+
+# samtools 版本資訊
+
+使用 `--version` 參數確認 samtools 是否成功安裝，並顯示版本號。
+
+```{bash}
+samtools --version
+```
+
+# BAM 轉 SAM
+
+```{bash}
+samtools view -h -o .test/test.paired_end.sorted.sam .test/test.paired_end.sorted.bam
+```
+
+# samtools flagstat
+
+```{bash}
+samtools flagstat .test/test.paired_end.sorted.bam
+```
+
+# samtools 指令參考
+
+顯示 samtools 提供的主要參數與使用說明，適合作為快速查詢指令用途。
+
+```{bash}
+samtools --help
+```
+
+# Conda 環境資訊
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "======================================="
+conda list
+```
