@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>samtools 基本使用</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="samtools_files/libs/clipboard/clipboard.min.js"></script>
+<script src="samtools_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="samtools_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="samtools_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="samtools_files/libs/quarto-html/popper.min.js"></script>
+<script src="samtools_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="samtools_files/libs/quarto-html/anchor.min.js"></script>
+<link href="samtools_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="samtools_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="samtools_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="samtools_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="samtools_files/libs/bootstrap/bootstrap-10fe2bd9fd8498839a96d31d92c830c0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#連結" id="toc-連結" class="nav-link active" data-scroll-target="#連結"><span class="header-section-number">1</span> 連結</a></li>
+  <li><a href="#samtools-version" id="toc-samtools-version" class="nav-link" data-scroll-target="#samtools-version"><span class="header-section-number">2</span> samtools –version</a></li>
+  <li><a href="#samtools-faidx" id="toc-samtools-faidx" class="nav-link" data-scroll-target="#samtools-faidx"><span class="header-section-number">3</span> samtools faidx</a>
+  <ul class="collapse">
+  <li><a href="#index-fasta" id="toc-index-fasta" class="nav-link" data-scroll-target="#index-fasta"><span class="header-section-number">3.1</span> index FASTA</a></li>
+  </ul></li>
+  <li><a href="#samtools-sort" id="toc-samtools-sort" class="nav-link" data-scroll-target="#samtools-sort"><span class="header-section-number">4</span> samtools sort</a></li>
+  <li><a href="#samtools-index" id="toc-samtools-index" class="nav-link" data-scroll-target="#samtools-index"><span class="header-section-number">5</span> samtools index</a></li>
+  <li><a href="#samtools-view" id="toc-samtools-view" class="nav-link" data-scroll-target="#samtools-view"><span class="header-section-number">6</span> samtools view</a>
+  <ul class="collapse">
+  <li><a href="#sam-轉-bam" id="toc-sam-轉-bam" class="nav-link" data-scroll-target="#sam-轉-bam"><span class="header-section-number">6.1</span> SAM 轉 BAM</a></li>
+  <li><a href="#bam-轉-sam" id="toc-bam-轉-sam" class="nav-link" data-scroll-target="#bam-轉-sam"><span class="header-section-number">6.2</span> BAM 轉 SAM</a></li>
+  <li><a href="#查看-bam-檔" id="toc-查看-bam-檔" class="nav-link" data-scroll-target="#查看-bam-檔"><span class="header-section-number">6.3</span> 查看 bam 檔</a></li>
+  <li><a href="#搜尋特定區域" id="toc-搜尋特定區域" class="nav-link" data-scroll-target="#搜尋特定區域"><span class="header-section-number">6.4</span> 搜尋特定區域</a></li>
+  </ul></li>
+  <li><a href="#samtools-flagstat" id="toc-samtools-flagstat" class="nav-link" data-scroll-target="#samtools-flagstat"><span class="header-section-number">7</span> samtools flagstat</a></li>
+  <li><a href="#samtools-merge" id="toc-samtools-merge" class="nav-link" data-scroll-target="#samtools-merge"><span class="header-section-number">8</span> samtools merge</a></li>
+  <li><a href="#samtools-coverage" id="toc-samtools-coverage" class="nav-link" data-scroll-target="#samtools-coverage"><span class="header-section-number">9</span> samtools coverage</a></li>
+  <li><a href="#samtools-idxstats" id="toc-samtools-idxstats" class="nav-link" data-scroll-target="#samtools-idxstats"><span class="header-section-number">10</span> samtools idxstats</a></li>
+  <li><a href="#samtools-stats" id="toc-samtools-stats" class="nav-link" data-scroll-target="#samtools-stats"><span class="header-section-number">11</span> samtools stats</a></li>
+  <li><a href="#samtools-help" id="toc-samtools-help" class="nav-link" data-scroll-target="#samtools-help"><span class="header-section-number">12</span> samtools –help</a></li>
+  <li><a href="#conda-環境資訊" id="toc-conda-環境資訊" class="nav-link" data-scroll-target="#conda-環境資訊"><span class="header-section-number">13</span> Conda 環境資訊</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">samtools 基本使用</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="連結" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 連結</h1>
+<p><a href="https://github.com/benson1231/tools/blob/main/samtools/READEM.md">create conda envs</a><br>
+<a href="https://github.com/samtools/samtools">samtools official github</a></p>
+</section>
+<section id="samtools-version" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> samtools –version</h1>
+<p>使用 <code>--version</code> 參數確認 samtools 是否成功安裝，並顯示版本號。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>samtools 1.23
+Using htslib 1.23
+Copyright (C) 2025 Genome Research Ltd.
+
+Samtools compilation details:
+    Features:       build=configure curses=yes 
+    CC:             /opt/conda/conda-bld/samtools_1765917324003/_build_env/bin/x86_64-conda-linux-gnu-cc
+    CPPFLAGS:       -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/benson/miniforge3/envs/bio-tools/include
+    CFLAGS:         -Wall -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/benson/miniforge3/envs/bio-tools/include -fdebug-prefix-map=/opt/conda/conda-bld/samtools_1765917324003/work=/usr/local/src/conda/samtools-1.23 -fdebug-prefix-map=/home/benson/miniforge3/envs/bio-tools=/usr/local/src/conda-prefix
+    LDFLAGS:        -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,--allow-shlib-undefined -Wl,-rpath,/home/benson/miniforge3/envs/bio-tools/lib -Wl,-rpath-link,/home/benson/miniforge3/envs/bio-tools/lib -L/home/benson/miniforge3/envs/bio-tools/lib
+    HTSDIR:         
+    LIBS:           
+    CURSES_LIB:     -ltinfow -lncursesw
+
+HTSlib compilation details:
+    Features:       build=configure libcurl=yes S3=yes GCS=yes libdeflate=yes lzma=yes bzip2=yes plugins=yes plugin-path=/home/benson/miniforge3/envs/bio-tools/libexec/htslib htscodecs=1.6.5
+    CC:             /opt/conda/conda-bld/htslib_1765902480168/_build_env/bin/x86_64-conda-linux-gnu-cc
+    CPPFLAGS:       -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/benson/miniforge3/envs/bio-tools/include
+    CFLAGS:         -Wall -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/benson/miniforge3/envs/bio-tools/include -fdebug-prefix-map=/opt/conda/conda-bld/htslib_1765902480168/work=/usr/local/src/conda/htslib-1.23 -fdebug-prefix-map=/home/benson/miniforge3/envs/bio-tools=/usr/local/src/conda-prefix -fvisibility=hidden
+    LDFLAGS:        -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,--allow-shlib-undefined -Wl,-rpath,/home/benson/miniforge3/envs/bio-tools/lib -Wl,-rpath-link,/home/benson/miniforge3/envs/bio-tools/lib -L/home/benson/miniforge3/envs/bio-tools/lib -fvisibility=hidden -rdynamic
+
+HTSlib URL scheme handlers present:
+    built-in:    file, preload, data
+    Amazon S3:   s3+https, s3, s3+http
+    libcurl:     gophers, smtp, wss, smb, rtsp, tftp, pop3, smbs, imaps, pop3s, ws, ftps, https, ftp, gopher, sftp, imap, http, smtps, scp, dict, mqtt, telnet
+    Google Cloud Storage:    gs+http, gs+https, gs
+    crypt4gh-needed:     crypt4gh
+    mem:     mem</code></pre>
+</div>
+</div>
+</section>
+<section id="samtools-faidx" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> samtools faidx</h1>
+<section id="index-fasta" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="index-fasta"><span class="header-section-number">3.1</span> index FASTA</h2>
+<p>建立 FASTA index</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> faidx ../.test/ex1.fa</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="samtools-sort" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> samtools sort</h1>
+<p>對 BAM 檔排序，以利後續建立索引或快速查詢。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> sort <span class="at">-o</span> ../.test/ex1.sorted.bam ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="samtools-index" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> samtools index</h1>
+<p>建立 bam 檔的 index file <code>bai</code>，供後續索引</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> index ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="samtools-view" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> samtools view</h1>
+<p>SAM&lt;-&gt;BAM&lt;-&gt;CRAM conversion</p>
+<section id="sam-轉-bam" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sam-轉-bam"><span class="header-section-number">6.1</span> SAM 轉 BAM</h2>
+<p><code>-b</code> 輸出bam，<code>-t</code> 提供 FASTA index(.fai)供 SAM 轉換 BAM，<code>-o &lt;output.bam&gt;</code> 指定輸出 BAM 檔的名稱</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-b</span> <span class="at">-t</span> ../.test/ex1.fa.fai <span class="at">-o</span> ../.test/ex1.bam ../.test/ex1.sam.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="bam-轉-sam" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="bam-轉-sam"><span class="header-section-number">6.2</span> BAM 轉 SAM</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-h</span> <span class="at">-o</span> ../.test/ex1.sam.gz ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="查看-bam-檔" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="查看-bam-檔"><span class="header-section-number">6.3</span> 查看 bam 檔</h2>
+<p>default 不包含header，<code>-h</code> 含 header，<code>-H</code> 只看 header</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有比對結果（不含 header）</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view ../.test/ex1.bam <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有比對結果（含 header）</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-h</span> ../.test/ex1.bam <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 只輸出 BAM 的 header</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-H</span> ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>B7_591:4:96:693:509 73  seq1    1   99  36M *   0   0   CACTAGTGGCTCATTGTAAATGTGTGGTTTAACTCG    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5&lt;&lt;&lt;&lt;&lt;;:&lt;;7    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_65:7:152:368:113  73  seq1    3   99  35M *   0   0   CTAGTGGCTCATTGTAAATGTGTGGTTTAACTCGT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;&lt;&lt;&lt;655&lt;&lt;7&lt;&lt;&lt;:9&lt;&lt;3/:&lt;6): MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_64:8:5:734:57 137 seq1    5   99  35M *   0   0   AGTGGCTCATTGTAAATGTGTGGTTTAACTCGTCC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7;71&lt;&lt;;&lt;;;&lt;7;&lt;&lt;3;);3*8/5 MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_591:1:289:587:906    137 seq1    6   63  36M *   0   0   GTGGCTCATTGTAATTTTTTGTTTTAACTCTTCTCT    (-&amp;----,----)-)-),'--)---',+-,),''*,    MF:i:130    Aq:i:63 NM:i:5  UQ:i:38 H0:i:0  H1:i:0
+EAS56_59:8:38:671:758   137 seq1    9   99  35M *   0   0   GCTCATTGTAAATGTGTGGTTTAACTCGTCCATGG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;;:&lt;5% MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_61:6:18:467:281   73  seq1    13  99  35M *   0   0   ATTGTAAATGTGTGGTTTAACTCGTCCCTGGCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;;8:;6/686&amp;;(16666 MF:i:18 Aq:i:39 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
+EAS114_28:5:296:340:699 137 seq1    13  99  36M *   0   0   ATTGTAAATGTGTGGTTTAACTCGTCCATGGCCCAG    &lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;8&lt;3&lt;8;&lt;;&lt;0;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_597:6:194:894:408    73  seq1    15  99  35M *   0   0   TGTAAATGTGTGGTTTAACTCGTCCATTGCCCAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;7;;&lt;&lt;&lt;*,;;572&lt; MF:i:18 Aq:i:43 NM:i:1  UQ:i:9  H0:i:0  H1:i:1
+EAS188_4:8:12:628:973   89  seq1    18  75  35M *   0   0   AAATGTGTGGTTTAACTCGTCCATGGCCCAGCATT ==;=:;:;;:====;=;===:=======;==;=== MF:i:64 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_66:7:68:402:50    137 seq1    22  99  35M *   0   0   GTGTGGTTTAACTCGTCCATGGCCCAGCATTTGGG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;9&lt;6;9;;&amp;697;7&amp;&lt;55 MF:i:18 Aq:i:66 NM:i:1  UQ:i:5  H0:i:1  H1:i:0
+@SQ SN:seq1 LN:1575
+@SQ SN:seq2 LN:1584
+@PG ID:samtools PN:samtools VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.1   PN:samtools PP:samtools VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG ID:samtools.2   PN:samtools PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.3   PN:samtools PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG ID:samtools.4   PN:samtools PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.5   PN:samtools PP:samtools.4   VN:1.23 CL:samtools view -h ../.test/ex1.bam
+B7_591:4:96:693:509 73  seq1    1   99  36M *   0   0   CACTAGTGGCTCATTGTAAATGTGTGGTTTAACTCG    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5&lt;&lt;&lt;&lt;&lt;;:&lt;;7    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_65:7:152:368:113  73  seq1    3   99  35M *   0   0   CTAGTGGCTCATTGTAAATGTGTGGTTTAACTCGT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;&lt;&lt;&lt;655&lt;&lt;7&lt;&lt;&lt;:9&lt;&lt;3/:&lt;6): MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+@SQ SN:seq1 LN:1575
+@SQ SN:seq2 LN:1584
+@PG ID:samtools PN:samtools VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.1   PN:samtools PP:samtools VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG ID:samtools.2   PN:samtools PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.3   PN:samtools PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG ID:samtools.4   PN:samtools PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.5   PN:samtools PP:samtools.4   VN:1.23 CL:samtools view -H ../.test/ex1.bam</code></pre>
+</div>
+</div>
+</section>
+<section id="搜尋特定區域" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="搜尋特定區域"><span class="header-section-number">6.4</span> 搜尋特定區域</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取 chr2 450-550 的比對結果</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view ../.test/ex1.sorted.bam seq2:450-550 <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 根據 BED 檔指定區域提取比對</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-L</span> ../.test/ex1.bed ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>EAS1_108:1:33:779:821   163 seq2    416 99  35M =   579 198 TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
+EAS112_34:6:75:615:555  147 seq2    416 99  35M =   255 -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA ;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+EAS188_7:6:11:994:584   147 seq2    417 97  35M =   226 -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+EAS114_26:7:218:858:445 147 seq2    421 99  35M =   239 -217    GAAAAAAATTCTAAAATCAGCAAGAGAAAAGCATA ;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;:&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:1
+EAS220_1:4:70:766:2016  163 seq2    422 99  35M =   607 220 AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+EAS54_81:2:317:72:221   83  seq2    422 99  35M =   270 -187    AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC =========:======;==;=============== MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_53:4:45:707:147   83  seq2    424 99  35M =   216 -243    AAAAATTCTAAAATCAGCAAGAGAAAAGCATACAG &lt;&lt;&lt;&lt;&lt;&lt;;3&lt;&lt;&lt;&lt;&lt;4;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:51 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS219_1:7:16:1343:1621 147 seq2    426 99  35M =   248 -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC ;&lt;&lt;9;7=====;;==&lt;==================&lt; MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_595:5:184:912:258    99  seq2    428 99  35M =   582 189 ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_62:5:119:38:945   147 seq2    428 99  35M =   221 -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT =;;8=====:========&lt;================ MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_108:1:33:779:821   163 seq2    416 99  35M =   579 198 TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
+EAS112_34:6:75:615:555  147 seq2    416 99  35M =   255 -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA ;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+EAS188_7:6:11:994:584   147 seq2    417 97  35M =   226 -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+EAS114_26:7:218:858:445 147 seq2    421 99  35M =   239 -217    GAAAAAAATTCTAAAATCAGCAAGAGAAAAGCATA ;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;:&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:1
+EAS220_1:4:70:766:2016  163 seq2    422 99  35M =   607 220 AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+EAS54_81:2:317:72:221   83  seq2    422 99  35M =   270 -187    AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC =========:======;==;=============== MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_53:4:45:707:147   83  seq2    424 99  35M =   216 -243    AAAAATTCTAAAATCAGCAAGAGAAAAGCATACAG &lt;&lt;&lt;&lt;&lt;&lt;;3&lt;&lt;&lt;&lt;&lt;4;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:51 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS219_1:7:16:1343:1621 147 seq2    426 99  35M =   248 -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC ;&lt;&lt;9;7=====;;==&lt;==================&lt; MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_595:5:184:912:258    99  seq2    428 99  35M =   582 189 ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_62:5:119:38:945   147 seq2    428 99  35M =   221 -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT =;;8=====:========&lt;================ MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_108:6:95:235:746   163 seq2    430 99  35M =   598 203 TCTAAAATCAGCAAGAGAAAAGCATACAGACATCT &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;79&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;*;;;&lt;9 MF:i:18 Aq:i:72 NM:i:1  UQ:i:9  H0:i:1  H1:i:0
+EAS114_30:3:39:348:594  163 seq2    431 99  35M =   600 204 CTAAAATCAGCAAGAGAAAAGCATACAGTCATCTA &lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;:&lt;:&lt;: MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_99:2:188:782:483   83  seq2    431 99  35M =   277 -189    CTAAAATCAGCAAGAGAAAAGCATACAGTCATCTA 7&lt;&lt;&lt;&lt;&lt;&lt;4&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_95:4:176:971:874   83  seq2    432 76  9M1D26M =   273 -195    TAAAATCAGAAGAGAAAAGCATACAGTCATCTATA &lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:130    Aq:i:76 NM:i:0  UQ:i:0  H0:i:0  H1:i:0
+EAS114_30:3:14:697:541  147 seq2    432 99  35M =   259 -208    TAAAAGCAGCAAGAGAAAAGCATACAGTCATCTAT 8&lt;&lt;&lt;&lt;&amp;6&lt;;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;8 MF:i:18 Aq:i:71 NM:i:1  UQ:i:5  H0:i:1  H1:i:0
+EAS1_108:1:131:518:588  163 seq2    433 99  35M =   607 209 AAAATCAGCAAGAGAAAAGCATACAGTCATCTATA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;1&lt;&lt; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_610:7:177:469:800    147 seq2    433 99  35M =   259 -209    AAAATCAGCAAGAGAAAAGCATACAGTCATCTATA =&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS192_3:8:6:237:885    147 seq2    433 99  35M =   269 -199    AAAATCAGCAAGAGAAAAGCATACAGTCATCTATA &lt;&lt;&lt;&lt;1:&lt;;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:2:104:402:732  163 seq2    434 99  35M =   610 211 AAATCAGCAAGAGAAAAGCATACAGTCATCTATAA =========================7=;===;=:= MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_53:3:134:126:465  147 seq2    434 99  35M =   245 -224    AAATCAGCAAGAGAAAAGCATACAGTCATCTATAA &lt;&lt;;:&amp;&lt;3)&lt;&lt;7&lt;:&lt;&lt;&lt;&lt;.:&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:56 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS218_4:3:65:85:1547   83  seq2    434 99  35M =   257 -212    AAATCAGCAAGAGAAAAGCATACAGTCATCTATAA &lt;&lt;&lt;&lt;&lt;&lt;;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_71:2:85:686:696   163 seq2    435 99  35M =   594 193 AATCAGCAAGAGAAAAGCATACAGTCATCTATAAA ==================&lt;=====:==&lt;=&lt;;=:== MF:i:18 Aq:i:47 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_28:1:144:242:602 163 seq2    436 99  36M =   611 211 ATCAGCAAGAGAAAAGCATACAGTCATCTATAAAGG    ========================;=====&lt;;;&lt;&lt;;    MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_81:7:124:253:889  163 seq2    437 99  35M =   598 196 TCAGCAAGAGAAAAGCATACAGTCATCTATAAAGG &lt;&lt;&lt;&lt;&lt;&lt;6&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_108:2:204:737:61   83  seq2    437 99  35M =   247 -225    TCAGCAAGAGAAAAGCATACAGTCATCTATAAAGG (7=72=;==2=====&lt;===&lt;&lt;============== MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_30:7:310:155:312 163 seq2    438 99  35M =   606 203 CAGCAAGAGAAAAGCATACAGTCATCTATAAAGGA ;&lt;&lt;&lt;;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;8&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS192_3:7:78:692:671   99  seq2    438 99  35M =   610 207 CAGCAAGAGAAAAGCATACAGTCATCTATAAAGGA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;:&lt;&lt;&lt;:8&lt;&lt;0;; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_11:7:60:163:1612 163 seq2    439 99  35M =   617 213 AGCAAGAGAAAAGCATACAGTCATCTATAAAGGAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;21&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;3&lt;--&lt;+&lt;&lt;&lt;+&lt;&lt;63&lt; MF:i:18 Aq:i:59 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_71:7:130:260:553  147 seq2    439 99  35M =   250 -224    AGCAAGAGAAAAGCATACAGTCATCTATAAAGGAA &lt;*;&lt;&lt;7&lt;);&lt;&lt;;9;&lt;5&lt;*&lt;9&lt;;&lt;&lt;;;&lt;7&lt;&lt;&lt;&lt;&lt;1&lt; MF:i:18 Aq:i:42 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_597:6:106:595:322    83  seq2    440 99  35M =   274 -201    GCAAGAGAAAAGCATACAGTCATCTATAAAGGAAA ;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_65:5:211:84:84    147 seq2    440 99  35M =   268 -207    GCAAGAGAAAAGCATACAGTCATCTATAAAGGAAA 6:&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;;;&lt;;&lt;3; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_105:2:280:662:939  147 seq2    442 99  35M =   294 -183    AAGAGAAAAGCATACAGTCATCTATAAAGGAAATC &lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:48 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_103:2:234:167:381  163 seq2    443 99  35M =   625 217 AGAGAAAAGCATACAGTCATCTATAAAGGAAATCC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;;7&lt;;; MF:i:18 Aq:i:49 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_595:6:52:751:360 83  seq2    443 99  35M =   263 -215    AGAGAAAAGCATACAGTCATCTATAAAGGAAATCC &lt;-&lt;9&lt;&lt;&lt;&lt;&lt;6&lt;&lt;&lt;8&lt;&lt;;;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:45 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_45:6:37:156:134  83  seq2    443 99  35M =   261 -217    AGAGAAAAGCATACAGTCATCTATAAAGGAAATCC 99998&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:49 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS112_34:7:96:489:453  99  seq2    445 99  35M =   625 215 AGAAAAGCATACAGTCATCTATAAAGGAAATCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;;: MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_28:2:167:905:852 163 seq2    445 99  36M =   647 238 AGAAAAGCATACAGTCATCTATAAAGAAAATCCCAT    &lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;:&lt;&lt;:::&amp;.&lt;:&lt;66:3&lt;    MF:i:18 Aq:i:43 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
+EAS219_FC30151:3:13:674:1717    163 seq2    445 99  35M =   623 213 AGAAAAGCATGCAGTCATCTATAAAGGAAATCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;%&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;:;;; MF:i:18 Aq:i:45 NM:i:1  UQ:i:4  H0:i:0  H1:i:1
+EAS56_59:1:93:490:901   83  seq2    445 99  35M =   280 -200    AGAAAAGCATACAGTCATCTATAAAGGAAATCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_26:6:46:13:880   147 seq2    445 99  35M =   290 -190    AGAAAAGCATACAGTCATCTATAAAGGAAATCCCA =&amp;====8==========0================= MF:i:18 Aq:i:43 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_62:7:196:511:896  83  seq2    446 99  35M =   283 -198    GAAAAGCATACAGTCATCTATAAAGGAAATCCCAT 8&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:52 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_53:1:154:118:488  163 seq2    447 99  35M =   624 212 AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:7&lt;&lt;&lt;&lt;7&lt;:;;:: MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_28:4:215:246:640 99  seq2    447 99  36M =   624 213 AAAAGCATACAGTCATCTATAAAGGAAATCCCATCA    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9;&lt;&lt;&lt;&lt;&lt;&lt;3;&lt;;3    MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_57:2:44:153:969   83  seq2    447 95  35M =   245 -237    AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;5&lt;:7&lt;72&lt;51&lt;7&lt;*79&lt;&lt;&lt;&lt;&lt;5&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2&lt; MF:i:18 Aq:i:36 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS219_1:7:94:1655:1921 147 seq2    447 85  35M =   258 -224    AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;&lt;&lt;;:===&lt;==;&lt;==&lt;;================; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS221_1:6:60:1037:1146 147 seq2    447 99  35M =   250 -232    AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_65:1:23:536:229   99  seq2    448 99  35M =   614 201 AAAGCATACAGTCATCTATAAAGGAAATCCCATCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;8&lt;:&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt; MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS112_34:6:130:865:838 163 seq2    448 99  35M =   649 236 AAAGCATACAGTCATCTATAAAGGAAATCCCATCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;:&lt;;3 MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:2:239:1001:406 99  seq2    450 99  35M =   634 219 AGCATACAGTCATCTATAAAGGAAATCCCATCAGA &lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;36&lt;&lt;3&lt;:33 MF:i:18 Aq:i:49 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_67:3:172:196:746  99  seq2    451 99  35M =   620 204 GCATACAGTCATCTATAAAGGAAATCCCATCAGAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;6&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_97:3:147:423:584   147 seq2    451 99  35M =   277 -209    GCATACAGTCATCTATAAAGGAAATCCCATCAGAA 27&lt;;&lt;3&lt;&lt;&lt;+&lt;&lt;;&lt;&lt;&lt;;;-4&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_99:1:187:715:521   83  seq2    451 99  35M =   291 -195    GCATACAGTCATCTATAAAGGAAATCCCATCAGAA &lt;7&lt;:&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_71:3:267:821:860  83  seq2    451 99  34M =   296 -189    GCATACAGTCATCTATAAAGGAAATCCCATCAGA  $&amp;&lt;&lt;&lt;.&lt;:;6&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;  MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
+EAS56_61:7:7:682:201    83  seq2    452 99  35M =   288 -199    CATACAGTCATCTATAAAGGAAATCCCATCAGAAT 0:8;5&lt;8&lt;1:78&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:8&lt;&lt;2&lt;&lt;&lt;&lt;:&lt; MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_589:3:82:13:897  163 seq2    453 99  35M =   606 188 ATACAGTCATCTATAAAGGAAATCCCAGCAGAATA &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;;5&lt;51;&lt;1&lt;&lt;&lt;&lt;%&lt;&lt;&lt;&lt;,58 MF:i:18 Aq:i:41 NM:i:1  UQ:i:4  H0:i:0  H1:i:1
+EAS56_53:6:180:695:621  99  seq2    453 99  35M =   637 219 ATACAGTCATCTATAAAGGAAATCCCATCAGAATA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;::&lt;&lt;&lt; MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_57:2:158:909:321  83  seq2    453 99  35M =   271 -217    ATACAGTCATCTATAAAGGAAATCCCATCAGAATA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_26:2:237:497:165 99  seq2    454 99  35M =   619 200 TACAGTCATCTATAAAGGAAATCCCATCAGAATAA 8===&lt;8===========37=&lt;===7=;7=8===== MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS220_1:4:100:20:1199  163 seq2    456 99  35M =   614 193 CAGTCATCTATAAAGGAAATCCCATCAGAATAACA 7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;4&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_99:2:152:355:962   83  seq2    456 99  35M =   269 -222    CAGTCATCTATAAAGGAAATCCCATCAGAATAACA &amp;&lt;.9.&lt;;+;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;::&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:2
+EAS192_3:4:255:549:422  83  seq2    456 99  35M =   295 -196    AAGTCATCTATAAAGGAAATCCCATCAGAATAACA &amp;&lt;;;+&lt;;4;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:1  UQ:i:5  H0:i:1  H1:i:2
+EAS54_67:5:71:408:741   163 seq2    457 99  35M =   637 215 AGTCATCTATAAAGGAAATCCCATCAGAATAACAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_73:3:4:854:140    99  seq2    458 72  35M =   638 215 GTCATCTATAAAGGAAATCCCATCAGAATAACAAT &lt;&lt;&lt;6&lt;&lt;&lt;:&lt;6&lt;&lt;&lt;:36:&lt;&lt;&lt;&lt;3&lt;&lt;8:.6&lt;38::4&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS188_7:6:107:636:642  163 seq2    458 99  35M =   630 207 GTCATCTATAAAGGAAATCCCATCAGAATAACAAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_66:5:285:395:450  147 seq2    458 99  35M =   269 -224    GTCATCTATAAAGGAAATCCCATCAGAATAACAAT 8)3&lt;8+;&lt;)&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;97:7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:65 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:6:227:657:95   147 seq2    458 99  35M =   280 -213    GTCATCTATAAAGGAAATCCCATCAGAATAACAAT ;3;&lt;);&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;18&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:59 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_28:7:57:324:546  83  seq2    458 99  36M =   281 -213    GTCATCTATAAAGGAAATCCCATCAGAATAACAATG    ;;5&lt;;,&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;97&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_19:4:26:274:1078 83  seq2    458 99  40M =   282 -216    GTCATCTATAAAGGAAATCCCATCAGAATAACAATGGGCT    9:*:64&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;8;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS192_3:4:312:915:751  99  seq2    461 99  35M =   621 195 ATCTATAAAGGAAATCCCATCAGAATAACAATGGG &lt;2&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;84,4: MF:i:18 Aq:i:41 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_81:7:226:869:36   147 seq2    461 99  35M =   273 -223    ATATATAAAGGAAATCCCATCAGAATAACAATGGG &lt;0/)&lt;/&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;)&lt;&lt;7&lt;&lt;&lt;&lt;&lt;+55&lt;&lt;1&lt;&lt;&lt;:&lt; MF:i:18 Aq:i:59 NM:i:1  UQ:i:14 H0:i:1  H1:i:0
+EAS188_4:7:96:899:106   99  seq2    462 99  35M =   636 209 TCTATAAAGGAAATCCCATCAGAATAACAATGGGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_65:6:67:56:806    99  seq2    464 99  35M =   637 208 TATAAAGGAAATCCCATCAGAATAACAATGGGCTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;:7: MF:i:18 Aq:i:70 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_65:5:37:611:267   99  seq2    464 99  35M =   610 181 TATAAAGGAAATCCCATAAGAATAACAATGGGCTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS1_93:5:62:969:12 147 seq2    464 99  35M =   303 -196    TATAAAGGAAATCCCATCAGAATAACAATGGGCTT &lt;&lt;;&lt;;&lt;::&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_105:8:96:720:940   163 seq2    467 99  35M =   654 222 AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;9&lt;&lt;8&lt;&lt;6&lt;;:;&lt;;;.;; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_53:2:59:286:290   99  seq2    467 99  35M =   628 196 AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;&lt;;7;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_57:2:236:841:20   163 seq2    467 99  35M =   652 220 AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;:&lt;&lt;9&lt;&lt;&lt;&lt;;&lt;:&lt;9 MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_93:7:319:280:57    147 seq2    467 99  35M =   306 -196    AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_30:6:49:656:507  99  seq2    468 99  35M =   637 204 AAGGAAATCCCATCAGAATAACAATGGGCTTCTCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;9 MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS221_3:4:78:1314:1275 147 seq2    469 99  35M =   277 -227    AGGAAATCCCATCAGAATAACAATGGGCTTCTCAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_62:2:133:8:379    163 seq2    470 99  35M =   653 218 GGAAATCCCATCAGAATAACAATGGGCTTCTCAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;&lt;&lt;8&lt;&lt;&lt;:6&lt; MF:i:18 Aq:i:70 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_99:6:181:392:500   147 seq2    470 99  35M =   299 -206    GGAAATCCCATCAGAATAACAATGGGCTTCTCAGC /5&lt;&lt;;(88&lt;&lt;&lt;;&lt;;&lt;&lt;6&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt; MF:i:18 Aq:i:63 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:5:198:929:684  163 seq2    471 99  35M =   624 188 GAAATCCCATCAGAATAACAATGGGCTTCTCAGCA &lt;7&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;::&lt;:7 MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_30:3:181:582:435 99  seq2    471 99  35M =   629 193 GAAATCCCATCAGAATAACAATGGGCTTCTCAGCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;:: MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_93:1:214:784:690   99  seq2    472 99  35M =   657 220 AAATCCCATCAGAATAACAATGGGCTTCTCAGCGG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;4&lt;44 MF:i:18 Aq:i:30 NM:i:1  UQ:i:19 H0:i:1  H1:i:0
+EAS114_39:3:11:1238:1728    83  seq2    475 99  35M =   310 -200    TCCCATCAGAATAACAATGGGCTTCTCAGCGGAAA :677&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:45 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS112_34:4:12:273:89   163 seq2    477 99  35M =   631 189 CCATCAGAATAACAATGGGCTTCTCAGCGGAAACC ==========&lt;====:=========+===4414;; MF:i:18 Aq:i:71 NM:i:1  UQ:i:28 H0:i:1  H1:i:0
+EAS56_63:2:119:161:322  147 seq2    479 99  35M =   297 -217    ATCAGAATAACAATGGGCTTCTCAGCAGAAACCTT &lt;83&lt;;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:1
+EAS114_30:2:111:142:21  83  seq2    479 99  35M =   304 -210    ATCAGAATAACAATGGGCTTCACAGCGGAAACCTT ;88&lt;:&lt;;;&lt;6&lt;;;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:28 NM:i:2  UQ:i:53 H0:i:0  H1:i:0
+EAS1_99:1:34:649:318    83  seq2    481 65  35M =   328 -188    AAGAATAACAATGGGCTTCACAGCGGAACCCTTAC )&lt;7&lt;&lt;3&lt;&lt;&lt;&lt;&lt;&lt;+&lt;1&lt;;&lt;8&amp;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:130    Aq:i:65 NM:i:3  UQ:i:59 H0:i:0  H1:i:0
+EAS114_30:6:214:565:337 147 seq2    481 99  35M =   326 -190    CAGAATAACAATGGGCTTCTCAGCAGAAACCTTAC ;;&lt;;&lt;1&lt;9&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_11:6:13:682:680  99  seq2    482 99  35M =   685 238 AGAATAACAATGGGCTTCTCAGCGGAAACCTTACA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS56_61:6:226:370:91   147 seq2    482 99  35M =   335 -182    AGAATAACAATGGGCTTCTCAGCGGAAACCTTACA &lt;':&lt;6&lt;;&lt;&lt;&lt;;2&lt;;&lt;-7;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;&lt;7;&lt; MF:i:18 Aq:i:43 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+B7_593:2:273:348:37 163 seq2    483 99  36M =   688 241 GAATAACAATGGGCTTCTCAGCAGAAACCTTACACG    &lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;49&lt;&lt;&lt;;&lt;&lt;&lt;&lt;*&lt;&lt;19&lt;15;&lt;&lt;/5&lt;;.5    MF:i:18 Aq:i:41 NM:i:1  UQ:i:13 H0:i:1  H1:i:0
+EAS139_11:8:76:205:587  83  seq2    483 99  35M =   306 -212    GAATAACAATGGGCTTCTCAGCGGAAACCTTACGA 8&lt;&lt;5&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;/&lt; MF:i:18 Aq:i:28 NM:i:2  UQ:i:41 H0:i:0  H1:i:0
+B7_591:2:27:280:592 147 seq2    484 99  36M =   310 -210    AATAACAATGGGCTTCTCAGCGGAAACCTTACAAGC    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS1_99:7:171:196:287   163 seq2    485 99  35M =   658 208 ATAACAATGGGCTTCTCAGCAGAAACCTTACAAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;6&lt;&lt;&lt;&lt;&lt;&lt;2:8&lt;0: MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_65:2:224:579:433  163 seq2    485 99  35M =   662 212 ATAACAATGGGCTTCTCAGCAGAAACCTTACAAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;+8;: MF:i:18 Aq:i:31 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS219_1:1:22:490:2011  147 seq2    485 99  35M =   307 -213    ATAACAATGGGCTTCTCAGCGGAAACCTTACAAGC &lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS56_65:6:46:173:214   83  seq2    487 99  35M =   308 -214    AACAATGGGCTTCTCAGCAGAAACCTTACAAGCCA &lt;&lt;2&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5&lt;&lt;5&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:29 NM:i:0  UQ:i:0  H0:i:4  H1:i:6
+EAS1_103:4:164:79:134   99  seq2    488 99  35M =   656 203 ACAATGGGCTTCTCAGCGGAAACCTTACAAGCCAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS114_32:2:283:577:398 147 seq2    488 99  35M =   308 -215    ACAATGGGCTTCTCAGCGGAAACCTTACAAGCCAG ;8;;&amp;&lt;&lt;&lt;;&lt;;67&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:29 NM:i:1  UQ:i:27 H0:i:0  H1:i:2
+EAS54_67:5:149:639:910  163 seq2    489 99  35M =   669 215 CAATGGGCTTCTCAGCAGAAACCTTACAAGCCAGA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;;;&lt;&lt;;&lt;&lt;;&lt; MF:i:18 Aq:i:42 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_28:3:250:628:423 83  seq2    489 99  36M =   295 -230    CAATGGGCTTCTCAGCGGAAACCTTACAAGCCAGAA    +&lt;&lt;4;;9;;7.;7&lt;;7&lt;;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:27 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS1_108:1:242:419:512  163 seq2    490 94  35M =   672 217 AATGGGCTTCTCAGCAGAAACCTTACAAGCCAGAA &lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;8&lt;(&lt;30 MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:1  H1:i:2
+EAS114_45:1:95:1530:28  83  seq2    490 74  35M =   332 -193    AATGGGCTTCTCAGCAGAAACCTTACAAGCCAGAA 77741(9;;994;5;;4;;1;;;;;1;&lt;;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:9  NM:i:0  UQ:i:0  H0:i:42 H1:i:45
+EAS192_3:6:326:887:180  163 seq2    492 73  35M =   672 215 TGGGCTTCTCAGCAGAAACCTTACAAGCCAGAAGC ;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;;;&lt;+ MF:i:18 Aq:i:0  NM:i:1  UQ:i:25 H0:i:3  H1:i:7
+EAS1_99:1:86:871:319    99  seq2    494 71  35M =   651 192 GGCTTCTCAGCGGAAACCTTACAAGCCAGAAGAGA &lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;:&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;:&lt;1;&lt;::) MF:i:18 Aq:i:0  NM:i:1  UQ:i:25 H0:i:0  H1:i:4
+EAS56_57:1:189:130:136  147 seq2    494 79  35M =   314 -215    GGCTTCTCAGCAGAAACCTTACAAGCCAGAAGAGA 823;23&lt;7&lt;57&lt;7&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:63 H1:i:85
+EAS51_64:7:140:752:822  99  seq2    495 76  35M =   667 207 GCTTCTCAGCGGAAACCTTACAAGCCAGAAGAGAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;:; MF:i:18 Aq:i:0  NM:i:1  UQ:i:27 H0:i:0  H1:i:5
+EAS56_57:5:53:544:889   147 seq2    495 76  35M =   335 -195    GCTTCTCAGCGGAAACCTTACAAGCCAGAAGAGAT ,&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:1  UQ:i:27 H0:i:2  H1:i:32
+EAS54_65:4:61:346:384   83  seq2    496 68  35M =   324 -207    CAACTAAGAAGAAACCTTACAAGCCAGAAGAGATT 7&amp;$+&amp;,&lt;&lt;+;;&lt;;;&lt;&lt;6&lt;&lt;8&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:3  UQ:i:19 H0:i:1  H1:i:53
+EAS54_81:8:177:800:714  83  seq2    497 76  35M =   324 -208    TTCTCAGCAGAAACCTTACAAGCCAGAAGAGATTG =;3=+=&lt;:=&lt;========8================ MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:29 H1:i:85
+B7_597:6:20:592:496 83  seq2    498 75  35M =   338 -195    TCTCAGCGGAAACCTTACAAGCCAGAAGAGATTGG 97&lt;7;&lt;;&lt;;&lt;&lt;&lt;&lt;;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:5  H1:i:48
+B7_591:5:243:557:560    83  seq2    499 75  36M =   331 -204    CTAAGCAGAAACCTTACAAGCCAGAAGAGATTGGAT    69&amp;&lt;;&amp;&lt;&amp;&lt;&lt;;6.&lt;&lt;&lt;+&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:0  NM:i:1  UQ:i:5  H0:i:1  H1:i:9
+EAS188_7:5:163:982:695  147 seq2    499 77  35M =   339 -195    CTCAGCAGAAACCTTACAAGCCAGAAGAGATTGGA &lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:7  H1:i:42
+EAS139_19:6:78:1029:512 163 seq2    500 99  40M =   656 196 TCAGCAGAAACCTTACAAGCCAGAAGAGATTGGATCTAAT    &lt;0:;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;:;&lt;&lt;&lt;;&lt;7&lt;&lt;;&lt;7;;;:6;::672    MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS221_3:6:51:1486:1131 163 seq2    500 77  35M =   685 220 TCAGCAGAAACCTTACAAGCCAGAAGAGATTGGAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt;5&lt;&lt;8&lt;&lt;&lt;'&lt;;&lt;&lt;;1 MF:i:18 Aq:i:3  NM:i:0  UQ:i:0  H0:i:22 H1:i:22
+EAS139_19:1:1:1598:843  83  seq2    500 99  40M =   347 -193    TCAGCGGAAACCTTACAAGCCAGAAGAGATTGGATCTAAT    1)::6::&lt;&lt;;&lt;98&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:74 NM:i:1  UQ:i:25 H0:i:1  H1:i:0
+EAS218_1:4:14:1872:1521 83  seq2    500 62  35M =   339 -196    TCATCAAAAACCTTACAAGCCAGAAGAGATTGGAT /1&lt;%73&amp;7&lt;1&lt;3577,&lt;&lt;&lt;7/733&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt;&lt; MF:i:18 Aq:i:2  NM:i:2  UQ:i:9  H0:i:1  H1:i:8
+EAS192_3:6:45:183:25    163 seq2    501 95  35M =   672 206 CAGCGGAAACCTTACAAGCCAGAAGAGATTGGATC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;86;&lt;;:; MF:i:18 Aq:i:23 NM:i:1  UQ:i:27 H0:i:0  H1:i:2
+EAS114_45:1:30:1882:1210    163 seq2    503 82  35M =   665 197 GCAGAAACCTTACAAGCCAGAAGAGATTGGATCTA ;;::;;;;:;;;;;:;;;;;;9;;:7;;8:77777 MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
+B7_597:4:38:999:463 147 seq2    503 39  35M =   317 -221    GCGGAAACCTTACAAGCCAGAAGAGATTGGATCTA .*:&amp;&lt;&lt;0&lt;0!&lt;&lt;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:39 NM:i:2  UQ:i:25 H0:i:0  H1:i:1
+EAS1_108:6:222:579:961  163 seq2    504 99  35M =   679 210 CAGAAACCTTACAAGCCAGAAGAGATTGGATCTAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;:7;;;68 MF:i:18 Aq:i:70 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_53:1:92:875:345   163 seq2    504 99  35M =   690 221 CGGAAACCTTACAAGCCAGAAGAGATTGGATCTAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS221_1:2:23:127:880   99  seq2    504 99  35M =   686 217 CGGAAACCTTACAAGCCAGAAGAGATTGGATCTAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
+EAS56_63:8:62:125:888   83  seq2    504 99  35M =   347 -192    CGGAAACCTTACAAGCCAGAAGAGATTGGATCTAA ,;3&lt;&lt;&lt;8;;3&lt;,&lt;&lt;&lt;8;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:69 NM:i:1  UQ:i:26 H0:i:1  H1:i:0
+EAS51_66:8:43:972:506   163 seq2    505 99  35M =   686 216 AGAAACCTTACAAGCCAGAAGAGATTGGATCTAAT &lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;;&lt;;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_26:6:183:697:555 83  seq2    505 84  35M =   341 -199    AGAAATCTTAGAAGCCAGAAGAGATTGGATCTAAT &lt;&lt;&lt;;&amp;,.;);&amp;96&lt;84&lt;&lt;81&lt;&lt;&amp;&lt;&lt;&lt;9&lt;&lt;8&lt;8&lt;&lt;1 MF:i:18 Aq:i:37 NM:i:2  UQ:i:16 H0:i:0  H1:i:1
+EAS221_3:8:65:463:703   99  seq2    506 99  35M =   693 222 GAAACCTTACAAGCCAGAAGAGATTGGATCTAATT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_67:7:101:752:996  163 seq2    508 99  35M =   687 214 AACCTTACAAGCCAGAAGAGATTGGATCTAATTTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;;;; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_105:6:267:953:459  99  seq2    509 99  35M =   667 193 ACCTTACAAGCCAGAAGAGATTGGATCTAATTTTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS221_3:8:33:1240:846  99  seq2    509 99  35M =   685 211 ACCTTACAAGCCAGAAGAGATTGGATCTAATTTTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;2&lt;;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;:6:&lt;&lt;&lt;: MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS112_32:7:135:401:735 99  seq2    510 99  35M =   703 228 CCTTACAAGCCAGAAGAGATTGGATCTAATTTTTG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:6:3:186:68 99  seq2    512 99  35M =   687 210 TTACAAGCCAGAAGAGATTGGATCTAATTTTTGTA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&amp;%8 MF:i:18 Aq:i:71 NM:i:1  UQ:i:4  H0:i:1  H1:i:0
+EAS51_78:7:164:727:977  163 seq2    513 99  35M =   689 211 TACAAGCCAGAAGAGATTGGATCTAATTTTTCGAC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;;;79; MF:i:18 Aq:i:75 NM:i:1  UQ:i:26 H0:i:1  H1:i:0
+B7_589:1:110:543:934    163 seq2    514 99  35M =   700 221 ACAAGCCAGAAGAGATTGGATCTAATTTTTGGACT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;,,;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:5:325:544:349  163 seq2    515 99  35M =   716 236 CAAGCCAGAAGAGATTGGATCTAATTTTTGGACTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6;;;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_591:4:329:339:408    147 seq2    515 99  36M =   325 -226    CAATCCAGAAGAGATTGGATCTAATTTTTGGACTTC    7&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:76 NM:i:1  UQ:i:27 H0:i:1  H1:i:0
+EAS1_105:1:3:903:957    99  seq2    516 99  35M =   661 180 AAGCCAGAAGAGATTGGATCTAATTTTTGGACTTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;66&lt;;&lt;&lt;; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_593:1:85:361:418 147 seq2    517 99  36M =   353 -200    AGCCAGAAGAGATTGGATCTAATTTTTGGACTTCTT    ;;;5&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_63:8:138:186:459  83  seq2    518 97  35M =   360 -193    GCCAGAAGAGATTGGAGCTAATTTTTGGACTTCTT +/2/;&lt;:&lt;&amp;7:7&lt;/&lt;2&amp;&lt;&lt;&lt;&amp;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;:3 MF:i:18 Aq:i:37 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
+EAS139_11:4:36:1184:994 83  seq2    518 99  35M =   358 -195    GCCAGAAGAGATTGGATCTAATTTTTGGACTTCTT &lt;84&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_593:2:270:430:269    83  seq2    519 99  36M =   331 -224    CCAGAAGAGATTGGATCTAATTTTTGGACTTCTTAA    28&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_62:5:295:882:282  163 seq2    520 99  35M =   691 206 CAGAAGAGATTGGATCTAATTTTTGGACTTCTTAA ========================&lt;6&lt;======8; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_61:5:272:240:950  163 seq2    520 97  35M =   696 211 CAGCAGAGCTTGGATCTAATTTTTGGACTTCTTCA 6&lt;&lt;&amp;:&lt;&lt;&lt;&amp;&lt;::;&amp;7&lt;&lt;&lt;3&lt;;&lt;&lt;;&lt;:;:&lt;8:&lt;&lt;(&lt; MF:i:18 Aq:i:25 NM:i:3  UQ:i:17 H0:i:0  H1:i:0
+EAS56_57:3:41:739:907   83  seq2    520 99  35M =   344 -211    CAGAAGAGATTGGATCTAATTTTTGGACTTCTTAA ;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_65:7:155:629:357  83  seq2    521 99  35M =   333 -223    AGAAGAGATTGGATCTAATTTTTGGACTTCTTAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_71:4:14:88:306    147 seq2    521 99  35M =   341 -215    AGAAGAGATTAGATCTAATTTTTGGACTTCTTAAA &lt;1;&lt;;&lt;;&lt;4&lt;&amp;&lt;&lt;&lt;:&lt;&lt;&lt;:&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:45 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
+EAS1_108:5:115:193:231  163 seq2    522 99  35M =   684 197 GAAGAGATTGGATCTAATTTTTGGACTTCTTAAAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;7 MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS219_FC30151:1:88:1454:418    83  seq2    522 99  35M =   349 -208    GAAGAGATTGGATCTAATTTTTGGACTTCTTAAAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;96&lt;&lt;&lt;1911&lt;&lt;&lt;1&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1 MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_595:5:36:649:554 83  seq2    523 99  35M =   350 -208    AAGAGATTGGATCTAATTTTTGGACTTCTTAAAGA &lt;&lt;&lt;&lt;&lt;888;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;;&lt;8&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:4:119:651:88   83  seq2    527 99  35M =   337 -225    GATTGGATCTAATTTTTGGACTTCTTAAAGAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_57:7:57:826:977   163 seq2    528 99  35M =   693 200 ATTGGATCTAATTTTTGGACTTCTTAAAGAAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;9:6&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_64:3:285:417:147  99  seq2    529 99  35M =   712 218 TTGGATCTAATTTTTGGACTTCTTAAAGAAAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;6&lt;:&lt;;&lt;&lt;; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_105:8:160:130:351  99  seq2    530 99  35M =   697 202 TGGATCTAATTTTTGGACTTCTTAAAGAAAAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;4&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;:&lt;&lt;:&lt; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_26:3:287:665:495 163 seq2    530 99  35M =   702 207 TGGATCTAATTTTTGGACTTCTTAAAGAAAAAAAA ==========================98====8=8 MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_108:6:71:187:824   147 seq2    534 99  35M =   367 -202    TCTAATTTTTGGACTTCTTAAAGAAAAAAAAACCT 0040;&lt;7&lt;&lt;&lt;&lt;0&lt;7&lt;&lt;&lt;;&lt;7*&lt;&lt;&lt;&lt;&lt;7&lt;&lt;771&lt;&lt;&lt; MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS218_1:8:70:445:1289  99  seq2    535 99  35M =   702 202 CTAATTTTTGGACTTCTTAAAGAAAAAAAAACCTG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;;&lt;: MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_61:7:41:745:603   83  seq2    536 99  35M =   360 -211    TAATTTTTGGACTTCTTAAAGAAAAAAAAACCTGT ;&lt;&lt;;;&lt;;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_65:6:197:759:975  163 seq2    537 99  35M =   698 196 AATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;; MF:i:18 Aq:i:78 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_26:6:140:253:322 99  seq2    537 99  35M =   689 187 AATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;&lt;; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_597:5:58:684:520 147 seq2    538 99  35M =   367 -206    ATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCA &lt;85;;:&lt;&lt;&lt;7&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_11:6:19:306:982  147 seq2    538 99  35M =   368 -205    ATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:78 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_57:7:273:562:954  99  seq2    539 99  35M =   722 218 TTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;:;;;; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_11:5:78:775:555  99  seq2    539 99  35M =   691 187 TTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAA 6:&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;6:&lt;&lt;)::8&lt;6&lt;&lt;:&lt;&lt;)&lt;::63832 MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_81:2:49:330:699   163 seq2    540 99  35M =   722 217 TTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAAA ==;=================;======5;;;==5= MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS114_28:2:329:437:643 147 seq2    540 99  36M =   354 -222    TTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAAAC    885&lt;8;;&lt;;3,8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_57:1:125:884:276  83  seq2    541 99  35M =   362 -214    TTTGGACTTCTTAAAGAAAAAAAAACCTGTCAAAC ,;;3,&lt;7&lt;;7&lt;&lt;===;============;====== MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_593:4:315:201:673    83  seq2    542 45  36M =   381 -197    TTGGACTTATTAAAGAAAAAAAAACCTGTCAAACAC    ;;;;&lt;-;;&amp;;;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:0  NM:i:1  UQ:i:5  H0:i:0  H1:i:1
+B7_597:3:10:394:392 147 seq2    542 99  35M =   376 -201    TTGGACTTCTTAAAGAAAAAAAAACCTGTCAAACA 28-:;0-&lt;0&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_103:1:228:736:747  83  seq2    542 68  35M =   381 -196    TTGGACTTCTTAAAGAAAAAAAAACCTGTCAAACA &lt;07&lt;&lt;&amp;&lt;;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_59:4:267:394:437  163 seq2    544 99  35M =   735 226 GGACTTCTTAAAGAAAAAAAAACCTGTCAAACACG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;:;8&lt;;&lt;8 MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_19:5:66:1381:181 83  seq2    544 99  40M =   362 -222    GGACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAATGT    ;;;+;;&amp;&lt;7&lt;&lt;&lt;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;8&lt;&lt;&lt;;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;;&lt;&lt;&lt;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS139_19:5:74:668:424  99  seq2    545 99  40M =   707 202 GACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAATGTT    ;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;::;;    MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS56_61:6:307:208:477  163 seq2    546 99  35M =   710 199 ACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;:&lt;&lt;&lt;88; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS51_66:4:322:350:374  83  seq2    546 99  35M =   360 -221    ACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAA &lt;+;8&amp;84&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS1_95:2:228:915:631   83  seq2    547 66  35M =   381 -201    ATTATTAAAGAAAAAAAAACCTGTCAAACACGAAT &amp;-))-*===/=========9====4========== MF:i:18 Aq:i:0  NM:i:2  UQ:i:13 H0:i:1  H1:i:0
+EAS1_93:5:246:177:525   99  seq2    549 98  35M =   738 224 TCTTAAAGAAAAAAAAACCTGTCAAACACGAATGT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;8;; MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+B7_589:7:93:634:323 99  seq2    550 99  35M =   721 206 CTTAAAGAAAAAAAAACCTGTCAAACACGAATGTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;,&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_61:8:165:441:708  163 seq2    550 99  35M =   737 222 CTTAAAGAAAAAAAAACCTGTCAAACACGAATGTT =&lt;===============================99 MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="samtools-flagstat" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> samtools flagstat</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> flagstat ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3307 + 0 in total (QC-passed reads + QC-failed reads)
+3307 + 0 primary
+0 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+0 + 0 primary duplicates
+3271 + 0 mapped (98.91% : N/A)
+3271 + 0 primary mapped (98.91% : N/A)
+3307 + 0 paired in sequencing
+1654 + 0 read1
+1653 + 0 read2
+3144 + 0 properly paired (95.07% : N/A)
+3144 + 0 with itself and mate mapped
+127 + 0 singletons (3.84% : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ&gt;=5)</code></pre>
+</div>
+</div>
+</section>
+<section id="samtools-merge" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> samtools merge</h1>
+<p>用於合併多個 BAM 檔為單一檔案。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> merge <span class="at">-o</span> ../.test/merge.bam ../.test/ex1.bam ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="samtools-coverage" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> samtools coverage</h1>
+<p>alignment depth and percent coverage</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> coverage ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#rname  startpos    endpos  numreads    covbases    coverage    meandepth   meanbaseq   meanmapq
+seq1    1   1575    1482    1569    99.619  33.1213 25.5    96.1
+seq2    1   1584    1789    1567    98.9268 39.7822 26  90.8</code></pre>
+</div>
+</div>
+</section>
+<section id="samtools-idxstats" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> samtools idxstats</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> idxstats ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>seq1    1575    1482    19
+seq2    1584    1789    17
+*   0   0   0</code></pre>
+</div>
+</div>
+</section>
+<section id="samtools-stats" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> samtools stats</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> stats ../.test/ex1.sorted.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># This file was produced by samtools stats (1.23+htslib-1.23) and can be plotted using plot-bamstats
+# This file contains statistics for all reads.
+# The command line was:  stats ../.test/ex1.sorted.bam
+# CHK, Checksum [2]Read Names   [3]Sequences    [4]Qualities
+# CHK, CRC32 of reads which passed filtering followed by addition (32bit overflow)
+CHK 1eb1426c    9b48daa9    abfd29ac
+# Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
+SN  raw total sequences:    3307    # excluding supplementary and secondary reads
+SN  filtered sequences: 0
+SN  sequences:  3307</code></pre>
+</div>
+</div>
+</section>
+<section id="samtools-help" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> samtools –help</h1>
+<p>顯示 samtools 提供的主要參數與使用說明，適合作為快速查詢指令用途。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Program: samtools (Tools for alignments in the SAM format)
+Version: 1.23 (using htslib 1.23)
+
+Usage:   samtools &lt;command&gt; [options]
+
+Commands:
+  -- Indexing
+     dict           create a sequence dictionary file
+     faidx          index/extract FASTA
+     fqidx          index/extract FASTQ
+     index          index alignment
+
+  -- Editing
+     calmd          recalculate MD/NM tags and '=' bases
+     fixmate        fix mate information
+     reheader       replace BAM header
+     targetcut      cut fosmid regions (for fosmid pool only)
+     addreplacerg   adds or replaces RG tags
+     markdup        mark duplicates
+     ampliconclip   clip oligos from the end of reads
+
+  -- File operations
+     collate        shuffle and group alignments by name
+     cat            concatenate BAMs
+     consensus      produce a consensus Pileup/FASTA/FASTQ
+     merge          merge sorted alignments
+     mpileup        multi-way pileup
+     sort           sort alignment file
+     split          splits a file by read group
+     quickcheck     quickly check if SAM/BAM/CRAM file appears intact
+     fastq          converts a BAM to a FASTQ
+     fasta          converts a BAM to a FASTA
+     import         Converts FASTA or FASTQ files to SAM/BAM/CRAM
+     reference      Generates a reference from aligned data
+     reset          Reverts aligner changes in reads
+
+  -- Statistics
+     bedcov         read depth per BED region
+     coverage       alignment depth and percent coverage
+     depth          compute the depth
+     flagstat       simple stats
+     idxstats       BAM index stats
+     cram-size      list CRAM Content-ID and Data-Series sizes
+     phase          phase heterozygotes
+     stats          generate stats (former bamcheck)
+     ampliconstats  generate amplicon specific stats
+     checksum       produce order-agnostic checksums of sequence content
+
+  -- Viewing
+     flags          explain BAM flags
+     head           header viewer
+     tview          text alignment viewer
+     view           SAM&lt;-&gt;BAM&lt;-&gt;CRAM conversion
+     depad          convert padded BAM to unpadded BAM
+     samples        list the samples in a set of SAM/BAM/CRAM files
+
+  -- Misc
+     help [cmd]     display this help message or help for [cmd]
+     version        detailed version information</code></pre>
+</div>
+</div>
+</section>
+<section id="conda-環境資訊" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Conda 環境資訊</h1>
+<p>完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">" Conda Environment: </span><span class="va">$(</span><span class="ex">conda</span> info <span class="at">--envs</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=======================================
+ Conda Environment: #
+bio-tools
+=======================================
+# packages in environment at /home/benson/miniforge3/envs/bio-tools:
+#
+# Name                       Version            Build                 Channel
+_libgcc_mutex                0.1                conda_forge           conda-forge
+_openmp_mutex                4.5                2_gnu                 conda-forge
+_python_abi3_support         1.0                hd8ed1ab_2            conda-forge
+_r-mutex                     1.0.1              anacondar_1           conda-forge
+alsa-lib                     1.2.15.1           hb03c661_0            conda-forge
+annotated-types              0.7.0              pyhd8ed1ab_1          conda-forge
+attrs                        25.4.0             pyhcf101f3_1          conda-forge
+backports.zstd               1.2.0              py314h680f03e_0       conda-forge
+bcftools                     1.23               h3a4d415_0            bioconda
+bedtools                     2.31.1             h13024bc_3            bioconda
+binutils_impl_linux-64       2.45               default_hfdba357_105  conda-forge
+brotli-python                1.2.0              py314h3de4e8d_1       conda-forge
+bwidget                      1.10.1             ha770c72_1            conda-forge
+bzip2                        1.0.8              hda65f42_8            conda-forge
+c-ares                       1.34.6             hb03c661_0            conda-forge
+ca-certificates              2025.11.12         hbd8a1cb_0            conda-forge
+cairo                        1.18.4             h3394656_0            conda-forge
+certifi                      2025.11.12         pyhd8ed1ab_0          conda-forge
+charset-normalizer           3.4.4              pyhd8ed1ab_0          conda-forge
+click                        8.3.1              pyh8f84b5b_1          conda-forge
+colorama                     0.4.6              pyhd8ed1ab_1          conda-forge
+coloredlogs                  15.0.1             pyhd8ed1ab_4          conda-forge
+colormath                    3.0.0              pyhd8ed1ab_4          conda-forge
+cpython                      3.14.2             py314hd8ed1ab_100     conda-forge
+curl                         8.17.0             h4e3cde8_1            conda-forge
+dart-sass                    1.59.1             ha770c72_0            conda-forge
+deno                         2.3.1              hbf66b88_0            conda-forge
+deno-dom                     0.1.41             h4768de7_0            conda-forge
+esbuild                      0.27.2             hfc2019e_0            conda-forge
+expat                        2.7.3              hecca717_0            conda-forge
+fastp                        1.0.1              heae3180_0            bioconda
+fastqc                       0.12.1             hdfd78af_0            bioconda
+font-ttf-dejavu-sans-mono    2.37               hab24e00_0            conda-forge
+font-ttf-inconsolata         3.000              h77eed37_0            conda-forge
+font-ttf-source-code-pro     2.038              h77eed37_0            conda-forge
+font-ttf-ubuntu              0.83               h77eed37_3            conda-forge
+fontconfig                   2.15.0             h7e30c49_1            conda-forge
+fonts-conda-ecosystem        1                  0                     conda-forge
+fonts-conda-forge            1                  hc364b38_1            conda-forge
+freetype                     2.14.1             ha770c72_0            conda-forge
+fribidi                      1.0.16             hb03c661_0            conda-forge
+gcc_impl_linux-64            15.2.0             hc5723f1_16           conda-forge
+gfortran_impl_linux-64       15.2.0             h281d09f_16           conda-forge
+giflib                       5.2.2              hd590300_0            conda-forge
+graphite2                    1.3.14             hecca717_2            conda-forge
+gsl                          2.7                he838d99_0            conda-forge
+gxx_impl_linux-64            15.2.0             hda75c37_16           conda-forge
+h2                           4.3.0              pyhcf101f3_0          conda-forge
+harfbuzz                     11.0.0             h76408a6_0            conda-forge
+hdf5                         1.14.3             nompi_h2d575fe_109    conda-forge
+hpack                        4.1.0              pyhd8ed1ab_0          conda-forge
+htslib                       1.23               h566b1c6_0            bioconda
+humanfriendly                10.0               pyh707e725_8          conda-forge
+humanize                     4.15.0             pyhd8ed1ab_0          conda-forge
+hyperframe                   6.1.0              pyhd8ed1ab_0          conda-forge
+icu                          75.1               he02047a_0            conda-forge
+idna                         3.11               pyhd8ed1ab_0          conda-forge
+importlib-metadata           8.7.0              pyhe01879c_1          conda-forge
+isa-l                        2.31.1             hb9d3cd8_1            conda-forge
+jinja2                       3.1.6              pyhcf101f3_1          conda-forge
+jsonschema                   4.25.1             pyhe01879c_0          conda-forge
+jsonschema-specifications    2025.9.1           pyhcf101f3_0          conda-forge
+kaleido-core                 0.2.1              h3644ca4_0            conda-forge
+kallisto                     0.51.1             h2b92561_2            bioconda
+kernel-headers_linux-64      6.12.0             he073ed8_5            conda-forge
+keyutils                     1.6.3              hb9d3cd8_0            conda-forge
+krb5                         1.21.3             h659f571_0            conda-forge
+lcms2                        2.17               h717163a_0            conda-forge
+ld_impl_linux-64             2.45               default_hbd61a6d_105  conda-forge
+lerc                         4.0.0              h0aef613_1            conda-forge
+libaec                       1.1.4              h3f801dc_0            conda-forge
+libblas                      3.11.0             5_h4a7cf45_openblas   conda-forge
+libcblas                     3.11.0             5_h0358290_openblas   conda-forge
+libcups                      2.3.3              hb8b1518_5            conda-forge
+libcurl                      8.17.0             h4e3cde8_1            conda-forge
+libdeflate                   1.22               hb9d3cd8_0            conda-forge
+libedit                      3.1.20250104       pl5321h7949ede_0      conda-forge
+libev                        4.33               hd590300_2            conda-forge
+libexpat                     2.7.3              hecca717_0            conda-forge
+libffi                       3.5.2              h9ec8514_0            conda-forge
+libfreetype                  2.14.1             ha770c72_0            conda-forge
+libfreetype6                 2.14.1             h73754d4_0            conda-forge
+libgcc                       15.2.0             he0feb66_16           conda-forge
+libgcc-devel_linux-64        15.2.0             hcc6f6b0_116          conda-forge
+libgcc-ng                    15.2.0             h69a702a_16           conda-forge
+libgfortran                  15.2.0             h69a702a_16           conda-forge
+libgfortran-ng               15.2.0             h69a702a_16           conda-forge
+libgfortran5                 15.2.0             h68bc16d_16           conda-forge
+libglib                      2.84.0             h2ff4ddf_0            conda-forge
+libgomp                      15.2.0             he0feb66_16           conda-forge
+libiconv                     1.18               h3b78370_2            conda-forge
+libjpeg-turbo                3.1.2              hb03c661_0            conda-forge
+liblapack                    3.11.0             5_h47877c9_openblas   conda-forge
+liblzma                      5.8.1              hb9d3cd8_2            conda-forge
+libmpdec                     4.0.0              hb9d3cd8_0            conda-forge
+libnghttp2                   1.67.0             had1ee68_0            conda-forge
+libopenblas                  0.3.30             pthreads_h94d23a6_4   conda-forge
+libpng                       1.6.53             h421ea60_0            conda-forge
+libsanitizer                 15.2.0             h90f66d4_16           conda-forge
+libsqlite                    3.51.1             h0c1763c_1            conda-forge
+libssh2                      1.11.1             hcf80075_0            conda-forge
+libstdcxx                    15.2.0             h934c35e_16           conda-forge
+libstdcxx-devel_linux-64     15.2.0             hd446a21_116          conda-forge
+libstdcxx-ng                 15.2.0             hdf11a46_16           conda-forge
+libtiff                      4.7.0              hc4654cb_2            conda-forge
+libuuid                      2.41.3             h5347b49_0            conda-forge
+libuv                        1.51.0             hb03c661_1            conda-forge
+libwebp-base                 1.6.0              hd42ef1d_0            conda-forge
+libxcb                       1.17.0             h8a09558_0            conda-forge
+libxcrypt                    4.4.36             hd590300_1            conda-forge
+libzlib                      1.3.1              hb9d3cd8_2            conda-forge
+make                         4.4.1              hb9d3cd8_2            conda-forge
+markdown                     3.10               pyhcf101f3_1          conda-forge
+markdown-it-py               4.0.0              pyhd8ed1ab_0          conda-forge
+markupsafe                   3.0.3              pyh7db6752_0          conda-forge
+mathjax                      2.7.7              ha770c72_3            conda-forge
+mdurl                        0.1.2              pyhd8ed1ab_1          conda-forge
+multiqc                      1.33               pyhdfd78af_0          bioconda
+narwhals                     2.14.0             pyhcf101f3_0          conda-forge
+natsort                      8.4.0              pyh29332c3_1          conda-forge
+ncurses                      6.5                h2d0b736_3            conda-forge
+networkx                     3.6.1              pyhcf101f3_0          conda-forge
+nodejs                       22.21.1            h4a9c4b4_0            conda-forge
+nspr                         4.38               h29cc59b_0            conda-forge
+nss                          3.118              h445c969_0            conda-forge
+numpy                        2.4.0              py314h2b28147_0       conda-forge
+openjdk                      23.0.2             h53dfc1b_2            conda-forge
+openjpeg                     2.5.3              h55fea9a_1            conda-forge
+openssl                      3.6.0              h26f9b46_0            conda-forge
+packaging                    25.0               pyh29332c3_1          conda-forge
+pandoc                       3.6.3              ha770c72_0            conda-forge
+pango                        1.56.3             h9ac818e_1            conda-forge
+pcre2                        10.44              hc749103_2            conda-forge
+perl                         5.32.1             7_hd590300_perl5      conda-forge
+pillow                       11.3.0             py314hdf18abd_3       conda-forge
+pip                          25.3               pyh145f28c_0          conda-forge
+pixman                       0.46.4             h54a6638_1            conda-forge
+plotly                       6.5.0              pyhd8ed1ab_0          conda-forge
+polars                       1.36.1             pyh6a1acc5_0          conda-forge
+polars-lts-cpu               1.34.0.deprecated  hc364b38_0            conda-forge
+polars-runtime-32            1.36.1             py310hffdcd12_0       conda-forge
+polars-runtime-compat        1.36.1             py310hbcd5346_0       conda-forge
+pthread-stubs                0.4                hb9d3cd8_1002         conda-forge
+pyaml-env                    1.2.2              pyhd8ed1ab_0          conda-forge
+pydantic                     2.12.5             pyhcf101f3_1          conda-forge
+pydantic-core                2.41.5             py314h2e6c369_1       conda-forge
+pygments                     2.19.2             pyhd8ed1ab_0          conda-forge
+pysocks                      1.7.1              pyha55dd90_7          conda-forge
+python                       3.14.2             h32b2ec7_100_cp314    conda-forge
+python-dotenv                1.2.1              pyhcf101f3_0          conda-forge
+python-gil                   3.14.2             h4df99d1_100          conda-forge
+python-kaleido               0.2.1              pyhd8ed1ab_0          conda-forge
+python_abi                   3.14               8_cp314               conda-forge
+pyyaml                       6.0.3              pyh7db6752_0          conda-forge
+quarto                       1.8.26             hbf95b10_0            conda-forge
+r-base                       4.4.2              hbab086e_1            conda-forge
+r-base64enc                  0.1_3              r44h54b55ab_1008      conda-forge
+r-bslib                      0.9.0              r44hc72bb7e_1         conda-forge
+r-cachem                     1.1.0              r44h54b55ab_2         conda-forge
+r-cli                        3.6.5              r44h3697838_1         conda-forge
+r-digest                     0.6.39             r44h3697838_0         conda-forge
+r-ellipsis                   0.3.2              r44h54b55ab_4         conda-forge
+r-evaluate                   1.0.5              r44hc72bb7e_1         conda-forge
+r-fastmap                    1.2.0              r44h3697838_2         conda-forge
+r-fontawesome                0.5.3              r44hc72bb7e_1         conda-forge
+r-fs                         1.6.6              r44h3697838_1         conda-forge
+r-glue                       1.8.0              r44h54b55ab_1         conda-forge
+r-here                       1.0.2              r44hc72bb7e_0         conda-forge
+r-highr                      0.11               r44hc72bb7e_2         conda-forge
+r-htmltools                  0.5.9              r44h3697838_0         conda-forge
+r-jquerylib                  0.1.4              r44hc72bb7e_4         conda-forge
+r-jsonlite                   2.0.0              r44h54b55ab_1         conda-forge
+r-knitr                      1.51               r44hc72bb7e_0         conda-forge
+r-lattice                    0.22_7             r44h54b55ab_1         conda-forge
+r-lifecycle                  1.0.4              r44hc72bb7e_2         conda-forge
+r-matrix                     1.7_4              r44h0e4624f_1         conda-forge
+r-memoise                    2.0.1              r44hc72bb7e_4         conda-forge
+r-mime                       0.13               r44h54b55ab_1         conda-forge
+r-png                        0.1_8              r44h6b2d295_3         conda-forge
+r-r6                         2.6.1              r44hc72bb7e_1         conda-forge
+r-rappdirs                   0.3.3              r44h54b55ab_4         conda-forge
+r-rcpp                       1.1.0              r44h3697838_1         conda-forge
+r-rcpptoml                   0.2.3              r44h3697838_1         conda-forge
+r-reticulate                 1.44.1             r44h3697838_0         conda-forge
+r-rlang                      1.1.6              r44h3697838_1         conda-forge
+r-rmarkdown                  2.30               r44hc72bb7e_0         conda-forge
+r-rprojroot                  2.1.1              r44hc72bb7e_1         conda-forge
+r-sass                       0.4.10             r44h3697838_1         conda-forge
+r-tinytex                    0.58               r44hc72bb7e_0         conda-forge
+r-withr                      3.0.2              r44hc72bb7e_1         conda-forge
+r-xfun                       0.55               r44h3697838_0         conda-forge
+r-yaml                       2.3.12             r44h54b55ab_0         conda-forge
+readline                     8.3                h853b02a_0            conda-forge
+referencing                  0.37.0             pyhcf101f3_0          conda-forge
+regex                        2025.11.3          py314h5bd0f2a_1       conda-forge
+requests                     2.32.5             pyhd8ed1ab_0          conda-forge
+rich                         14.2.0             pyhcf101f3_0          conda-forge
+rich-click                   1.9.5              pyhd8ed1ab_0          conda-forge
+rpds-py                      0.30.0             py314h2e6c369_0       conda-forge
+samtools                     1.23               h96c455f_0            bioconda
+sed                          4.9                h6688a6e_0            conda-forge
+spectra                      0.0.11             pyhd8ed1ab_2          conda-forge
+sqlite                       3.51.1             hbc0de68_1            conda-forge
+sysroot_linux-64             2.39               hc4b9eeb_5            conda-forge
+tiktoken                     0.12.0             py314h67fec18_3       conda-forge
+tk                           8.6.13             noxft_ha0e22de_103    conda-forge
+tktable                      2.10               h8d826fa_7            conda-forge
+tqdm                         4.67.1             pyhd8ed1ab_1          conda-forge
+typeguard                    4.4.4              pyhd8ed1ab_0          conda-forge
+typing-extensions            4.15.0             h396c80c_0            conda-forge
+typing-inspection            0.4.2              pyhd8ed1ab_1          conda-forge
+typing_extensions            4.15.0             pyhcf101f3_0          conda-forge
+typst                        0.13.0             h53e704d_0            conda-forge
+tzdata                       2025c              h8577fbf_0            conda-forge
+urllib3                      2.6.2              pyhd8ed1ab_0          conda-forge
+xorg-libice                  1.1.2              hb9d3cd8_0            conda-forge
+xorg-libsm                   1.2.6              he73a12e_0            conda-forge
+xorg-libx11                  1.8.12             h4f16b4b_0            conda-forge
+xorg-libxau                  1.0.12             hb03c661_1            conda-forge
+xorg-libxdmcp                1.1.5              hb03c661_1            conda-forge
+xorg-libxext                 1.3.6              hb9d3cd8_0            conda-forge
+xorg-libxfixes               6.0.2              hb03c661_0            conda-forge
+xorg-libxi                   1.8.2              hb9d3cd8_0            conda-forge
+xorg-libxrandr               1.5.4              hb9d3cd8_0            conda-forge
+xorg-libxrender              0.9.12             hb9d3cd8_0            conda-forge
+xorg-libxt                   1.3.1              hb9d3cd8_0            conda-forge
+xorg-libxtst                 1.2.5              hb9d3cd8_3            conda-forge
+yaml                         0.2.5              h280c20c_3            conda-forge
+zipp                         3.23.0             pyhcf101f3_1          conda-forge
+zlib-ng                      2.2.5              hde8ca8f_1            conda-forge
+zstd                         1.5.7              hb78ec9c_6            conda-forge</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

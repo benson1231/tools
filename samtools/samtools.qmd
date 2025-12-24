@@ -13,10 +13,10 @@ engine: knitr
 
 # 連結
 
-[create conda envs]()  
-[samtools official github]()  
+[create conda envs](https://github.com/benson1231/tools/blob/main/samtools/READEM.md)  
+[samtools official github](https://github.com/samtools/samtools)  
 
-# samtools 版本資訊
+# samtools --version
 
 使用 `--version` 參數確認 samtools 是否成功安裝，並顯示版本號。
 
@@ -24,19 +24,109 @@ engine: knitr
 samtools --version
 ```
 
-# BAM 轉 SAM
+# samtools faidx
+## index FASTA
+
+建立 FASTA index
 
 ```{bash}
-samtools view -h -o .test/test.paired_end.sorted.sam .test/test.paired_end.sorted.bam
+samtools faidx ../.test/ex1.fa
+```
+
+# samtools sort
+
+對 BAM 檔排序，以利後續建立索引或快速查詢。
+
+```{bash}
+samtools sort -o ../.test/ex1.sorted.bam ../.test/ex1.bam
+```
+
+# samtools index
+
+建立 bam 檔的 index file `bai`，供後續索引
+
+```{bash}
+samtools index ../.test/ex1.sorted.bam
+```
+
+# samtools view
+
+SAM<->BAM<->CRAM conversion
+
+## SAM 轉 BAM
+
+`-b` 輸出bam，`-t` 提供 FASTA index(.fai)供 SAM 轉換 BAM，`-o <output.bam>` 指定輸出 BAM 檔的名稱
+
+```{bash}
+samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+```
+
+## BAM 轉 SAM
+
+```{bash}
+samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+```
+
+## 查看 bam 檔
+
+default 不包含header，`-h` 含 header，`-H` 只看 header
+
+```{bash}
+# 查看所有比對結果（不含 header）
+samtools view ../.test/ex1.bam | head
+
+# 查看所有比對結果（含 header）
+samtools view -h ../.test/ex1.bam | head
+
+# 只輸出 BAM 的 header
+samtools view -H ../.test/ex1.bam
+```
+
+## 搜尋特定區域
+
+```{bash}
+# 提取 chr2 450-550 的比對結果
+samtools view ../.test/ex1.sorted.bam seq2:450-550 | head
+
+# 根據 BED 檔指定區域提取比對
+samtools view -L ../.test/ex1.bed ../.test/ex1.sorted.bam
 ```
 
 # samtools flagstat
 
 ```{bash}
-samtools flagstat .test/test.paired_end.sorted.bam
+samtools flagstat ../.test/ex1.bam
 ```
 
-# samtools 指令參考
+# samtools merge
+
+用於合併多個 BAM 檔為單一檔案。
+
+```{bash}
+samtools merge -o ../.test/merge.bam ../.test/ex1.bam ../.test/ex1.sorted.bam
+```
+
+# samtools coverage
+
+alignment depth and percent coverage
+
+```{bash}
+samtools coverage ../.test/ex1.sorted.bam
+```
+
+# samtools idxstats
+
+```{bash}
+samtools idxstats ../.test/ex1.sorted.bam
+```
+
+# samtools stats
+
+```{bash}
+samtools stats ../.test/ex1.sorted.bam | head
+```
+
+# samtools --help
 
 顯示 samtools 提供的主要參數與使用說明，適合作為快速查詢指令用途。
 
