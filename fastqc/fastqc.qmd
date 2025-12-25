@@ -1,22 +1,138 @@
 ---
-title: "fastqc 基本使用"
+title: "FastQC 基本使用"
 format:
   html:
     toc: true
+    toc-title: Contents
     toc-location: left
-    sidebar:
-      style: "floating"
-      search: true
+    toc-depth: 4
+    toc-expand: 1
+    other-links:
+      - text: home
+        icon: house
+        href: https://benson1231.github.io/tools/
+    code-links:
+      - text: github
+        icon: github
+        href: https://github.com/benson1231/tools
 number-sections: true
 engine: knitr
 ---
 
-# 連結
+# FastQC 介紹
 
-[create conda envs](https://github.com/benson1231/tools/tree/main/fastqc)  
-[fastqc official github](https://github.com/s-andrews/FastQC)  
+> 目前主流 **前處理 trimming** 通常由 **fastp/Cutadapt** 完成
+> 而**品質報告整合** 通常由 **FastQC + MultiQC** 完成
 
-# fastqc 版本資訊
+[FastQC](https://github.com/s-andrews/FastQC) 是 Illumina 及其他高通量定序（Next-Generation Sequencing, NGS）資料中最常用的品質控制（Quality Control, QC）工具之一，由 [Babraham Bioinformatics](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) 開發。它提供快速、直觀的方式，評估原始 FASTQ 讀序的品質狀況，協助使用者判斷資料是否適合進行後續分析（如比對、定量、變異偵測等）。
+
+FastQC 的設計目標是：
+
+* **提供簡單明瞭的 QC 報告**（HTML 格式），讓使用者快速掌握資料品質，[詳見html報告範例](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/good_sequence_short_fastqc.html)。
+* **自動偵測常見的測序問題**，如 adapter contamination、GC 偏移、序列偏差。
+* **在多種資料來源之間保持一致性**，不論是 Illumina、BGI/MGI、Nanopore 或 PacBio，皆能進行 QC（長讀序有些圖會被省略）。
+
+## FastQC 的主要功能
+
+FastQC 的分析項目包括下列模組，每個模組會以 *PASS / WARN / FAIL* 標記品質狀態：
+
+## ✅ Basic Statistics
+
+提供 FASTQ 檔案的基本資訊，例如：
+
+* 讀序總數
+* 讀長（是否固定或變動）
+* GC 含量
+* 估計的 encoding（如 Phred33/Phred64）
+
+## ✅ Per Base Sequence Quality
+
+顯示每一個位置的 Phred 品質分數分布，用來判斷讀序兩端是否需要 trimming。若尾端品質下降明顯，通常需要進行修剪。
+
+## ✅ Per Tile Sequence Quality
+
+針對 Illumina flowcell 的 tile 分析品質分布，用來偵測儀器特定 tile 是否表現不良（常見於舊機型）。
+
+## ✅ Per Sequence Quality Scores
+
+顯示每條讀序的平均品質，評估樣本是否有異常的品質讀序。
+
+## ✅ Per Base Sequence Content
+
+顯示每個位置 A/T/G/C 的比例。若讀序起始端出現強烈偏差（特別是 RNA-seq），屬正常現象，不必過度解讀。
+
+## ✅ Per Sequence GC Content
+
+展示所有讀序的 GC 分布。若分布異常（過度偏移或多峰），可能代表 contamination 或 library 準備問題。
+
+## ✅ Per Base N Content
+
+顯示每個位置 N（未知鹼基）的比例。高比例 N 通常代表測序品質問題。
+
+## ✅ Sequence Length Distribution
+
+顯示讀序長度的分布。對於固定讀長平台（Illumina）應呈現單一峰；若發生多峰則可能來自 trimming、amplicon 或分析流程特性。
+
+## ✅ Sequence Duplication Levels
+
+顯示序列重複程度。高 duplication 可能反映：
+
+* library 多次 PCR 放大
+* low complexity library
+* biological contamination
+
+RNA-seq 樣本 duplication 偏高屬常見現象。
+
+## ✅ Overrepresented Sequences
+
+列出出現次數過高的讀序，用於偵測：
+
+* adapters
+* primers
+* PCR artifacts
+* contamination
+
+## ✅ Adapter Content
+
+分析讀序中是否存在 adapter 污染。若含量高，需要使用 trimming 工具（如 fastp、Cutadapt）。
+
+這些模組組合提供了對測序資料完整的品質診斷，有助於使用者判斷資料是否適合下游分析並決定是否需要 trimming 或重新進行實驗。
+
+
+## FastQC 的使用情境
+
+FastQC 通常用於：
+
+* **跑在原始 FASTQ**（raw sequencing data）上做初步 QC
+* **trimming 前後的比較**（搭配 fastp、Cutadapt、Trimmomatic）
+* **檢查 library 是否成功建置**
+* **判斷是否需要 PolyG trimming（Illumina NextSeq/NovaSeq）**
+* **偵測 contamination 或 batch effect 的前兆**
+
+FastQC 並不進行 trimming，也不修改讀序，因此通常搭配 fastp 或其他 trimming 工具一起使用。
+
+## FastQC 的輸出內容
+
+執行完 FastQC 後會得到兩種檔案：
+
+* `*_fastqc.html` → 可視化品質報告，[官方網站提供各種情況範例報告](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+* `*_fastqc.zip` → 報告原始數據（包含 `fastqc_data.txt`）
+
+這些結果適合用於：
+
+* 手動檢查 QC
+* 多個樣本一起進行 MultiQC 整合分析
+
+## FastQC 的限制
+
+雖然 FastQC 是標準 QC 工具，但也有幾項限制：
+
+* 無法 trimming 或修復資料（只能檢查）
+* Adapter 偵測不如 fastp 自動、準確
+* 部分「FAIL」其實是正常現象（特別是 RNA-seq）
+* 在 long-read（Nanopore/PacBio）資料上模組較少
+
+# fastqc -v (版本)
 
 使用 `-v` 參數確認 fastqc 是否成功安裝，並顯示版本號。
 
@@ -24,7 +140,7 @@ engine: knitr
 fastqc -v
 ```
 
-# 執行 fastqc
+# fastqc (執行)
 
 以下示範 fastqc 的基本用法：對單一或雙端 FASTQ 做品質檢查並輸出 HTML 與 ZIP 報告。
 
@@ -46,7 +162,7 @@ fastqc \
 --outdir ./
 ```
 
-# fastqc 指令參考
+# fastqc --help
 
 顯示 fastqc 提供的主要參數與使用說明，適合作為快速查詢指令用途。
 
@@ -54,13 +170,13 @@ fastqc \
 fastqc --help
 ```
 
-# Conda 環境資訊
+# 環境資訊
 
 完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
 
 ```{bash}
 echo "======================================="
-echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "Conda Environment: $(mamba env list | grep '*' | awk '{print $1}')"
 echo "======================================="
 conda list
 ```

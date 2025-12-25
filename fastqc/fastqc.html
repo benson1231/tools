@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>fastqc 基本使用</title>
+<title>FastQC 基本使用</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="fastqc_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="fastqc_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="fastqc_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="fastqc_files/libs/bootstrap/bootstrap-91f297ac5b9b6094cb160b32f5ee6a0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="fastqc_files/libs/bootstrap/bootstrap-10fe2bd9fd8498839a96d31d92c830c0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -78,20 +78,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+  <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#連結" id="toc-連結" class="nav-link active" data-scroll-target="#連結"><span class="header-section-number">1</span> 連結</a></li>
-  <li><a href="#fastqc-版本資訊" id="toc-fastqc-版本資訊" class="nav-link" data-scroll-target="#fastqc-版本資訊"><span class="header-section-number">2</span> fastqc 版本資訊</a></li>
-  <li><a href="#執行-fastqc" id="toc-執行-fastqc" class="nav-link" data-scroll-target="#執行-fastqc"><span class="header-section-number">3</span> 執行 fastqc</a>
-  <ul class="collapse">
+  <li><a href="#fastqc-介紹" id="toc-fastqc-介紹" class="nav-link active" data-scroll-target="#fastqc-介紹"><span class="header-section-number">1</span> FastQC 介紹</a>
+  <ul>
+  <li><a href="#fastqc-的主要功能" id="toc-fastqc-的主要功能" class="nav-link" data-scroll-target="#fastqc-的主要功能"><span class="header-section-number">1.1</span> FastQC 的主要功能</a></li>
+  <li><a href="#basic-statistics" id="toc-basic-statistics" class="nav-link" data-scroll-target="#basic-statistics"><span class="header-section-number">1.2</span> ✅ Basic Statistics</a></li>
+  <li><a href="#per-base-sequence-quality" id="toc-per-base-sequence-quality" class="nav-link" data-scroll-target="#per-base-sequence-quality"><span class="header-section-number">1.3</span> ✅ Per Base Sequence Quality</a></li>
+  <li><a href="#per-tile-sequence-quality" id="toc-per-tile-sequence-quality" class="nav-link" data-scroll-target="#per-tile-sequence-quality"><span class="header-section-number">1.4</span> ✅ Per Tile Sequence Quality</a></li>
+  <li><a href="#per-sequence-quality-scores" id="toc-per-sequence-quality-scores" class="nav-link" data-scroll-target="#per-sequence-quality-scores"><span class="header-section-number">1.5</span> ✅ Per Sequence Quality Scores</a></li>
+  <li><a href="#per-base-sequence-content" id="toc-per-base-sequence-content" class="nav-link" data-scroll-target="#per-base-sequence-content"><span class="header-section-number">1.6</span> ✅ Per Base Sequence Content</a></li>
+  <li><a href="#per-sequence-gc-content" id="toc-per-sequence-gc-content" class="nav-link" data-scroll-target="#per-sequence-gc-content"><span class="header-section-number">1.7</span> ✅ Per Sequence GC Content</a></li>
+  <li><a href="#per-base-n-content" id="toc-per-base-n-content" class="nav-link" data-scroll-target="#per-base-n-content"><span class="header-section-number">1.8</span> ✅ Per Base N Content</a></li>
+  <li><a href="#sequence-length-distribution" id="toc-sequence-length-distribution" class="nav-link" data-scroll-target="#sequence-length-distribution"><span class="header-section-number">1.9</span> ✅ Sequence Length Distribution</a></li>
+  <li><a href="#sequence-duplication-levels" id="toc-sequence-duplication-levels" class="nav-link" data-scroll-target="#sequence-duplication-levels"><span class="header-section-number">1.10</span> ✅ Sequence Duplication Levels</a></li>
+  <li><a href="#overrepresented-sequences" id="toc-overrepresented-sequences" class="nav-link" data-scroll-target="#overrepresented-sequences"><span class="header-section-number">1.11</span> ✅ Overrepresented Sequences</a></li>
+  <li><a href="#adapter-content" id="toc-adapter-content" class="nav-link" data-scroll-target="#adapter-content"><span class="header-section-number">1.12</span> ✅ Adapter Content</a></li>
+  <li><a href="#fastqc-的使用情境" id="toc-fastqc-的使用情境" class="nav-link" data-scroll-target="#fastqc-的使用情境"><span class="header-section-number">1.13</span> FastQC 的使用情境</a></li>
+  <li><a href="#fastqc-的輸出內容" id="toc-fastqc-的輸出內容" class="nav-link" data-scroll-target="#fastqc-的輸出內容"><span class="header-section-number">1.14</span> FastQC 的輸出內容</a></li>
+  <li><a href="#fastqc-的限制" id="toc-fastqc-的限制" class="nav-link" data-scroll-target="#fastqc-的限制"><span class="header-section-number">1.15</span> FastQC 的限制</a></li>
+  </ul></li>
+  <li><a href="#fastqc--v-版本" id="toc-fastqc--v-版本" class="nav-link" data-scroll-target="#fastqc--v-版本"><span class="header-section-number">2</span> fastqc -v (版本)</a></li>
+  <li><a href="#fastqc-執行" id="toc-fastqc-執行" class="nav-link" data-scroll-target="#fastqc-執行"><span class="header-section-number">3</span> fastqc (執行)</a>
+  <ul>
   <li><a href="#pair-end-fastq-檔案" id="toc-pair-end-fastq-檔案" class="nav-link" data-scroll-target="#pair-end-fastq-檔案"><span class="header-section-number">3.1</span> pair-end FASTQ 檔案</a></li>
   </ul></li>
-  <li><a href="#fastqc-指令參考" id="toc-fastqc-指令參考" class="nav-link" data-scroll-target="#fastqc-指令參考"><span class="header-section-number">4</span> fastqc 指令參考</a></li>
-  <li><a href="#conda-環境資訊" id="toc-conda-環境資訊" class="nav-link" data-scroll-target="#conda-環境資訊"><span class="header-section-number">5</span> Conda 環境資訊</a></li>
+  <li><a href="#fastqc-help" id="toc-fastqc-help" class="nav-link" data-scroll-target="#fastqc-help"><span class="header-section-number">4</span> fastqc –help</a></li>
+  <li><a href="#環境資訊" id="toc-環境資訊" class="nav-link" data-scroll-target="#環境資訊"><span class="header-section-number">5</span> 環境資訊</a></li>
   </ul>
-</nav>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://benson1231.github.io/tools/"><i class="bi bi-house"></i>home</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/benson1231/tools"><i class="bi bi-github"></i>github</a></li></ul></div></nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
@@ -99,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">fastqc 基本使用</h1>
+<h1 class="title">FastQC 基本使用</h1>
 </div>
 
 
@@ -116,13 +133,123 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="連結" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> 連結</h1>
-<p><a href="https://github.com/benson1231/tools/tree/main/fastqc">create conda envs</a><br>
-<a href="https://github.com/s-andrews/FastQC">fastqc official github</a></p>
+<section id="fastqc-介紹" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> FastQC 介紹</h1>
+<blockquote class="blockquote">
+<p>目前主流 <strong>前處理 trimming</strong> 通常由 <strong>fastp/Cutadapt</strong> 完成 而<strong>品質報告整合</strong> 通常由 <strong>FastQC + MultiQC</strong> 完成</p>
+</blockquote>
+<p><a href="https://github.com/s-andrews/FastQC">FastQC</a> 是 Illumina 及其他高通量定序（Next-Generation Sequencing, NGS）資料中最常用的品質控制（Quality Control, QC）工具之一，由 <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">Babraham Bioinformatics</a> 開發。它提供快速、直觀的方式，評估原始 FASTQ 讀序的品質狀況，協助使用者判斷資料是否適合進行後續分析（如比對、定量、變異偵測等）。</p>
+<p>FastQC 的設計目標是：</p>
+<ul>
+<li><strong>提供簡單明瞭的 QC 報告</strong>（HTML 格式），讓使用者快速掌握資料品質，<a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/good_sequence_short_fastqc.html">詳見html報告範例</a>。</li>
+<li><strong>自動偵測常見的測序問題</strong>，如 adapter contamination、GC 偏移、序列偏差。</li>
+<li><strong>在多種資料來源之間保持一致性</strong>，不論是 Illumina、BGI/MGI、Nanopore 或 PacBio，皆能進行 QC（長讀序有些圖會被省略）。</li>
+</ul>
+<section id="fastqc-的主要功能" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="fastqc-的主要功能"><span class="header-section-number">1.1</span> FastQC 的主要功能</h2>
+<p>FastQC 的分析項目包括下列模組，每個模組會以 <em>PASS / WARN / FAIL</em> 標記品質狀態：</p>
 </section>
-<section id="fastqc-版本資訊" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> fastqc 版本資訊</h1>
+<section id="basic-statistics" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="basic-statistics"><span class="header-section-number">1.2</span> ✅ Basic Statistics</h2>
+<p>提供 FASTQ 檔案的基本資訊，例如：</p>
+<ul>
+<li>讀序總數</li>
+<li>讀長（是否固定或變動）</li>
+<li>GC 含量</li>
+<li>估計的 encoding（如 Phred33/Phred64）</li>
+</ul>
+</section>
+<section id="per-base-sequence-quality" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="per-base-sequence-quality"><span class="header-section-number">1.3</span> ✅ Per Base Sequence Quality</h2>
+<p>顯示每一個位置的 Phred 品質分數分布，用來判斷讀序兩端是否需要 trimming。若尾端品質下降明顯，通常需要進行修剪。</p>
+</section>
+<section id="per-tile-sequence-quality" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="per-tile-sequence-quality"><span class="header-section-number">1.4</span> ✅ Per Tile Sequence Quality</h2>
+<p>針對 Illumina flowcell 的 tile 分析品質分布，用來偵測儀器特定 tile 是否表現不良（常見於舊機型）。</p>
+</section>
+<section id="per-sequence-quality-scores" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="per-sequence-quality-scores"><span class="header-section-number">1.5</span> ✅ Per Sequence Quality Scores</h2>
+<p>顯示每條讀序的平均品質，評估樣本是否有異常的品質讀序。</p>
+</section>
+<section id="per-base-sequence-content" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="per-base-sequence-content"><span class="header-section-number">1.6</span> ✅ Per Base Sequence Content</h2>
+<p>顯示每個位置 A/T/G/C 的比例。若讀序起始端出現強烈偏差（特別是 RNA-seq），屬正常現象，不必過度解讀。</p>
+</section>
+<section id="per-sequence-gc-content" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="per-sequence-gc-content"><span class="header-section-number">1.7</span> ✅ Per Sequence GC Content</h2>
+<p>展示所有讀序的 GC 分布。若分布異常（過度偏移或多峰），可能代表 contamination 或 library 準備問題。</p>
+</section>
+<section id="per-base-n-content" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="per-base-n-content"><span class="header-section-number">1.8</span> ✅ Per Base N Content</h2>
+<p>顯示每個位置 N（未知鹼基）的比例。高比例 N 通常代表測序品質問題。</p>
+</section>
+<section id="sequence-length-distribution" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="sequence-length-distribution"><span class="header-section-number">1.9</span> ✅ Sequence Length Distribution</h2>
+<p>顯示讀序長度的分布。對於固定讀長平台（Illumina）應呈現單一峰；若發生多峰則可能來自 trimming、amplicon 或分析流程特性。</p>
+</section>
+<section id="sequence-duplication-levels" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="sequence-duplication-levels"><span class="header-section-number">1.10</span> ✅ Sequence Duplication Levels</h2>
+<p>顯示序列重複程度。高 duplication 可能反映：</p>
+<ul>
+<li>library 多次 PCR 放大</li>
+<li>low complexity library</li>
+<li>biological contamination</li>
+</ul>
+<p>RNA-seq 樣本 duplication 偏高屬常見現象。</p>
+</section>
+<section id="overrepresented-sequences" class="level2" data-number="1.11">
+<h2 data-number="1.11" class="anchored" data-anchor-id="overrepresented-sequences"><span class="header-section-number">1.11</span> ✅ Overrepresented Sequences</h2>
+<p>列出出現次數過高的讀序，用於偵測：</p>
+<ul>
+<li>adapters</li>
+<li>primers</li>
+<li>PCR artifacts</li>
+<li>contamination</li>
+</ul>
+</section>
+<section id="adapter-content" class="level2" data-number="1.12">
+<h2 data-number="1.12" class="anchored" data-anchor-id="adapter-content"><span class="header-section-number">1.12</span> ✅ Adapter Content</h2>
+<p>分析讀序中是否存在 adapter 污染。若含量高，需要使用 trimming 工具（如 fastp、Cutadapt）。</p>
+<p>這些模組組合提供了對測序資料完整的品質診斷，有助於使用者判斷資料是否適合下游分析並決定是否需要 trimming 或重新進行實驗。</p>
+</section>
+<section id="fastqc-的使用情境" class="level2" data-number="1.13">
+<h2 data-number="1.13" class="anchored" data-anchor-id="fastqc-的使用情境"><span class="header-section-number">1.13</span> FastQC 的使用情境</h2>
+<p>FastQC 通常用於：</p>
+<ul>
+<li><strong>跑在原始 FASTQ</strong>（raw sequencing data）上做初步 QC</li>
+<li><strong>trimming 前後的比較</strong>（搭配 fastp、Cutadapt、Trimmomatic）</li>
+<li><strong>檢查 library 是否成功建置</strong></li>
+<li><strong>判斷是否需要 PolyG trimming（Illumina NextSeq/NovaSeq）</strong></li>
+<li><strong>偵測 contamination 或 batch effect 的前兆</strong></li>
+</ul>
+<p>FastQC 並不進行 trimming，也不修改讀序，因此通常搭配 fastp 或其他 trimming 工具一起使用。</p>
+</section>
+<section id="fastqc-的輸出內容" class="level2" data-number="1.14">
+<h2 data-number="1.14" class="anchored" data-anchor-id="fastqc-的輸出內容"><span class="header-section-number">1.14</span> FastQC 的輸出內容</h2>
+<p>執行完 FastQC 後會得到兩種檔案：</p>
+<ul>
+<li><code>*_fastqc.html</code> → 可視化品質報告，<a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">官方網站提供各種情況範例報告</a></li>
+<li><code>*_fastqc.zip</code> → 報告原始數據（包含 <code>fastqc_data.txt</code>）</li>
+</ul>
+<p>這些結果適合用於：</p>
+<ul>
+<li>手動檢查 QC</li>
+<li>多個樣本一起進行 MultiQC 整合分析</li>
+</ul>
+</section>
+<section id="fastqc-的限制" class="level2" data-number="1.15">
+<h2 data-number="1.15" class="anchored" data-anchor-id="fastqc-的限制"><span class="header-section-number">1.15</span> FastQC 的限制</h2>
+<p>雖然 FastQC 是標準 QC 工具，但也有幾項限制：</p>
+<ul>
+<li>無法 trimming 或修復資料（只能檢查）</li>
+<li>Adapter 偵測不如 fastp 自動、準確</li>
+<li>部分「FAIL」其實是正常現象（特別是 RNA-seq）</li>
+<li>在 long-read（Nanopore/PacBio）資料上模組較少</li>
+</ul>
+</section>
+</section>
+<section id="fastqc--v-版本" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> fastqc -v (版本)</h1>
 <p>使用 <code>-v</code> 參數確認 fastqc 是否成功安裝，並顯示版本號。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">-v</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -131,8 +258,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="執行-fastqc" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> 執行 fastqc</h1>
+<section id="fastqc-執行" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> fastqc (執行)</h1>
 <p>以下示範 fastqc 的基本用法：對單一或雙端 FASTQ 做品質檢查並輸出 HTML 與 ZIP 報告。</p>
 <p>請確認：</p>
 <ul>
@@ -169,8 +296,8 @@ Analysis complete for a.chr21_R2.fastq.gz</code></pre>
 </div>
 </section>
 </section>
-<section id="fastqc-指令參考" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> fastqc 指令參考</h1>
+<section id="fastqc-help" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> fastqc –help</h1>
 <p>顯示 fastqc 提供的主要參數與使用說明，適合作為快速查詢指令用途。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -314,168 +441,252 @@ BUGS
 </div>
 </div>
 </section>
-<section id="conda-環境資訊" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Conda 環境資訊</h1>
+<section id="環境資訊" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> 環境資訊</h1>
 <p>完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">" Conda Environment: </span><span class="va">$(</span><span class="ex">conda</span> info <span class="at">--envs</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Conda Environment: </span><span class="va">$(</span><span class="ex">mamba</span> env list <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>=======================================
- Conda Environment: #
-fastqc-env
+Conda Environment: bio-tools
 =======================================
-# packages in environment at /home/benson/miniforge3/envs/fastqc-env:
+# packages in environment at /home/benson/miniforge3/envs/bio-tools:
 #
-# Name                       Version          Build                 Channel
-_libgcc_mutex                0.1              conda_forge           conda-forge
-_openmp_mutex                4.5              2_gnu                 conda-forge
-_r-mutex                     1.0.1            anacondar_1           conda-forge
-alsa-lib                     1.2.15.1         hb03c661_0            conda-forge
-binutils_impl_linux-64       2.45             default_hfdba357_104  conda-forge
-bwidget                      1.10.1           ha770c72_1            conda-forge
-bzip2                        1.0.8            hda65f42_8            conda-forge
-c-ares                       1.34.6           hb03c661_0            conda-forge
-ca-certificates              2025.11.12       hbd8a1cb_0            conda-forge
-cairo                        1.18.4           h3394656_0            conda-forge
-curl                         8.17.0           h4e3cde8_1            conda-forge
-dart-sass                    1.59.1           ha770c72_0            conda-forge
-deno                         2.3.1            hbf66b88_0            conda-forge
-deno-dom                     0.1.41           h4768de7_0            conda-forge
-esbuild                      0.27.2           hfc2019e_0            conda-forge
-fastqc                       0.12.1           hdfd78af_0            bioconda
-font-ttf-dejavu-sans-mono    2.37             hab24e00_0            conda-forge
-font-ttf-inconsolata         3.000            h77eed37_0            conda-forge
-font-ttf-source-code-pro     2.038            h77eed37_0            conda-forge
-font-ttf-ubuntu              0.83             h77eed37_3            conda-forge
-fontconfig                   2.15.0           h7e30c49_1            conda-forge
-fonts-conda-ecosystem        1                0                     conda-forge
-fonts-conda-forge            1                hc364b38_1            conda-forge
-freetype                     2.14.1           ha770c72_0            conda-forge
-fribidi                      1.0.16           hb03c661_0            conda-forge
-gcc_impl_linux-64            15.2.0           hc5723f1_16           conda-forge
-gfortran_impl_linux-64       15.2.0           h281d09f_16           conda-forge
-giflib                       5.2.2            hd590300_0            conda-forge
-graphite2                    1.3.14           hecca717_2            conda-forge
-gsl                          2.7              he838d99_0            conda-forge
-gxx_impl_linux-64            15.2.0           hda75c37_16           conda-forge
-harfbuzz                     12.2.0           h15599e2_0            conda-forge
-icu                          75.1             he02047a_0            conda-forge
-kernel-headers_linux-64      5.14.0           he073ed8_3            conda-forge
-keyutils                     1.6.3            hb9d3cd8_0            conda-forge
-krb5                         1.21.3           h659f571_0            conda-forge
-lcms2                        2.17             h717163a_0            conda-forge
-ld_impl_linux-64             2.45             default_hbd61a6d_104  conda-forge
-lerc                         4.0.0            h0aef613_1            conda-forge
-libblas                      3.11.0           5_h4a7cf45_openblas   conda-forge
-libcblas                     3.11.0           5_h0358290_openblas   conda-forge
-libcups                      2.3.3            hb8b1518_5            conda-forge
-libcurl                      8.17.0           h4e3cde8_1            conda-forge
-libdeflate                   1.25             h17f619e_0            conda-forge
-libedit                      3.1.20250104     pl5321h7949ede_0      conda-forge
-libev                        4.33             hd590300_2            conda-forge
-libexpat                     2.7.3            hecca717_0            conda-forge
-libffi                       3.5.2            h9ec8514_0            conda-forge
-libfreetype                  2.14.1           ha770c72_0            conda-forge
-libfreetype6                 2.14.1           h73754d4_0            conda-forge
-libgcc                       15.2.0           he0feb66_16           conda-forge
-libgcc-devel_linux-64        15.2.0           hcc6f6b0_116          conda-forge
-libgcc-ng                    15.2.0           h69a702a_16           conda-forge
-libgfortran                  15.2.0           h69a702a_16           conda-forge
-libgfortran-ng               15.2.0           h69a702a_16           conda-forge
-libgfortran5                 15.2.0           h68bc16d_16           conda-forge
-libglib                      2.86.3           h6548e54_0            conda-forge
-libgomp                      15.2.0           he0feb66_16           conda-forge
-libiconv                     1.18             h3b78370_2            conda-forge
-libjpeg-turbo                3.1.2            hb03c661_0            conda-forge
-liblapack                    3.11.0           5_h47877c9_openblas   conda-forge
-liblzma                      5.8.1            hb9d3cd8_2            conda-forge
-libnghttp2                   1.67.0           had1ee68_0            conda-forge
-libopenblas                  0.3.30           pthreads_h94d23a6_4   conda-forge
-libpng                       1.6.53           h421ea60_0            conda-forge
-libsanitizer                 15.2.0           h90f66d4_16           conda-forge
-libssh2                      1.11.1           hcf80075_0            conda-forge
-libstdcxx                    15.2.0           h934c35e_16           conda-forge
-libstdcxx-devel_linux-64     15.2.0           hd446a21_116          conda-forge
-libstdcxx-ng                 15.2.0           hdf11a46_16           conda-forge
-libtiff                      4.7.1            h9d88235_1            conda-forge
-libuuid                      2.41.3           h5347b49_0            conda-forge
-libuv                        1.51.0           hb03c661_1            conda-forge
-libwebp-base                 1.6.0            hd42ef1d_0            conda-forge
-libxcb                       1.17.0           h8a09558_0            conda-forge
-libxcrypt                    4.4.36           hd590300_1            conda-forge
-libzlib                      1.3.1            hb9d3cd8_2            conda-forge
-make                         4.4.1            hb9d3cd8_2            conda-forge
-ncurses                      6.5              h2d0b736_3            conda-forge
-nodejs                       22.21.1          h4a9c4b4_0            conda-forge
-openjdk                      25.0.1           h5755bd7_0            conda-forge
-openssl                      3.6.0            h26f9b46_0            conda-forge
-pandoc                       3.6.3            ha770c72_0            conda-forge
-pango                        1.56.4           hadf4263_0            conda-forge
-pcre2                        10.47            haa7fec5_0            conda-forge
-perl                         5.32.1           7_hd590300_perl5      conda-forge
-pixman                       0.46.4           h54a6638_1            conda-forge
-pthread-stubs                0.4              hb9d3cd8_1002         conda-forge
-quarto                       1.8.26           hbf95b10_0            conda-forge
-r-base                       4.3.3            hc28aa72_21           conda-forge
-r-base64enc                  0.1_3            r43hb1dbf0f_1007      conda-forge
-r-bslib                      0.9.0            r43hc72bb7e_0         conda-forge
-r-cachem                     1.1.0            r43hb1dbf0f_1         conda-forge
-r-cli                        3.6.5            r43h93ab643_0         conda-forge
-r-digest                     0.6.37           r43h0d4f4ea_0         conda-forge
-r-ellipsis                   0.3.2            r43hb1dbf0f_3         conda-forge
-r-evaluate                   1.0.5            r43hc72bb7e_0         conda-forge
-r-fastmap                    1.2.0            r43ha18555a_1         conda-forge
-r-fontawesome                0.5.3            r43hc72bb7e_0         conda-forge
-r-fs                         1.6.6            r43h93ab643_0         conda-forge
-r-glue                       1.8.0            r43h2b5f3a1_0         conda-forge
-r-here                       1.0.1            r43hc72bb7e_3         conda-forge
-r-highr                      0.11             r43hc72bb7e_1         conda-forge
-r-htmltools                  0.5.8.1          r43ha18555a_1         conda-forge
-r-jquerylib                  0.1.4            r43hc72bb7e_3         conda-forge
-r-jsonlite                   2.0.0            r43h2b5f3a1_0         conda-forge
-r-knitr                      1.50             r43hc72bb7e_0         conda-forge
-r-lattice                    0.22_7           r43h2b5f3a1_0         conda-forge
-r-lifecycle                  1.0.4            r43hc72bb7e_1         conda-forge
-r-matrix                     1.6_5            r43he966344_1         conda-forge
-r-memoise                    2.0.1            r43hc72bb7e_3         conda-forge
-r-mime                       0.13             r43h2b5f3a1_0         conda-forge
-r-png                        0.1_8            r43h21f035c_2         conda-forge
-r-r6                         2.6.1            r43hc72bb7e_0         conda-forge
-r-rappdirs                   0.3.3            r43hb1dbf0f_3         conda-forge
-r-rcpp                       1.1.0            r43h93ab643_0         conda-forge
-r-rcpptoml                   0.2.3            r43h93ab643_0         conda-forge
-r-reticulate                 1.43.0           r43h3697838_0         conda-forge
-r-rlang                      1.1.6            r43h93ab643_0         conda-forge
-r-rmarkdown                  2.29             r43hc72bb7e_0         conda-forge
-r-rprojroot                  2.1.1            r43hc72bb7e_0         conda-forge
-r-sass                       0.4.10           r43h93ab643_0         conda-forge
-r-tinytex                    0.57             r43hc72bb7e_0         conda-forge
-r-withr                      3.0.2            r43hc72bb7e_0         conda-forge
-r-xfun                       0.53             r43h3697838_0         conda-forge
-r-yaml                       2.3.10           r43hdb488b9_0         conda-forge
-readline                     8.3              h853b02a_0            conda-forge
-sed                          4.9              h6688a6e_0            conda-forge
-sysroot_linux-64             2.34             h087de78_3            conda-forge
-tk                           8.6.13           noxft_ha0e22de_103    conda-forge
-tktable                      2.10             h8d826fa_7            conda-forge
-typst                        0.13.0           h53e704d_0            conda-forge
-tzdata                       2025c            h8577fbf_0            conda-forge
-xorg-libice                  1.1.2            hb9d3cd8_0            conda-forge
-xorg-libsm                   1.2.6            he73a12e_0            conda-forge
-xorg-libx11                  1.8.12           h4f16b4b_0            conda-forge
-xorg-libxau                  1.0.12           hb03c661_1            conda-forge
-xorg-libxdmcp                1.1.5            hb03c661_1            conda-forge
-xorg-libxext                 1.3.6            hb9d3cd8_0            conda-forge
-xorg-libxfixes               6.0.2            hb03c661_0            conda-forge
-xorg-libxi                   1.8.2            hb9d3cd8_0            conda-forge
-xorg-libxrandr               1.5.4            hb9d3cd8_0            conda-forge
-xorg-libxrender              0.9.12           hb9d3cd8_0            conda-forge
-xorg-libxt                   1.3.1            hb9d3cd8_0            conda-forge
-xorg-libxtst                 1.2.5            hb9d3cd8_3            conda-forge
-zstd                         1.5.7            hb78ec9c_6            conda-forge</code></pre>
+# Name                       Version            Build                 Channel
+_libgcc_mutex                0.1                conda_forge           conda-forge
+_openmp_mutex                4.5                2_gnu                 conda-forge
+_python_abi3_support         1.0                hd8ed1ab_2            conda-forge
+_r-mutex                     1.0.1              anacondar_1           conda-forge
+alsa-lib                     1.2.15.1           hb03c661_0            conda-forge
+annotated-types              0.7.0              pyhd8ed1ab_1          conda-forge
+attrs                        25.4.0             pyhcf101f3_1          conda-forge
+backports.zstd               1.2.0              py314h680f03e_0       conda-forge
+bcftools                     1.23               h3a4d415_0            bioconda
+bedtools                     2.31.1             h13024bc_3            bioconda
+binutils_impl_linux-64       2.45               default_hfdba357_105  conda-forge
+brotli-python                1.2.0              py314h3de4e8d_1       conda-forge
+bwidget                      1.10.1             ha770c72_1            conda-forge
+bzip2                        1.0.8              hda65f42_8            conda-forge
+c-ares                       1.34.6             hb03c661_0            conda-forge
+ca-certificates              2025.11.12         hbd8a1cb_0            conda-forge
+cairo                        1.18.4             h3394656_0            conda-forge
+certifi                      2025.11.12         pyhd8ed1ab_0          conda-forge
+charset-normalizer           3.4.4              pyhd8ed1ab_0          conda-forge
+click                        8.3.1              pyh8f84b5b_1          conda-forge
+colorama                     0.4.6              pyhd8ed1ab_1          conda-forge
+coloredlogs                  15.0.1             pyhd8ed1ab_4          conda-forge
+colormath                    3.0.0              pyhd8ed1ab_4          conda-forge
+cpython                      3.14.2             py314hd8ed1ab_100     conda-forge
+curl                         8.17.0             h4e3cde8_1            conda-forge
+dart-sass                    1.59.1             ha770c72_0            conda-forge
+deno                         2.3.1              hbf66b88_0            conda-forge
+deno-dom                     0.1.41             h4768de7_0            conda-forge
+esbuild                      0.27.2             hfc2019e_0            conda-forge
+expat                        2.7.3              hecca717_0            conda-forge
+fastp                        1.0.1              heae3180_0            bioconda
+fastqc                       0.12.1             hdfd78af_0            bioconda
+font-ttf-dejavu-sans-mono    2.37               hab24e00_0            conda-forge
+font-ttf-inconsolata         3.000              h77eed37_0            conda-forge
+font-ttf-source-code-pro     2.038              h77eed37_0            conda-forge
+font-ttf-ubuntu              0.83               h77eed37_3            conda-forge
+fontconfig                   2.15.0             h7e30c49_1            conda-forge
+fonts-conda-ecosystem        1                  0                     conda-forge
+fonts-conda-forge            1                  hc364b38_1            conda-forge
+freetype                     2.14.1             ha770c72_0            conda-forge
+fribidi                      1.0.16             hb03c661_0            conda-forge
+gcc_impl_linux-64            15.2.0             hc5723f1_16           conda-forge
+gfortran_impl_linux-64       15.2.0             h281d09f_16           conda-forge
+giflib                       5.2.2              hd590300_0            conda-forge
+graphite2                    1.3.14             hecca717_2            conda-forge
+gsl                          2.7                he838d99_0            conda-forge
+gxx_impl_linux-64            15.2.0             hda75c37_16           conda-forge
+h2                           4.3.0              pyhcf101f3_0          conda-forge
+harfbuzz                     11.0.0             h76408a6_0            conda-forge
+hdf5                         1.14.3             nompi_h2d575fe_109    conda-forge
+hpack                        4.1.0              pyhd8ed1ab_0          conda-forge
+htslib                       1.23               h566b1c6_0            bioconda
+humanfriendly                10.0               pyh707e725_8          conda-forge
+humanize                     4.15.0             pyhd8ed1ab_0          conda-forge
+hyperframe                   6.1.0              pyhd8ed1ab_0          conda-forge
+icu                          75.1               he02047a_0            conda-forge
+idna                         3.11               pyhd8ed1ab_0          conda-forge
+importlib-metadata           8.7.0              pyhe01879c_1          conda-forge
+isa-l                        2.31.1             hb9d3cd8_1            conda-forge
+jinja2                       3.1.6              pyhcf101f3_1          conda-forge
+jsonschema                   4.25.1             pyhe01879c_0          conda-forge
+jsonschema-specifications    2025.9.1           pyhcf101f3_0          conda-forge
+kaleido-core                 0.2.1              h3644ca4_0            conda-forge
+kallisto                     0.51.1             h2b92561_2            bioconda
+kernel-headers_linux-64      6.12.0             he073ed8_5            conda-forge
+keyutils                     1.6.3              hb9d3cd8_0            conda-forge
+krb5                         1.21.3             h659f571_0            conda-forge
+lcms2                        2.17               h717163a_0            conda-forge
+ld_impl_linux-64             2.45               default_hbd61a6d_105  conda-forge
+lerc                         4.0.0              h0aef613_1            conda-forge
+libaec                       1.1.4              h3f801dc_0            conda-forge
+libblas                      3.11.0             5_h4a7cf45_openblas   conda-forge
+libcblas                     3.11.0             5_h0358290_openblas   conda-forge
+libcups                      2.3.3              hb8b1518_5            conda-forge
+libcurl                      8.17.0             h4e3cde8_1            conda-forge
+libdeflate                   1.22               hb9d3cd8_0            conda-forge
+libedit                      3.1.20250104       pl5321h7949ede_0      conda-forge
+libev                        4.33               hd590300_2            conda-forge
+libexpat                     2.7.3              hecca717_0            conda-forge
+libffi                       3.5.2              h9ec8514_0            conda-forge
+libfreetype                  2.14.1             ha770c72_0            conda-forge
+libfreetype6                 2.14.1             h73754d4_0            conda-forge
+libgcc                       15.2.0             he0feb66_16           conda-forge
+libgcc-devel_linux-64        15.2.0             hcc6f6b0_116          conda-forge
+libgcc-ng                    15.2.0             h69a702a_16           conda-forge
+libgfortran                  15.2.0             h69a702a_16           conda-forge
+libgfortran-ng               15.2.0             h69a702a_16           conda-forge
+libgfortran5                 15.2.0             h68bc16d_16           conda-forge
+libglib                      2.84.0             h2ff4ddf_0            conda-forge
+libgomp                      15.2.0             he0feb66_16           conda-forge
+libiconv                     1.18               h3b78370_2            conda-forge
+libjpeg-turbo                3.1.2              hb03c661_0            conda-forge
+liblapack                    3.11.0             5_h47877c9_openblas   conda-forge
+liblzma                      5.8.1              hb9d3cd8_2            conda-forge
+libmpdec                     4.0.0              hb9d3cd8_0            conda-forge
+libnghttp2                   1.67.0             had1ee68_0            conda-forge
+libopenblas                  0.3.30             pthreads_h94d23a6_4   conda-forge
+libpng                       1.6.53             h421ea60_0            conda-forge
+libsanitizer                 15.2.0             h90f66d4_16           conda-forge
+libsqlite                    3.51.1             h0c1763c_1            conda-forge
+libssh2                      1.11.1             hcf80075_0            conda-forge
+libstdcxx                    15.2.0             h934c35e_16           conda-forge
+libstdcxx-devel_linux-64     15.2.0             hd446a21_116          conda-forge
+libstdcxx-ng                 15.2.0             hdf11a46_16           conda-forge
+libtiff                      4.7.0              hc4654cb_2            conda-forge
+libuuid                      2.41.3             h5347b49_0            conda-forge
+libuv                        1.51.0             hb03c661_1            conda-forge
+libwebp-base                 1.6.0              hd42ef1d_0            conda-forge
+libxcb                       1.17.0             h8a09558_0            conda-forge
+libxcrypt                    4.4.36             hd590300_1            conda-forge
+libzlib                      1.3.1              hb9d3cd8_2            conda-forge
+make                         4.4.1              hb9d3cd8_2            conda-forge
+markdown                     3.10               pyhcf101f3_1          conda-forge
+markdown-it-py               4.0.0              pyhd8ed1ab_0          conda-forge
+markupsafe                   3.0.3              pyh7db6752_0          conda-forge
+mathjax                      2.7.7              ha770c72_3            conda-forge
+mdurl                        0.1.2              pyhd8ed1ab_1          conda-forge
+multiqc                      1.33               pyhdfd78af_0          bioconda
+narwhals                     2.14.0             pyhcf101f3_0          conda-forge
+natsort                      8.4.0              pyh29332c3_1          conda-forge
+ncurses                      6.5                h2d0b736_3            conda-forge
+networkx                     3.6.1              pyhcf101f3_0          conda-forge
+nodejs                       22.21.1            h4a9c4b4_0            conda-forge
+nspr                         4.38               h29cc59b_0            conda-forge
+nss                          3.118              h445c969_0            conda-forge
+numpy                        2.4.0              py314h2b28147_0       conda-forge
+openjdk                      23.0.2             h53dfc1b_2            conda-forge
+openjpeg                     2.5.3              h55fea9a_1            conda-forge
+openssl                      3.6.0              h26f9b46_0            conda-forge
+packaging                    25.0               pyh29332c3_1          conda-forge
+pandoc                       3.6.3              ha770c72_0            conda-forge
+pango                        1.56.3             h9ac818e_1            conda-forge
+pcre2                        10.44              hc749103_2            conda-forge
+perl                         5.32.1             7_hd590300_perl5      conda-forge
+pillow                       11.3.0             py314hdf18abd_3       conda-forge
+pip                          25.3               pyh145f28c_0          conda-forge
+pixman                       0.46.4             h54a6638_1            conda-forge
+plotly                       6.5.0              pyhd8ed1ab_0          conda-forge
+polars                       1.36.1             pyh6a1acc5_0          conda-forge
+polars-lts-cpu               1.34.0.deprecated  hc364b38_0            conda-forge
+polars-runtime-32            1.36.1             py310hffdcd12_0       conda-forge
+polars-runtime-compat        1.36.1             py310hbcd5346_0       conda-forge
+pthread-stubs                0.4                hb9d3cd8_1002         conda-forge
+pyaml-env                    1.2.2              pyhd8ed1ab_0          conda-forge
+pydantic                     2.12.5             pyhcf101f3_1          conda-forge
+pydantic-core                2.41.5             py314h2e6c369_1       conda-forge
+pygments                     2.19.2             pyhd8ed1ab_0          conda-forge
+pysocks                      1.7.1              pyha55dd90_7          conda-forge
+python                       3.14.2             h32b2ec7_100_cp314    conda-forge
+python-dotenv                1.2.1              pyhcf101f3_0          conda-forge
+python-gil                   3.14.2             h4df99d1_100          conda-forge
+python-kaleido               0.2.1              pyhd8ed1ab_0          conda-forge
+python_abi                   3.14               8_cp314               conda-forge
+pyyaml                       6.0.3              pyh7db6752_0          conda-forge
+quarto                       1.8.26             hbf95b10_0            conda-forge
+r-base                       4.4.2              hbab086e_1            conda-forge
+r-base64enc                  0.1_3              r44h54b55ab_1008      conda-forge
+r-bslib                      0.9.0              r44hc72bb7e_1         conda-forge
+r-cachem                     1.1.0              r44h54b55ab_2         conda-forge
+r-cli                        3.6.5              r44h3697838_1         conda-forge
+r-digest                     0.6.39             r44h3697838_0         conda-forge
+r-ellipsis                   0.3.2              r44h54b55ab_4         conda-forge
+r-evaluate                   1.0.5              r44hc72bb7e_1         conda-forge
+r-fastmap                    1.2.0              r44h3697838_2         conda-forge
+r-fontawesome                0.5.3              r44hc72bb7e_1         conda-forge
+r-fs                         1.6.6              r44h3697838_1         conda-forge
+r-glue                       1.8.0              r44h54b55ab_1         conda-forge
+r-here                       1.0.2              r44hc72bb7e_0         conda-forge
+r-highr                      0.11               r44hc72bb7e_2         conda-forge
+r-htmltools                  0.5.9              r44h3697838_0         conda-forge
+r-jquerylib                  0.1.4              r44hc72bb7e_4         conda-forge
+r-jsonlite                   2.0.0              r44h54b55ab_1         conda-forge
+r-knitr                      1.51               r44hc72bb7e_0         conda-forge
+r-lattice                    0.22_7             r44h54b55ab_1         conda-forge
+r-lifecycle                  1.0.4              r44hc72bb7e_2         conda-forge
+r-matrix                     1.7_4              r44h0e4624f_1         conda-forge
+r-memoise                    2.0.1              r44hc72bb7e_4         conda-forge
+r-mime                       0.13               r44h54b55ab_1         conda-forge
+r-png                        0.1_8              r44h6b2d295_3         conda-forge
+r-r6                         2.6.1              r44hc72bb7e_1         conda-forge
+r-rappdirs                   0.3.3              r44h54b55ab_4         conda-forge
+r-rcpp                       1.1.0              r44h3697838_1         conda-forge
+r-rcpptoml                   0.2.3              r44h3697838_1         conda-forge
+r-reticulate                 1.44.1             r44h3697838_0         conda-forge
+r-rlang                      1.1.6              r44h3697838_1         conda-forge
+r-rmarkdown                  2.30               r44hc72bb7e_0         conda-forge
+r-rprojroot                  2.1.1              r44hc72bb7e_1         conda-forge
+r-sass                       0.4.10             r44h3697838_1         conda-forge
+r-tinytex                    0.58               r44hc72bb7e_0         conda-forge
+r-withr                      3.0.2              r44hc72bb7e_1         conda-forge
+r-xfun                       0.55               r44h3697838_0         conda-forge
+r-yaml                       2.3.12             r44h54b55ab_0         conda-forge
+readline                     8.3                h853b02a_0            conda-forge
+referencing                  0.37.0             pyhcf101f3_0          conda-forge
+regex                        2025.11.3          py314h5bd0f2a_1       conda-forge
+requests                     2.32.5             pyhd8ed1ab_0          conda-forge
+rich                         14.2.0             pyhcf101f3_0          conda-forge
+rich-click                   1.9.5              pyhd8ed1ab_0          conda-forge
+rpds-py                      0.30.0             py314h2e6c369_0       conda-forge
+samtools                     1.23               h96c455f_0            bioconda
+sed                          4.9                h6688a6e_0            conda-forge
+spectra                      0.0.11             pyhd8ed1ab_2          conda-forge
+sqlite                       3.51.1             hbc0de68_1            conda-forge
+sysroot_linux-64             2.39               hc4b9eeb_5            conda-forge
+tiktoken                     0.12.0             py314h67fec18_3       conda-forge
+tk                           8.6.13             noxft_ha0e22de_103    conda-forge
+tktable                      2.10               h8d826fa_7            conda-forge
+tqdm                         4.67.1             pyhd8ed1ab_1          conda-forge
+typeguard                    4.4.4              pyhd8ed1ab_0          conda-forge
+typing-extensions            4.15.0             h396c80c_0            conda-forge
+typing-inspection            0.4.2              pyhd8ed1ab_1          conda-forge
+typing_extensions            4.15.0             pyhcf101f3_0          conda-forge
+typst                        0.13.0             h53e704d_0            conda-forge
+tzdata                       2025c              h8577fbf_0            conda-forge
+urllib3                      2.6.2              pyhd8ed1ab_0          conda-forge
+xorg-libice                  1.1.2              hb9d3cd8_0            conda-forge
+xorg-libsm                   1.2.6              he73a12e_0            conda-forge
+xorg-libx11                  1.8.12             h4f16b4b_0            conda-forge
+xorg-libxau                  1.0.12             hb03c661_1            conda-forge
+xorg-libxdmcp                1.1.5              hb03c661_1            conda-forge
+xorg-libxext                 1.3.6              hb9d3cd8_0            conda-forge
+xorg-libxfixes               6.0.2              hb03c661_0            conda-forge
+xorg-libxi                   1.8.2              hb9d3cd8_0            conda-forge
+xorg-libxrandr               1.5.4              hb9d3cd8_0            conda-forge
+xorg-libxrender              0.9.12             hb9d3cd8_0            conda-forge
+xorg-libxt                   1.3.1              hb9d3cd8_0            conda-forge
+xorg-libxtst                 1.2.5              hb9d3cd8_3            conda-forge
+yaml                         0.2.5              h280c20c_3            conda-forge
+zipp                         3.23.0             pyhcf101f3_1          conda-forge
+zlib-ng                      2.2.5              hde8ca8f_1            conda-forge
+zstd                         1.5.7              hb78ec9c_6            conda-forge</code></pre>
 </div>
 </div>
 </section>
