@@ -9,6 +9,10 @@ format:
     toc-location: left
     toc-depth: 4
     toc-expand: 1
+    other-links:
+      - text: home
+        icon: house
+        href: https://benson1231.github.io/tools/
     code-links:
       - text: github
         icon: github
