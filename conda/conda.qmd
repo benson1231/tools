@@ -5,10 +5,14 @@ date-format: "YYYY-MM-DD"
 format:
   html:
     toc: true
+    toc-title: Contents
     toc-location: left
-    sidebar:
-      style: "floating"
-      search: true
+    toc-depth: 4
+    toc-expand: 1
+    code-links:
+      - text: github
+        icon: github
+        href: https://github.com/benson1231/tools
 number-sections: true
 execute: 
   enabled: false  
@@ -23,7 +27,7 @@ engine: knitr
 [Conda](https://github.com/conda/conda) 本身是一個 CLI 工具（Command-Line Interface tool），可透過指令執行套件安裝、環境建立、版本管理與環境切換。本篇文章將整理常用的 Conda 指令與實務操作，詳細指令請見 [官方文檔](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html)。
 
 此外，Conda 也有一個速度更快、完全相容的替代指令工具 —— mamba。
-mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但**實務上強烈建議在生物資訊流程中使用 mamba** 執行環境建立與套件安裝，詳細介紹請見 [mamba 教學](../mamba/) 。
+mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但**實務上強烈建議在生物資訊流程中使用 mamba** 執行環境建立與套件安裝，詳細介紹請見 [mamba 教學](../mamba/mamba.html) 。
 
 ---
 
@@ -55,7 +59,7 @@ Conda 透過 channel（套件來源庫） 取得各種可安裝的工具與套�
 - [官網下載 Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)  
 - [github下載 Miniforge(推薦)](https://github.com/conda-forge/miniforge)  
 
-# 查看 conda 版本
+# conda --version (查看版本)
 
 使用 `--version` 或 `-V` 參數確認是否成功安裝，並顯示版本號。
 
@@ -66,15 +70,15 @@ conda -V
 conda 25.11.0
 conda 25.11.0
 
-# 建立新 conda 環境
+# conda create (建立新環境)
 
-`-n` 代表創建環境名稱， `-y` 代表直接確認下載 (yes)
+`-n` 代表創建環境名稱， `-y` 代表直接確認下載 (yes)， `-f` 是透過指定 YAML file 建立環境
 
 ```{bash}
 conda create -n myenv python=3.10 -y
 ```
 
-# 啟動 conda 環境
+# conda activate (啟動環境)
 
 需先進入環境才能使用該環境安裝之套件
 
@@ -82,7 +86,7 @@ conda create -n myenv python=3.10 -y
 conda activate myenv
 ```
 
-# 安裝套件
+# conda install (安裝套件)
 
 於該環境內安裝套件會獨立於其他環境
 
@@ -90,15 +94,7 @@ conda activate myenv
 conda install numpy -y
 ```
 
-## 匯出環境 YAML
-
-將環境 YAML 匯出可以進入版本控制，也能夠後續透過該 YAML 重建一樣的環境
-
-```{bash}
-conda env export > output.yaml
-```
-
-# 移除套件
+# conda remove (移除套件)
 
 移除該環境的套件，`-y` 表示直接確認，就不用再終端確認並輸入 `yes`
 
@@ -106,7 +102,7 @@ conda env export > output.yaml
 conda remove numpy -y
 ```
 
-# 離開環境
+# conda deactivate (離開環境)
 
 回到 base 環境
 
@@ -114,15 +110,38 @@ conda remove numpy -y
 conda deactivate
 ```
 
-# 由 YAML 建立環境
+# conda env (環境相關指令)
 
-可以透過 YAML 檔建立環境
+與 conda 環境相關的指令，`-h` 有詳細解釋相關用法
 
+```{bash}
+conda env -h
+```
+
+## conda env export (匯出環境至YAML)
+
+將環境 YAML 匯出可以進入版本控制，也能夠後續透過該 YAML 重建一樣的環境
+
+```{bash}
+conda env export > output.yaml
+```
+
+## conda env create (透過YAML建立環境)
+
+環境名稱會是 YAML 的 name 參數
 ```{bash}
 conda env create -f ./conda/envs.yaml
 ```
 
-# 列出所有環境
+## conda env remove (刪除環境)
+
+`-n` 指定待刪除環境名稱
+
+```{bash}
+conda env remove -n myenv -y
+```
+
+## conda env list (列出所有環境)
 
 `*` 表示當前環境
 
@@ -140,7 +159,9 @@ myenv                    /home/benson/miniforge3/envs/myenv
 quarto-test-env      *   /home/benson/miniforge3/envs/quarto-test-env
 ```
 
-# 查看目前環境套件的來源
+# conda list (查看下載之套件)
+
+## conda list --show-channel-urls (查看套件的來源)
 
 會匯出該環境套件之**版本號、build string 與 Channel來源**。
 `build string` 表示該套件是用什麼編譯器、什麼設定、在什麼平台下編譯出來的版本。
@@ -164,6 +185,8 @@ arrow                            1.4.0            pyhcf101f3_0          conda-fo
 asttokens                        3.0.1            pyhd8ed1ab_0          conda-forge
 async-lru                        2.0.5            pyh29332c3_0          conda-forge
 ```
+
+## conda list --explicit (查看套件的詳細url)
 
 詳細來源也可以使用 `--explicit` 輸出 `url`，基本上能 100% 重建環境
 
@@ -189,7 +212,7 @@ https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-h77eed37_3.co
 https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-5.14.0-he073ed8_3.conda
 ```
 
-# 列出目前環境資訊
+## Tips: 輸出當前環境
 
 完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
 
@@ -215,16 +238,7 @@ alsa-lib                         1.2.15.1         hb03c661_0            conda-fo
 anyio                            4.12.0           pyhcf101f3_0          conda-forge
 ```
 
-# 刪除環境
-
-`-n` 指定待刪除環境名稱
-
-```{bash}
-conda env remove -n myenv -y
-```
-
-
-# 其他 conda 指令(--help)
+# conda --help (詳細指令)
 
 顯示 conda 的主要參數與使用說明，適合作為快速查詢用途。
 

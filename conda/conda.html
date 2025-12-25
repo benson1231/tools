@@ -79,30 +79,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+  <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Contents</h2>
    
   <ul>
   <li><a href="#conda-介紹" id="toc-conda-介紹" class="nav-link active" data-scroll-target="#conda-介紹"><span class="header-section-number">1</span> Conda 介紹</a></li>
   <li><a href="#conda-channels-介紹" id="toc-conda-channels-介紹" class="nav-link" data-scroll-target="#conda-channels-介紹"><span class="header-section-number">2</span> Conda Channels 介紹</a></li>
   <li><a href="#conda-發行版整理" id="toc-conda-發行版整理" class="nav-link" data-scroll-target="#conda-發行版整理"><span class="header-section-number">3</span> Conda 發行版整理</a></li>
-  <li><a href="#查看-conda-版本" id="toc-查看-conda-版本" class="nav-link" data-scroll-target="#查看-conda-版本"><span class="header-section-number">4</span> 查看 conda 版本</a></li>
-  <li><a href="#建立新-conda-環境" id="toc-建立新-conda-環境" class="nav-link" data-scroll-target="#建立新-conda-環境"><span class="header-section-number">5</span> 建立新 conda 環境</a></li>
-  <li><a href="#啟動-conda-環境" id="toc-啟動-conda-環境" class="nav-link" data-scroll-target="#啟動-conda-環境"><span class="header-section-number">6</span> 啟動 conda 環境</a></li>
-  <li><a href="#安裝套件" id="toc-安裝套件" class="nav-link" data-scroll-target="#安裝套件"><span class="header-section-number">7</span> 安裝套件</a>
-  <ul class="collapse">
-  <li><a href="#匯出環境-yaml" id="toc-匯出環境-yaml" class="nav-link" data-scroll-target="#匯出環境-yaml"><span class="header-section-number">7.1</span> 匯出環境 YAML</a></li>
+  <li><a href="#conda-version-查看版本" id="toc-conda-version-查看版本" class="nav-link" data-scroll-target="#conda-version-查看版本"><span class="header-section-number">4</span> conda –version (查看版本)</a></li>
+  <li><a href="#conda-create-建立新環境" id="toc-conda-create-建立新環境" class="nav-link" data-scroll-target="#conda-create-建立新環境"><span class="header-section-number">5</span> conda create (建立新環境)</a></li>
+  <li><a href="#conda-activate-啟動環境" id="toc-conda-activate-啟動環境" class="nav-link" data-scroll-target="#conda-activate-啟動環境"><span class="header-section-number">6</span> conda activate (啟動環境)</a></li>
+  <li><a href="#conda-install-安裝套件" id="toc-conda-install-安裝套件" class="nav-link" data-scroll-target="#conda-install-安裝套件"><span class="header-section-number">7</span> conda install (安裝套件)</a></li>
+  <li><a href="#conda-remove-移除套件" id="toc-conda-remove-移除套件" class="nav-link" data-scroll-target="#conda-remove-移除套件"><span class="header-section-number">8</span> conda remove (移除套件)</a></li>
+  <li><a href="#conda-deactivate-離開環境" id="toc-conda-deactivate-離開環境" class="nav-link" data-scroll-target="#conda-deactivate-離開環境"><span class="header-section-number">9</span> conda deactivate (離開環境)</a></li>
+  <li><a href="#conda-env-環境相關指令" id="toc-conda-env-環境相關指令" class="nav-link" data-scroll-target="#conda-env-環境相關指令"><span class="header-section-number">10</span> conda env (環境相關指令)</a>
+  <ul>
+  <li><a href="#conda-env-export-匯出環境至yaml" id="toc-conda-env-export-匯出環境至yaml" class="nav-link" data-scroll-target="#conda-env-export-匯出環境至yaml"><span class="header-section-number">10.1</span> conda env export (匯出環境至YAML)</a></li>
+  <li><a href="#conda-env-create-透過yaml建立環境" id="toc-conda-env-create-透過yaml建立環境" class="nav-link" data-scroll-target="#conda-env-create-透過yaml建立環境"><span class="header-section-number">10.2</span> conda env create (透過YAML建立環境)</a></li>
+  <li><a href="#conda-env-remove-刪除環境" id="toc-conda-env-remove-刪除環境" class="nav-link" data-scroll-target="#conda-env-remove-刪除環境"><span class="header-section-number">10.3</span> conda env remove (刪除環境)</a></li>
+  <li><a href="#conda-env-list-列出所有環境" id="toc-conda-env-list-列出所有環境" class="nav-link" data-scroll-target="#conda-env-list-列出所有環境"><span class="header-section-number">10.4</span> conda env list (列出所有環境)</a></li>
   </ul></li>
-  <li><a href="#移除套件" id="toc-移除套件" class="nav-link" data-scroll-target="#移除套件"><span class="header-section-number">8</span> 移除套件</a></li>
-  <li><a href="#離開環境" id="toc-離開環境" class="nav-link" data-scroll-target="#離開環境"><span class="header-section-number">9</span> 離開環境</a></li>
-  <li><a href="#由-yaml-建立環境" id="toc-由-yaml-建立環境" class="nav-link" data-scroll-target="#由-yaml-建立環境"><span class="header-section-number">10</span> 由 YAML 建立環境</a></li>
-  <li><a href="#列出所有環境" id="toc-列出所有環境" class="nav-link" data-scroll-target="#列出所有環境"><span class="header-section-number">11</span> 列出所有環境</a></li>
-  <li><a href="#查看目前環境套件的來源" id="toc-查看目前環境套件的來源" class="nav-link" data-scroll-target="#查看目前環境套件的來源"><span class="header-section-number">12</span> 查看目前環境套件的來源</a></li>
-  <li><a href="#列出目前環境資訊" id="toc-列出目前環境資訊" class="nav-link" data-scroll-target="#列出目前環境資訊"><span class="header-section-number">13</span> 列出目前環境資訊</a></li>
-  <li><a href="#刪除環境" id="toc-刪除環境" class="nav-link" data-scroll-target="#刪除環境"><span class="header-section-number">14</span> 刪除環境</a></li>
-  <li><a href="#其他-conda-指令help" id="toc-其他-conda-指令help" class="nav-link" data-scroll-target="#其他-conda-指令help"><span class="header-section-number">15</span> 其他 conda 指令(–help)</a></li>
+  <li><a href="#conda-list-查看下載之套件" id="toc-conda-list-查看下載之套件" class="nav-link" data-scroll-target="#conda-list-查看下載之套件"><span class="header-section-number">11</span> conda list (查看下載之套件)</a>
+  <ul>
+  <li><a href="#conda-list-show-channel-urls-查看套件的來源" id="toc-conda-list-show-channel-urls-查看套件的來源" class="nav-link" data-scroll-target="#conda-list-show-channel-urls-查看套件的來源"><span class="header-section-number">11.1</span> conda list –show-channel-urls (查看套件的來源)</a></li>
+  <li><a href="#conda-list-explicit-查看套件的詳細url" id="toc-conda-list-explicit-查看套件的詳細url" class="nav-link" data-scroll-target="#conda-list-explicit-查看套件的詳細url"><span class="header-section-number">11.2</span> conda list –explicit (查看套件的詳細url)</a></li>
+  <li><a href="#tips-輸出當前環境" id="toc-tips-輸出當前環境" class="nav-link" data-scroll-target="#tips-輸出當前環境"><span class="header-section-number">11.3</span> Tips: 輸出當前環境</a></li>
+  </ul></li>
+  <li><a href="#conda-help-詳細指令" id="toc-conda-help-詳細指令" class="nav-link" data-scroll-target="#conda-help-詳細指令"><span class="header-section-number">12</span> conda –help (詳細指令)</a></li>
   </ul>
-</nav>
+<div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/benson1231/tools"><i class="bi bi-github"></i>github</a></li></ul></div></nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
@@ -137,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1 data-number="1"><span class="header-section-number">1</span> Conda 介紹</h1>
 <p><code>Conda</code> 是一個跨平台的套件管理與環境管理系統（package &amp; environment manager），廣泛用於安裝和管理 Python、R、生物資訊工具（如 samtools、fastp、bwa）以及資料科學套件。 它能為每個專案建立獨立的軟體環境，避免不同工具之間的版本衝突，並大幅提升分析流程的 <code>可重現性（reproducibility）</code>。</p>
 <p><a href="https://github.com/conda/conda">Conda</a> 本身是一個 CLI 工具（Command-Line Interface tool），可透過指令執行套件安裝、環境建立、版本管理與環境切換。本篇文章將整理常用的 Conda 指令與實務操作，詳細指令請見 <a href="https://docs.conda.io/projects/conda/en/stable/user-guide/index.html">官方文檔</a>。</p>
-<p>此外，Conda 也有一個速度更快、完全相容的替代指令工具 —— mamba。 mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但<strong>實務上強烈建議在生物資訊流程中使用 mamba</strong> 執行環境建立與套件安裝，詳細介紹請見 <a href="../mamba/">mamba 教學</a> 。</p>
+<p>此外，Conda 也有一個速度更快、完全相容的替代指令工具 —— mamba。 mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但<strong>實務上強烈建議在生物資訊流程中使用 mamba</strong> 執行環境建立與套件安裝，詳細介紹請見 <a href="../mamba/mamba.html">mamba 教學</a> 。</p>
 <hr>
 </section>
 <section id="conda-channels-介紹" class="level1" data-number="2">
@@ -249,8 +254,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="https://github.com/conda-forge/miniforge">github下載 Miniforge(推薦)</a></li>
 </ul>
 </section>
-<section id="查看-conda-版本" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> 查看 conda 版本</h1>
+<section id="conda-version-查看版本" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> conda –version (查看版本)</h1>
 <p>使用 <code>--version</code> 或 <code>-V</code> 參數確認是否成功安裝，並顯示版本號。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> <span class="at">--version</span></span>
@@ -258,60 +263,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>conda 25.11.0 conda 25.11.0</p>
 </section>
-<section id="建立新-conda-環境" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> 建立新 conda 環境</h1>
-<p><code>-n</code> 代表創建環境名稱， <code>-y</code> 代表直接確認下載 (yes)</p>
+<section id="conda-create-建立新環境" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> conda create (建立新環境)</h1>
+<p><code>-n</code> 代表創建環境名稱， <code>-y</code> 代表直接確認下載 (yes)， <code>-f</code> 是透過指定 YAML file 建立環境</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> myenv python=3.10 <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="啟動-conda-環境" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> 啟動 conda 環境</h1>
+<section id="conda-activate-啟動環境" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> conda activate (啟動環境)</h1>
 <p>需先進入環境才能使用該環境安裝之套件</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate myenv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="安裝套件" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> 安裝套件</h1>
+<section id="conda-install-安裝套件" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> conda install (安裝套件)</h1>
 <p>於該環境內安裝套件會獨立於其他環境</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install numpy <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="匯出環境-yaml" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="匯出環境-yaml"><span class="header-section-number">7.1</span> 匯出環境 YAML</h2>
-<p>將環境 YAML 匯出可以進入版本控制，也能夠後續透過該 YAML 重建一樣的環境</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env export <span class="op">&gt;</span> output.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
-</section>
-<section id="移除套件" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> 移除套件</h1>
+<section id="conda-remove-移除套件" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> conda remove (移除套件)</h1>
 <p>移除該環境的套件，<code>-y</code> 表示直接確認，就不用再終端確認並輸入 <code>yes</code></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove numpy <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove numpy <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="離開環境" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> 離開環境</h1>
+<section id="conda-deactivate-離開環境" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> conda deactivate (離開環境)</h1>
 <p>回到 base 環境</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="由-yaml-建立環境" class="level1" data-number="10">
-<h1 data-number="10"><span class="header-section-number">10</span> 由 YAML 建立環境</h1>
-<p>可以透過 YAML 檔建立環境</p>
+<section id="conda-env-環境相關指令" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> conda env (環境相關指令)</h1>
+<p>與 conda 環境相關的指令，<code>-h</code> 有詳細解釋相關用法</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> ./conda/envs.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env <span class="at">-h</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="conda-env-export-匯出環境至yaml" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="conda-env-export-匯出環境至yaml"><span class="header-section-number">10.1</span> conda env export (匯出環境至YAML)</h2>
+<p>將環境 YAML 匯出可以進入版本控制，也能夠後續透過該 YAML 重建一樣的環境</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env export <span class="op">&gt;</span> output.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="列出所有環境" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> 列出所有環境</h1>
+<section id="conda-env-create-透過yaml建立環境" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="conda-env-create-透過yaml建立環境"><span class="header-section-number">10.2</span> conda env create (透過YAML建立環境)</h2>
+<p>環境名稱會是 YAML 的 name 參數</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> ./conda/envs.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="conda-env-remove-刪除環境" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="conda-env-remove-刪除環境"><span class="header-section-number">10.3</span> conda env remove (刪除環境)</h2>
+<p><code>-n</code> 指定待刪除環境名稱</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env remove <span class="at">-n</span> myenv <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="conda-env-list-列出所有環境" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="conda-env-list-列出所有環境"><span class="header-section-number">10.4</span> conda env list (列出所有環境)</h2>
 <p><code>*</code> 表示當前環境</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code># conda environments:
 #
@@ -321,11 +339,14 @@ base                     /home/benson/miniforge3
 myenv                    /home/benson/miniforge3/envs/myenv
 quarto-test-env      *   /home/benson/miniforge3/envs/quarto-test-env</code></pre>
 </section>
-<section id="查看目前環境套件的來源" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> 查看目前環境套件的來源</h1>
+</section>
+<section id="conda-list-查看下載之套件" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> conda list (查看下載之套件)</h1>
+<section id="conda-list-show-channel-urls-查看套件的來源" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="conda-list-show-channel-urls-查看套件的來源"><span class="header-section-number">11.1</span> conda list –show-channel-urls (查看套件的來源)</h2>
 <p>會匯出該環境套件之<strong>版本號、build string 與 Channel來源</strong>。 <code>build string</code> 表示該套件是用什麼編譯器、什麼設定、在什麼平台下編譯出來的版本。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list <span class="at">--show-channel-urls</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list <span class="at">--show-channel-urls</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code># packages in environment at /home/benson/miniforge3/envs/quarto-test-env:
 #
@@ -340,9 +361,12 @@ argon2-cffi-bindings             25.1.0           py310h7c4b9e2_2       conda-fo
 arrow                            1.4.0            pyhcf101f3_0          conda-forge
 asttokens                        3.0.1            pyhd8ed1ab_0          conda-forge
 async-lru                        2.0.5            pyh29332c3_0          conda-forge</code></pre>
+</section>
+<section id="conda-list-explicit-查看套件的詳細url" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="conda-list-explicit-查看套件的詳細url"><span class="header-section-number">11.2</span> conda list –explicit (查看套件的詳細url)</h2>
 <p>詳細來源也可以使用 <code>--explicit</code> 輸出 <code>url</code>，基本上能 100% 重建環境</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list <span class="at">--explicit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list <span class="at">--explicit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code># This file may be used to create an environment using:
 # $ conda create --name &lt;env&gt; --file &lt;this file&gt;
@@ -360,14 +384,14 @@ https://conda.anaconda.org/conda-forge/noarch/font-ttf-source-code-pro-2.038-h77
 https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-h77eed37_3.conda
 https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-5.14.0-he073ed8_3.conda</code></pre>
 </section>
-<section id="列出目前環境資訊" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> 列出目前環境資訊</h1>
+<section id="tips-輸出當前環境" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="tips-輸出當前環境"><span class="header-section-number">11.3</span> Tips: 輸出當前環境</h2>
 <p>完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Conda Environment: </span><span class="va">$(</span><span class="ex">conda</span> env list <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Conda Environment: </span><span class="va">$(</span><span class="ex">conda</span> env list <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code>=======================================
 Conda Environment: #
@@ -382,18 +406,12 @@ _r-mutex                         1.0.1            anacondar_1           conda-fo
 alsa-lib                         1.2.15.1         hb03c661_0            conda-forge
 anyio                            4.12.0           pyhcf101f3_0          conda-forge</code></pre>
 </section>
-<section id="刪除環境" class="level1" data-number="14">
-<h1 data-number="14"><span class="header-section-number">14</span> 刪除環境</h1>
-<p><code>-n</code> 指定待刪除環境名稱</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env remove <span class="at">-n</span> myenv <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
-<section id="其他-conda-指令help" class="level1" data-number="15">
-<h1 data-number="15"><span class="header-section-number">15</span> 其他 conda 指令(–help)</h1>
+<section id="conda-help-詳細指令" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> conda –help (詳細指令)</h1>
 <p>顯示 conda 的主要參數與使用說明，適合作為快速查詢用途。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code>usage: conda [-h] [-v] [--no-plugins] [-V] COMMAND ...
 
