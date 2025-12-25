@@ -1,14 +1,7 @@
+# render html
+
 ```bash
 quarto render conda/conda.qmd
-```
-
-
-```bash
-conda list --show-channel-urls
-```
-
-```bash
-conda list --explicit > explicit.txt
 ```
 
 # export conda env

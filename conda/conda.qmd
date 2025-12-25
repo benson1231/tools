@@ -1,5 +1,7 @@
 ---
-title: "conda 基本使用"
+title: "Conda 基本使用"
+date: today
+date-format: "YYYY-MM-DD"
 format:
   html:
     toc: true
@@ -13,18 +15,55 @@ execute:
 engine: knitr
 ---
 
-# 連結
+# Conda 介紹
 
-[create conda envs]()  
-[conda official github]()  
+`Conda` 是一個跨平台的套件管理與環境管理系統（package & environment manager），廣泛用於安裝和管理 Python、R、生物資訊工具（如 samtools、fastp、bwa）以及資料科學套件。
+它能為每個專案建立獨立的軟體環境，避免不同工具之間的版本衝突，並大幅提升分析流程的 `可重現性（reproducibility）`。
 
-# conda 版本資訊
+[Conda](https://github.com/conda/conda) 本身是一個 CLI 工具（Command-Line Interface tool），可透過指令執行套件安裝、環境建立、版本管理與環境切換。本篇文章將整理常用的 Conda 指令與實務操作，詳細指令請見 [官方文檔](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html)。
 
-使用 `-V` 參數確認 conda 是否成功安裝，並顯示版本號。
+此外，Conda 也有一個速度更快、完全相容的替代指令工具 —— mamba。
+mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但**實務上強烈建議在生物資訊流程中使用 mamba** 執行環境建立與套件安裝，詳細介紹請見 [mamba 教學](../mamba/) 。
+
+---
+
+# Conda Channels 介紹
+
+> 現代生物資訊分析最佳實踐為：**直接使用 conda-forge 與 bioconda 兩個 Channels**。
+
+Conda 透過 channel（套件來源庫） 取得各種可安裝的工具與套件。對生物資訊分析而言，最重要的三個 channel 如下：
+
+| Channel 名稱     | 來源/維護者      | 主要用途                        | 特點                         | 是否建議使用           |
+| --------------- | ----------- | --------------------------- | -------------------------- | ---------------- |
+| **conda-forge** | 社群維護        | Python、R、生信依賴、系統函式庫         | 套件最多、更新快、依賴最乾淨             | ⭐ **強烈推薦（第一順位）** |
+| **bioconda**    | Bioconda 專案 | 生物資訊工具（samtools/fastp/bwa…） | 建立在 conda-forge 之上、專門為生信設計 | ⭐ **推薦（第二順位）**   |
+| **defaults**    | Anaconda 官方 | 一般 Python/R 套件              | 更新慢、相依性常與生信工具衝突            | ❌ **不建議使用**      |
+
+- [conda-forge 官網](https://conda-forge.org/)
+- [bioconda 官網](https://bioconda.github.io/)
+
+# Conda 發行版整理
+
+> 現代生信最佳實踐為：**直接使用 Miniforge（內含 mamba）**。
+
+| 名稱                | 來源/維護者         | 是否包含 mamba  | 預設 Channel  | 特點                                                  | 適用情境                                 |
+| ----------------- | -------------- | ----------- | ----------- | --------------------------------------------------- | ------------------------------------ |
+| **Anaconda**      | Anaconda 官方    | ✖           | defaults    | 體積大，預裝大量 Python 科學套件；更新慢、依賴較複雜，不適合生信                | 初學者入門、教學示範。生信不推薦                     |
+| **Miniconda**     | Anaconda 官方    | ✖           | defaults    | 精簡 Conda，但需手動設定 conda-forge/bioconda；易與 defaults 衝突 | 想自行管理 channels 的使用者                  |
+| **Miniforge（推薦）** | conda-forge 社群 | ✔（內建 mamba） | conda-forge | 輕量、乾淨、無 defaults；包含 mamba，適合大型生信環境                  | ⭐ 生信最佳選擇、Snakemake/nf-core、重現性要求高的專案 |
+
+- [官網下載 Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)  
+- [github下載 Miniforge(推薦)](https://github.com/conda-forge/miniforge)  
+
+# 查看 conda 版本
+
+使用 `--version` 或 `-V` 參數確認是否成功安裝，並顯示版本號。
 
 ```{bash}
+conda --version
 conda -V
 ```
+conda 25.11.0
 conda 25.11.0
 
 # 建立新 conda 環境
@@ -37,11 +76,15 @@ conda create -n myenv python=3.10 -y
 
 # 啟動 conda 環境
 
+需先進入環境才能使用該環境安裝之套件
+
 ```{bash}
 conda activate myenv
 ```
 
 # 安裝套件
+
+於該環境內安裝套件會獨立於其他環境
 
 ```{bash}
 conda install numpy -y
@@ -49,11 +92,15 @@ conda install numpy -y
 
 ## 匯出環境 YAML
 
+將環境 YAML 匯出可以進入版本控制，也能夠後續透過該 YAML 重建一樣的環境
+
 ```{bash}
 conda env export > output.yaml
 ```
 
 # 移除套件
+
+移除該環境的套件，`-y` 表示直接確認，就不用再終端確認並輸入 `yes`
 
 ```{bash}
 conda remove numpy -y
@@ -61,17 +108,23 @@ conda remove numpy -y
 
 # 離開環境
 
+回到 base 環境
+
 ```{bash}
 conda deactivate
 ```
 
-## 由 YAML 建立環境
+# 由 YAML 建立環境
+
+可以透過 YAML 檔建立環境
 
 ```{bash}
 conda env create -f ./conda/envs.yaml
 ```
 
 # 列出所有環境
+
+`*` 表示當前環境
 
 ```{bash}
 conda env list
@@ -88,6 +141,9 @@ quarto-test-env      *   /home/benson/miniforge3/envs/quarto-test-env
 ```
 
 # 查看目前環境套件的來源
+
+會匯出該環境套件之**版本號、build string 與 Channel來源**。
+`build string` 表示該套件是用什麼編譯器、什麼設定、在什麼平台下編譯出來的版本。
 
 ```{bash}
 conda list --show-channel-urls
@@ -108,6 +164,8 @@ arrow                            1.4.0            pyhcf101f3_0          conda-fo
 asttokens                        3.0.1            pyhd8ed1ab_0          conda-forge
 async-lru                        2.0.5            pyh29332c3_0          conda-forge
 ```
+
+詳細來源也可以使用 `--explicit` 輸出 `url`，基本上能 100% 重建環境
 
 ```{bash}
 conda list --explicit
@@ -131,20 +189,20 @@ https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-h77eed37_3.co
 https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-5.14.0-he073ed8_3.conda
 ```
 
-# conda 環境資訊
+# 列出目前環境資訊
 
 完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
 
 ```{bash}
 echo "======================================="
-echo " Conda Environment: $(conda info --envs | grep '*' | awk '{print $1}')"
+echo "Conda Environment: $(conda env list | grep '*' | awk '{print $1}')"
 echo "======================================="
 conda list
 ```
 
 ```
 =======================================
- Conda Environment: #
+Conda Environment: #
 quarto-test-env
 =======================================
 # packages in environment at /home/benson/miniforge3/envs/quarto-test-env:
@@ -159,12 +217,14 @@ anyio                            4.12.0           pyhcf101f3_0          conda-fo
 
 # 刪除環境
 
+`-n` 指定待刪除環境名稱
+
 ```{bash}
 conda env remove -n myenv -y
 ```
 
 
-# 其他 conda 指令
+# 其他 conda 指令(--help)
 
 顯示 conda 的主要參數與使用說明，適合作為快速查詢用途。
 
