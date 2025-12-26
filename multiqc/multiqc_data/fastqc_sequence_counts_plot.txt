@@ -1,0 +1,3 @@
+Sample	Unique Reads	Duplicate Reads
+a.chr21_R1	4426.0	431.0
+a.chr21_R2	4528.0	329.0

@@ -1,0 +1,2 @@
+Sample	Passed Filter	Low Quality	Too Many N	Low Complexity	Too Short	Too Long
+a.chr21	8370.0	1344.0	0.0	nan	0.0	0.0

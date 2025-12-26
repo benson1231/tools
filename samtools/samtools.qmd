@@ -24,7 +24,7 @@ engine: knitr
 
 # Samtools 基本介紹
 
-[samtools](https://github.com/samtools/samtools) 是處理高通量定序（Next-Generation Sequencing, NGS）比對資料的核心工具套件，用於操作 SAM（Sequence Alignment/Map）與 BAM（Binary Alignment/Map）文件格式。SAM/BAM 是儲存序列與參考基因組比對結果的標準格式，而 samtools 提供快速、高效、彈性的指令協助使用者解析與管理這些資料。
+[samtools](https://github.com/samtools/samtools) 是處理高通量定序（Next-Generation Sequencing, NGS）比對資料的核心工具套件，用於操作 SAM（Sequence Alignment/Map）與 BAM（Binary Alignment/Map）文件格式。SAM/BAM 是儲存序列與參考基因組比對結果的標準格式，而 samtools 提供快速、高效、彈性的指令協助使用者解析與管理這些資料。另外還有更高效能、高度平行的工具 [sambamba](https://github.com/biod/sambamba)。
 
 > Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li
 GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008

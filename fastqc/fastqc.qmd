@@ -37,9 +37,9 @@ FastQC 的設計目標是：
 
 ## FastQC 的主要功能
 
-FastQC 的分析項目包括下列模組，每個模組會以 *PASS / WARN / FAIL* 標記品質狀態：
+FastQC 的分析項目包括下列模組，每個模組會以 *✅PASS / ⚠️WARN / ❌FAIL* 標記品質狀態：
 
-## ✅ Basic Statistics
+### ✅ Basic Statistics
 
 提供 FASTQ 檔案的基本資訊，例如：
 
@@ -48,35 +48,35 @@ FastQC 的分析項目包括下列模組，每個模組會以 *PASS / WARN / FAI
 * GC 含量
 * 估計的 encoding（如 Phred33/Phred64）
 
-## ✅ Per Base Sequence Quality
+### ✅ Per Base Sequence Quality
 
 顯示每一個位置的 Phred 品質分數分布，用來判斷讀序兩端是否需要 trimming。若尾端品質下降明顯，通常需要進行修剪。
 
-## ✅ Per Tile Sequence Quality
+### ✅ Per Tile Sequence Quality
 
 針對 Illumina flowcell 的 tile 分析品質分布，用來偵測儀器特定 tile 是否表現不良（常見於舊機型）。
 
-## ✅ Per Sequence Quality Scores
+### ✅ Per Sequence Quality Scores
 
 顯示每條讀序的平均品質，評估樣本是否有異常的品質讀序。
 
-## ✅ Per Base Sequence Content
+### ✅ Per Base Sequence Content
 
 顯示每個位置 A/T/G/C 的比例。若讀序起始端出現強烈偏差（特別是 RNA-seq），屬正常現象，不必過度解讀。
 
-## ✅ Per Sequence GC Content
+### ✅ Per Sequence GC Content
 
 展示所有讀序的 GC 分布。若分布異常（過度偏移或多峰），可能代表 contamination 或 library 準備問題。
 
-## ✅ Per Base N Content
+### ✅ Per Base N Content
 
 顯示每個位置 N（未知鹼基）的比例。高比例 N 通常代表測序品質問題。
 
-## ✅ Sequence Length Distribution
+### ✅ Sequence Length Distribution
 
 顯示讀序長度的分布。對於固定讀長平台（Illumina）應呈現單一峰；若發生多峰則可能來自 trimming、amplicon 或分析流程特性。
 
-## ✅ Sequence Duplication Levels
+### ✅ Sequence Duplication Levels
 
 顯示序列重複程度。高 duplication 可能反映：
 
@@ -86,7 +86,7 @@ FastQC 的分析項目包括下列模組，每個模組會以 *PASS / WARN / FAI
 
 RNA-seq 樣本 duplication 偏高屬常見現象。
 
-## ✅ Overrepresented Sequences
+### ✅ Overrepresented Sequences
 
 列出出現次數過高的讀序，用於偵測：
 
@@ -95,7 +95,7 @@ RNA-seq 樣本 duplication 偏高屬常見現象。
 * PCR artifacts
 * contamination
 
-## ✅ Adapter Content
+### ✅ Adapter Content
 
 分析讀序中是否存在 adapter 污染。若含量高，需要使用 trimming 工具（如 fastp、Cutadapt）。
 
@@ -135,6 +135,8 @@ FastQC 並不進行 trimming，也不修改讀序，因此通常搭配 fastp 或
 * 部分「FAIL」其實是正常現象（特別是 RNA-seq）
 * 在 long-read（Nanopore/PacBio）資料上模組較少
 
+---
+
 # fastqc -v (版本)
 
 使用 `-v` 參數確認 fastqc 是否成功安裝，並顯示版本號。
@@ -142,6 +144,8 @@ FastQC 並不進行 trimming，也不修改讀序，因此通常搭配 fastp 或
 ```{bash}
 fastqc -v
 ```
+
+---
 
 # fastqc (執行)
 
@@ -165,6 +169,8 @@ fastqc \
 --outdir ./
 ```
 
+---
+
 # fastqc --help
 
 顯示 fastqc 提供的主要參數與使用說明，適合作為快速查詢指令用途。
@@ -172,6 +178,8 @@ fastqc \
 ```{bash}
 fastqc --help
 ```
+
+---
 
 # 環境資訊
 

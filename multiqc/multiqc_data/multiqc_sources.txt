@@ -1,0 +1,4 @@
+Module	Section	Sample Name	Source
+fastp	all_sections	a.chr21	/mnt/c/Users/user/git/tools/fastp/fastp_report.json
+FastQC	all_sections	a.chr21_R1	/mnt/c/Users/user/git/tools/fastqc/a.chr21_R1_fastqc.zip
+FastQC	all_sections	a.chr21_R2	/mnt/c/Users/user/git/tools/fastqc/a.chr21_R2_fastqc.zip
