@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2025-12-26">
 
-<title>samtools 基本使用</title>
+<title>Samtools 基本使用</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,40 +73,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="samtools_files/libs/bootstrap/bootstrap-10fe2bd9fd8498839a96d31d92c830c0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
+<link rel="stylesheet" href="../styles/quarto.css">
 </head>
 
 <body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+  <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#連結" id="toc-連結" class="nav-link active" data-scroll-target="#連結"><span class="header-section-number">1</span> 連結</a></li>
+  <li><a href="#samtools-基本介紹" id="toc-samtools-基本介紹" class="nav-link active" data-scroll-target="#samtools-基本介紹"><span class="header-section-number">1</span> Samtools 基本介紹</a>
+  <ul>
+  <li><a href="#samtools-的主要功能" id="toc-samtools-的主要功能" class="nav-link" data-scroll-target="#samtools-的主要功能"><span class="header-section-number">1.1</span> Samtools 的主要功能</a></li>
+  <li><a href="#samtools-的特色" id="toc-samtools-的特色" class="nav-link" data-scroll-target="#samtools-的特色"><span class="header-section-number">1.2</span> Samtools 的特色</a></li>
+  <li><a href="#samtools-分析角色" id="toc-samtools-分析角色" class="nav-link" data-scroll-target="#samtools-分析角色"><span class="header-section-number">1.3</span> Samtools 分析角色</a></li>
+  </ul></li>
   <li><a href="#samtools-version" id="toc-samtools-version" class="nav-link" data-scroll-target="#samtools-version"><span class="header-section-number">2</span> samtools –version</a></li>
-  <li><a href="#samtools-faidx" id="toc-samtools-faidx" class="nav-link" data-scroll-target="#samtools-faidx"><span class="header-section-number">3</span> samtools faidx</a>
-  <ul class="collapse">
+  <li><a href="#samtools-faidx-建fasta索引" id="toc-samtools-faidx-建fasta索引" class="nav-link" data-scroll-target="#samtools-faidx-建fasta索引"><span class="header-section-number">3</span> samtools faidx (建FASTA索引)</a>
+  <ul>
   <li><a href="#index-fasta" id="toc-index-fasta" class="nav-link" data-scroll-target="#index-fasta"><span class="header-section-number">3.1</span> index FASTA</a></li>
   </ul></li>
-  <li><a href="#samtools-sort" id="toc-samtools-sort" class="nav-link" data-scroll-target="#samtools-sort"><span class="header-section-number">4</span> samtools sort</a></li>
-  <li><a href="#samtools-index" id="toc-samtools-index" class="nav-link" data-scroll-target="#samtools-index"><span class="header-section-number">5</span> samtools index</a></li>
-  <li><a href="#samtools-view" id="toc-samtools-view" class="nav-link" data-scroll-target="#samtools-view"><span class="header-section-number">6</span> samtools view</a>
-  <ul class="collapse">
+  <li><a href="#samtools-sort-排序" id="toc-samtools-sort-排序" class="nav-link" data-scroll-target="#samtools-sort-排序"><span class="header-section-number">4</span> samtools sort (排序)</a></li>
+  <li><a href="#samtools-index-建bam索引" id="toc-samtools-index-建bam索引" class="nav-link" data-scroll-target="#samtools-index-建bam索引"><span class="header-section-number">5</span> samtools index (建BAM索引)</a></li>
+  <li><a href="#samtools-view-轉檔篩選與過濾等" id="toc-samtools-view-轉檔篩選與過濾等" class="nav-link" data-scroll-target="#samtools-view-轉檔篩選與過濾等"><span class="header-section-number">6</span> samtools view (轉檔、篩選與過濾等)</a>
+  <ul>
   <li><a href="#sam-轉-bam" id="toc-sam-轉-bam" class="nav-link" data-scroll-target="#sam-轉-bam"><span class="header-section-number">6.1</span> SAM 轉 BAM</a></li>
   <li><a href="#bam-轉-sam" id="toc-bam-轉-sam" class="nav-link" data-scroll-target="#bam-轉-sam"><span class="header-section-number">6.2</span> BAM 轉 SAM</a></li>
   <li><a href="#查看-bam-檔" id="toc-查看-bam-檔" class="nav-link" data-scroll-target="#查看-bam-檔"><span class="header-section-number">6.3</span> 查看 bam 檔</a></li>
   <li><a href="#搜尋特定區域" id="toc-搜尋特定區域" class="nav-link" data-scroll-target="#搜尋特定區域"><span class="header-section-number">6.4</span> 搜尋特定區域</a></li>
+  <li><a href="#samtools-view-常用於進行篩選" id="toc-samtools-view-常用於進行篩選" class="nav-link" data-scroll-target="#samtools-view-常用於進行篩選"><span class="header-section-number">6.5</span> samtools view 常用於進行篩選</a></li>
   </ul></li>
-  <li><a href="#samtools-flagstat" id="toc-samtools-flagstat" class="nav-link" data-scroll-target="#samtools-flagstat"><span class="header-section-number">7</span> samtools flagstat</a></li>
-  <li><a href="#samtools-merge" id="toc-samtools-merge" class="nav-link" data-scroll-target="#samtools-merge"><span class="header-section-number">8</span> samtools merge</a></li>
-  <li><a href="#samtools-coverage" id="toc-samtools-coverage" class="nav-link" data-scroll-target="#samtools-coverage"><span class="header-section-number">9</span> samtools coverage</a></li>
-  <li><a href="#samtools-idxstats" id="toc-samtools-idxstats" class="nav-link" data-scroll-target="#samtools-idxstats"><span class="header-section-number">10</span> samtools idxstats</a></li>
-  <li><a href="#samtools-stats" id="toc-samtools-stats" class="nav-link" data-scroll-target="#samtools-stats"><span class="header-section-number">11</span> samtools stats</a></li>
-  <li><a href="#samtools-help" id="toc-samtools-help" class="nav-link" data-scroll-target="#samtools-help"><span class="header-section-number">12</span> samtools –help</a></li>
-  <li><a href="#conda-環境資訊" id="toc-conda-環境資訊" class="nav-link" data-scroll-target="#conda-環境資訊"><span class="header-section-number">13</span> Conda 環境資訊</a></li>
+  <li><a href="#samtools-flags-flag-解讀" id="toc-samtools-flags-flag-解讀" class="nav-link" data-scroll-target="#samtools-flags-flag-解讀"><span class="header-section-number">7</span> samtools flags (flag 解讀)</a></li>
+  <li><a href="#samtools-flagstat" id="toc-samtools-flagstat" class="nav-link" data-scroll-target="#samtools-flagstat"><span class="header-section-number">8</span> samtools flagstat</a></li>
+  <li><a href="#samtools-merge" id="toc-samtools-merge" class="nav-link" data-scroll-target="#samtools-merge"><span class="header-section-number">9</span> samtools merge</a></li>
+  <li><a href="#samtools-coverage" id="toc-samtools-coverage" class="nav-link" data-scroll-target="#samtools-coverage"><span class="header-section-number">10</span> samtools coverage</a></li>
+  <li><a href="#samtools-depth" id="toc-samtools-depth" class="nav-link" data-scroll-target="#samtools-depth"><span class="header-section-number">11</span> samtools depth</a>
+  <ul>
+  <li><a href="#計算平均深度" id="toc-計算平均深度" class="nav-link" data-scroll-target="#計算平均深度"><span class="header-section-number">11.1</span> 計算平均深度</a></li>
+  </ul></li>
+  <li><a href="#samtools-idxstats" id="toc-samtools-idxstats" class="nav-link" data-scroll-target="#samtools-idxstats"><span class="header-section-number">12</span> samtools idxstats</a></li>
+  <li><a href="#samtools-stats" id="toc-samtools-stats" class="nav-link" data-scroll-target="#samtools-stats"><span class="header-section-number">13</span> samtools stats</a></li>
+  <li><a href="#samtools-help" id="toc-samtools-help" class="nav-link" data-scroll-target="#samtools-help"><span class="header-section-number">14</span> samtools –help</a></li>
+  <li><a href="#conda-環境資訊" id="toc-conda-環境資訊" class="nav-link" data-scroll-target="#conda-環境資訊"><span class="header-section-number">15</span> Conda 環境資訊</a></li>
   </ul>
-</nav>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://benson1231.github.io/tools/"><i class="bi bi-house"></i>home</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/benson1231/tools"><i class="bi bi-github"></i>github</a></li></ul></div></nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
@@ -113,7 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">samtools 基本使用</h1>
+<h1 class="title">Samtools 基本使用</h1>
 </div>
 
 
@@ -121,6 +134,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2025-12-26</p>
+    </div>
+  </div>
   
     
   </div>
@@ -130,10 +149,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="連結" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> 連結</h1>
-<p><a href="https://github.com/benson1231/tools/blob/main/samtools/READEM.md">create conda envs</a><br>
-<a href="https://github.com/samtools/samtools">samtools official github</a></p>
+<section id="samtools-基本介紹" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Samtools 基本介紹</h1>
+<p><a href="https://github.com/samtools/samtools">samtools</a> 是處理高通量定序（Next-Generation Sequencing, NGS）比對資料的核心工具套件，用於操作 SAM（Sequence Alignment/Map）與 BAM（Binary Alignment/Map）文件格式。SAM/BAM 是儲存序列與參考基因組比對結果的標準格式，而 samtools 提供快速、高效、彈性的指令協助使用者解析與管理這些資料。</p>
+<blockquote class="blockquote">
+<p>Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008</p>
+</blockquote>
+<section id="samtools-的主要功能" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="samtools-的主要功能"><span class="header-section-number">1.1</span> Samtools 的主要功能</h2>
+<p>samtools 涵蓋了 NGS 比對檔案處理的幾乎所有基礎步驟，包括：</p>
+<ul>
+<li>檔案格式轉換（SAM ↔︎ BAM）</li>
+<li>排序（Sorting）與索引（Indexing）</li>
+<li>區域擷取（Region Extraction）</li>
+<li>基礎統計（flagstat, idxstats, coverage, stats）</li>
+<li>檔案合併與拆分（merge, split）</li>
+</ul>
+</section>
+<section id="samtools-的特色" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="samtools-的特色"><span class="header-section-number">1.2</span> Samtools 的特色</h2>
+<ul>
+<li><strong>高速、低記憶體需求</strong>：建立在 htslib 之上，效能優異</li>
+<li><strong>與主流工具鏈相容</strong>：如 BWA、Bowtie2、GATK、DeepVariant、nf-core pipelines</li>
+<li><strong>CLI 工作流程簡單、模組化</strong>：各指令可自由組合</li>
+<li><strong>支援 CRAM 格式（壓縮率更高）</strong>：可在提供參考序列時大幅節省硬碟空間</li>
+</ul>
+</section>
+<section id="samtools-分析角色" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="samtools-分析角色"><span class="header-section-number">1.3</span> Samtools 分析角色</h2>
+<p>samtools 常用於以下生物資訊流程：</p>
+<ul>
+<li><strong>比對後處理（post-alignment processing）</strong></li>
+<li><strong>品質檢查（QC）</strong>：檢查 mapping 成功率、深度是否正常</li>
+<li><strong>擷取特定基因區域</strong>：Sanger validation、視覺化前資料抽取</li>
+<li><strong>變異分析前的必要步驟</strong>：排序、索引、清理比對檔</li>
+</ul>
+<hr>
+</section>
 </section>
 <section id="samtools-version" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> samtools –version</h1>
@@ -171,59 +223,179 @@ HTSlib URL scheme handlers present:
     mem:     mem</code></pre>
 </div>
 </div>
+<hr>
 </section>
-<section id="samtools-faidx" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> samtools faidx</h1>
+<section id="samtools-faidx-建fasta索引" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> samtools faidx (建FASTA索引)</h1>
 <section id="index-fasta" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="index-fasta"><span class="header-section-number">3.1</span> index FASTA</h2>
 <p>建立 FASTA index</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> faidx ../.test/ex1.fa</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> faidx ../.test/ex1.fa</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
 </section>
-<section id="samtools-sort" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> samtools sort</h1>
+<section id="samtools-sort-排序" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> samtools sort (排序)</h1>
 <p>對 BAM 檔排序，以利後續建立索引或快速查詢。</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> sort <span class="at">-o</span> ../.test/ex1.sorted.bam ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> sort <span class="at">-o</span> ../.test/ex1.sorted.bam ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
-<section id="samtools-index" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> samtools index</h1>
+<section id="samtools-index-建bam索引" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> samtools index (建BAM索引)</h1>
 <p>建立 bam 檔的 index file <code>bai</code>，供後續索引</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> index ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> index ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
-<section id="samtools-view" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> samtools view</h1>
-<p>SAM&lt;-&gt;BAM&lt;-&gt;CRAM conversion</p>
+<section id="samtools-view-轉檔篩選與過濾等" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> samtools view (轉檔、篩選與過濾等)</h1>
+<p><code>samtools view</code> 是 samtools 套件中最常使用的指令之一，負責從 SAM/BAM/CRAM 中擷取資料、轉換格式、過濾 reads、以及抽取區域。透過不同參數組合，可快速針對 mapping 品質、FLAG 標記、比對狀態等條件進行篩選，是 NGS 分析中不可或缺的核心指令。</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Usage: samtools view [options] &lt;in.bam&gt;|&lt;in.sam&gt;|&lt;in.cram&gt; [region ...]
+
+Output options:
+  -b, --bam                  Output BAM
+  -C, --cram                 Output CRAM (requires -T)
+  -1, --fast                 Use fast BAM compression (and default to --bam)
+  -u, --uncompressed         Uncompressed BAM output (and default to --bam)
+  -h, --with-header          Include header in SAM output
+  -H, --header-only          Print SAM header only (no alignments)
+      --no-header            Print SAM alignment records only [default]
+  -c, --count                Print only the count of matching records
+      --save-counts FILE     Write counts of passed/failed records to FILE
+  -o, --output FILE          Write output to FILE [standard output]
+  -U, --unoutput FILE, --output-unselected FILE
+                             Output reads not selected by filters to FILE
+  -p, --unmap                Set flag to UNMAP on reads not selected
+                             then write to output file.
+  -P, --fetch-pairs          Retrieve complete pairs even when outside of region
+
+Input options:
+  -t, --fai-reference FILE   FILE listing reference names and lengths
+  -M, --use-index            Use index and multi-region iterator for regions
+      --region[s]-file FILE  Use index to include only reads overlapping FILE
+  -X, --customized-index     Expect extra index file argument after &lt;in.bam&gt;
+
+Filtering options (Only include in output reads that...):
+  -L, --target[s]-file FILE  ...overlap (BED) regions in FILE
+  -N, --qname-file [^]FILE   ...whose read name is listed in FILE ("^" negates)
+  -r, --read-group STR       ...are in read group STR or in no read group
+  -R, --read-group-file [^]FILE
+                             ...are in a read group listed in FILE or in none
+  -n, --exclude-no-read_group
+                             ...have a read group, exclude those that have not
+  -d, --tag STR1[:STR2]      ...have a tag STR1 (with associated value STR2)
+  -D, --tag-file STR:FILE    ...have a tag STR whose value is listed in FILE
+  -q, --min-MQ INT           ...have mapping quality &gt;= INT
+  -l, --library STR          ...are in library STR
+  -m, --min-qlen INT         ...cover &gt;= INT query bases (as measured via CIGAR)
+  -e, --expr STR             ...match the filter expression STR
+  -f, --require-flags FLAG   ...have all of the FLAGs present
+  -F, --excl[ude]-flags FLAG ...have none of the FLAGs present
+      --rf, --incl-flags, --include-flags FLAG
+                             ...have some of the FLAGs present
+  -G FLAG                    EXCLUDE reads with all of the FLAGs present
+      --subsample FLOAT      Keep only FLOAT fraction of templates/read pairs
+      --subsample-seed INT   Influence WHICH reads are kept in subsampling [0]
+  -s INT.FRAC                Same as --subsample 0.FRAC --subsample-seed INT
+
+Processing options:
+      --add-flags FLAG       Add FLAGs to reads
+      --remove-flags FLAG    Remove FLAGs from reads
+  -x, --remove-tag STR
+               Comma-separated read tags to strip (repeatable) [null]
+      --keep-tag STR
+               Comma-separated read tags to preserve (repeatable) [null].
+               Equivalent to "-x ^STR"
+  -B, --remove-B             Collapse the backward CIGAR operation
+  -z, --sanitize FLAGS       Perform sanitity checking and fixing on records.
+                             FLAGS is comma separated (see manual). [off]
+
+General options:
+  -?, --help   Print long help, including note about region specification
+  -S           Ignored (input format is auto-detected)
+      --no-PG  Do not add a PG line
+      --input-fmt-option OPT[=VAL]
+               Specify a single input file format option in the form
+               of OPTION or OPTION=VALUE
+  -O, --output-fmt FORMAT[,OPT[=VAL]]...
+               Specify output format (SAM, BAM, CRAM)
+      --output-fmt-option OPT[=VAL]
+               Specify a single output file format option in the form
+               of OPTION or OPTION=VALUE
+  -T, --reference FILE
+               Reference sequence FASTA FILE [null]
+  -@, --threads INT
+               Number of additional threads to use [0]
+      --write-index
+               Automatically index the output files [off]
+      --verbosity INT
+               Set level of verbosity
+
+See https://www.htslib.org/doc/samtools.html#GLOBAL_COMMAND_OPTIONS
+for more details.
+
+Notes:
+
+1. This command now auto-detects the input format (BAM/CRAM/SAM).
+   Further control over the CRAM format can be specified by using the
+   --output-fmt-option, e.g. to specify the number of sequences per slice
+   and to use avoid reference based compression:
+
+    samtools view -C --output-fmt-option seqs_per_slice=5000 \
+       --output-fmt-option no_ref -o out.cram in.bam
+
+   Options can also be specified as a comma separated list within the
+   --output-fmt value too.  For example this is equivalent to the above
+
+    samtools view --output-fmt cram,seqs_per_slice=5000,no_ref \
+       -o out.cram in.bam
+
+2. The file supplied with `-t' is SPACE/TAB delimited with the first
+   two fields of each line consisting of the reference name and the
+   corresponding sequence length. The `.fai' file generated by 
+   `samtools faidx' is suitable for use as this file. This may be an
+   empty file if reads are unaligned.
+
+3. SAM-&gt;BAM conversion:  samtools view -bT ref.fa in.sam.gz
+
+4. BAM-&gt;SAM conversion:  samtools view -h in.bam
+
+5. A region should be presented in one of the following formats:
+   `chr1', `chr2:1,000' and `chr3:1000-2,000'. When a region is
+   specified, the input alignment file must be a sorted and indexed
+   alignment (BAM/CRAM) file.
+
+6. Option `-u' is preferred over `-b' when the output is piped to
+   another samtools command.
+
+7. Option `-M`/`--use-index` causes overlaps with `-L` BED file regions and
+   command-line region arguments to be computed using the multi-region iterator
+   and an index. This increases speed, omits duplicates, and outputs the reads
+   as they are ordered in the input SAM/BAM/CRAM file.
+
+8. Options `-L`/`--target[s]-file` and `--region[s]-file` may not be used
+   together. `--region[s]-file FILE` is simply equivalent to `-M -L FILE`,
+   so using both causes one of the specified BED files to be ignored.</code></pre>
+</div>
+</div>
 <section id="sam-轉-bam" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="sam-轉-bam"><span class="header-section-number">6.1</span> SAM 轉 BAM</h2>
 <p><code>-b</code> 輸出bam，<code>-t</code> 提供 FASTA index(.fai)供 SAM 轉換 BAM，<code>-o &lt;output.bam&gt;</code> 指定輸出 BAM 檔的名稱</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-b</span> <span class="at">-t</span> ../.test/ex1.fa.fai <span class="at">-o</span> ../.test/ex1.bam ../.test/ex1.sam.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-b</span> <span class="at">-t</span> ../.test/ex1.fa.fai <span class="at">-o</span> ../.test/ex1.bam ../.test/ex1.sam.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="bam-轉-sam" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="bam-轉-sam"><span class="header-section-number">6.2</span> BAM 轉 SAM</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-h</span> <span class="at">-o</span> ../.test/ex1.sam.gz ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-h</span> <span class="at">-o</span> ../.test/ex1.sam.gz ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="查看-bam-檔" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="查看-bam-檔"><span class="header-section-number">6.3</span> 查看 bam 檔</h2>
 <p>default 不包含header，<code>-h</code> 含 header，<code>-H</code> 只看 header</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有比對結果（不含 header）</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view ../.test/ex1.bam <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有比對結果（含 header）</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-h</span> ../.test/ex1.bam <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 只輸出 BAM 的 header</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-H</span> ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有比對結果（不含 header）</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view ../.test/ex1.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>B7_591:4:96:693:509 73  seq1    1   99  36M *   0   0   CACTAGTGGCTCATTGTAAATGTGTGGTTTAACTCG    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5&lt;&lt;&lt;&lt;&lt;;:&lt;;7    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 EAS54_65:7:152:368:113  73  seq1    3   99  35M *   0   0   CTAGTGGCTCATTGTAAATGTGTGGTTTAACTCGT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;&lt;&lt;&lt;655&lt;&lt;7&lt;&lt;&lt;:9&lt;&lt;3/:&lt;6): MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
@@ -234,36 +406,47 @@ EAS56_61:6:18:467:281   73  seq1    13  99  35M *   0   0   ATTGTAAATGTGTGGTTTAA
 EAS114_28:5:296:340:699 137 seq1    13  99  36M *   0   0   ATTGTAAATGTGTGGTTTAACTCGTCCATGGCCCAG    &lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;8&lt;3&lt;8;&lt;;&lt;0;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 B7_597:6:194:894:408    73  seq1    15  99  35M *   0   0   TGTAAATGTGTGGTTTAACTCGTCCATTGCCCAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;7;;&lt;&lt;&lt;*,;;572&lt; MF:i:18 Aq:i:43 NM:i:1  UQ:i:9  H0:i:0  H1:i:1
 EAS188_4:8:12:628:973   89  seq1    18  75  35M *   0   0   AAATGTGTGGTTTAACTCGTCCATGGCCCAGCATT ==;=:;:;;:====;=;===:=======;==;=== MF:i:64 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_66:7:68:402:50    137 seq1    22  99  35M *   0   0   GTGTGGTTTAACTCGTCCATGGCCCAGCATTTGGG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;9&lt;6;9;;&amp;697;7&amp;&lt;55 MF:i:18 Aq:i:66 NM:i:1  UQ:i:5  H0:i:1  H1:i:0
-@SQ SN:seq1 LN:1575
+EAS51_66:7:68:402:50    137 seq1    22  99  35M *   0   0   GTGTGGTTTAACTCGTCCATGGCCCAGCATTTGGG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;9&lt;6;9;;&amp;697;7&amp;&lt;55 MF:i:18 Aq:i:66 NM:i:1  UQ:i:5  H0:i:1  H1:i:0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 查看所有比對結果（含 header）</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-h</span> ../.test/ex1.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>@SQ SN:seq1 LN:1575
 @SQ SN:seq2 LN:1584
 @PG ID:samtools PN:samtools VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
 @PG ID:samtools.1   PN:samtools PP:samtools VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
 @PG ID:samtools.2   PN:samtools PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
 @PG ID:samtools.3   PN:samtools PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
 @PG ID:samtools.4   PN:samtools PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG ID:samtools.5   PN:samtools PP:samtools.4   VN:1.23 CL:samtools view -h ../.test/ex1.bam
-B7_591:4:96:693:509 73  seq1    1   99  36M *   0   0   CACTAGTGGCTCATTGTAAATGTGTGGTTTAACTCG    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5&lt;&lt;&lt;&lt;&lt;;:&lt;;7    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_65:7:152:368:113  73  seq1    3   99  35M *   0   0   CTAGTGGCTCATTGTAAATGTGTGGTTTAACTCGT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;&lt;&lt;&lt;655&lt;&lt;7&lt;&lt;&lt;:9&lt;&lt;3/:&lt;6): MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-@SQ SN:seq1 LN:1575
+@PG ID:samtools.5   PN:samtools PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG ID:samtools.6   PN:samtools PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.7   PN:samtools PP:samtools.6   VN:1.23 CL:samtools view -h ../.test/ex1.bam</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 只輸出 BAM 的 header</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-H</span> ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>@SQ SN:seq1 LN:1575
 @SQ SN:seq2 LN:1584
 @PG ID:samtools PN:samtools VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
 @PG ID:samtools.1   PN:samtools PP:samtools VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
 @PG ID:samtools.2   PN:samtools PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
 @PG ID:samtools.3   PN:samtools PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
 @PG ID:samtools.4   PN:samtools PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG ID:samtools.5   PN:samtools PP:samtools.4   VN:1.23 CL:samtools view -H ../.test/ex1.bam</code></pre>
+@PG ID:samtools.5   PN:samtools PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG ID:samtools.6   PN:samtools PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG ID:samtools.7   PN:samtools PP:samtools.6   VN:1.23 CL:samtools view -H ../.test/ex1.bam</code></pre>
 </div>
 </div>
 </section>
 <section id="搜尋特定區域" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="搜尋特定區域"><span class="header-section-number">6.4</span> 搜尋特定區域</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取 chr2 450-550 的比對結果</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view ../.test/ex1.sorted.bam seq2:450-550 <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 根據 BED 檔指定區域提取比對</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-L</span> ../.test/ex1.bed ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 提取 chr2 450-550 的比對結果</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view ../.test/ex1.sorted.bam seq2:450-550 <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EAS1_108:1:33:779:821   163 seq2    416 99  35M =   579 198 TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
 EAS112_34:6:75:615:555  147 seq2    416 99  35M =   255 -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA ;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
@@ -274,8 +457,14 @@ EAS54_81:2:317:72:221   83  seq2    422 99  35M =   270 -187    AAAAAAATTCTAAAAT
 EAS56_53:4:45:707:147   83  seq2    424 99  35M =   216 -243    AAAAATTCTAAAATCAGCAAGAGAAAAGCATACAG &lt;&lt;&lt;&lt;&lt;&lt;;3&lt;&lt;&lt;&lt;&lt;4;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:51 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 EAS219_1:7:16:1343:1621 147 seq2    426 99  35M =   248 -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC ;&lt;&lt;9;7=====;;==&lt;==================&lt; MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 B7_595:5:184:912:258    99  seq2    428 99  35M =   582 189 ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_62:5:119:38:945   147 seq2    428 99  35M =   221 -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT =;;8=====:========&lt;================ MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_108:1:33:779:821   163 seq2    416 99  35M =   579 198 TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
+EAS51_62:5:119:38:945   147 seq2    428 99  35M =   221 -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT =;;8=====:========&lt;================ MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 根據 BED 檔指定區域提取比對</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-L</span> ../.test/ex1.bed ../.test/ex1.sorted.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>EAS1_108:1:33:779:821   163 seq2    416 99  35M =   579 198 TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
 EAS112_34:6:75:615:555  147 seq2    416 99  35M =   255 -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA ;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
 EAS188_7:6:11:994:584   147 seq2    417 97  35M =   226 -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
 EAS114_26:7:218:858:445 147 seq2    421 99  35M =   239 -217    GAAAAAAATTCTAAAATCAGCAAGAGAAAAGCATA ;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;:&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:1
@@ -284,186 +473,130 @@ EAS54_81:2:317:72:221   83  seq2    422 99  35M =   270 -187    AAAAAAATTCTAAAAT
 EAS56_53:4:45:707:147   83  seq2    424 99  35M =   216 -243    AAAAATTCTAAAATCAGCAAGAGAAAAGCATACAG &lt;&lt;&lt;&lt;&lt;&lt;;3&lt;&lt;&lt;&lt;&lt;4;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:51 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 EAS219_1:7:16:1343:1621 147 seq2    426 99  35M =   248 -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC ;&lt;&lt;9;7=====;;==&lt;==================&lt; MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 B7_595:5:184:912:258    99  seq2    428 99  35M =   582 189 ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_62:5:119:38:945   147 seq2    428 99  35M =   221 -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT =;;8=====:========&lt;================ MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_108:6:95:235:746   163 seq2    430 99  35M =   598 203 TCTAAAATCAGCAAGAGAAAAGCATACAGACATCT &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;79&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;*;;;&lt;9 MF:i:18 Aq:i:72 NM:i:1  UQ:i:9  H0:i:1  H1:i:0
-EAS114_30:3:39:348:594  163 seq2    431 99  35M =   600 204 CTAAAATCAGCAAGAGAAAAGCATACAGTCATCTA &lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;:&lt;:&lt;: MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_99:2:188:782:483   83  seq2    431 99  35M =   277 -189    CTAAAATCAGCAAGAGAAAAGCATACAGTCATCTA 7&lt;&lt;&lt;&lt;&lt;&lt;4&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_95:4:176:971:874   83  seq2    432 76  9M1D26M =   273 -195    TAAAATCAGAAGAGAAAAGCATACAGTCATCTATA &lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:130    Aq:i:76 NM:i:0  UQ:i:0  H0:i:0  H1:i:0
-EAS114_30:3:14:697:541  147 seq2    432 99  35M =   259 -208    TAAAAGCAGCAAGAGAAAAGCATACAGTCATCTAT 8&lt;&lt;&lt;&lt;&amp;6&lt;;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;8 MF:i:18 Aq:i:71 NM:i:1  UQ:i:5  H0:i:1  H1:i:0
-EAS1_108:1:131:518:588  163 seq2    433 99  35M =   607 209 AAAATCAGCAAGAGAAAAGCATACAGTCATCTATA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;1&lt;&lt; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_610:7:177:469:800    147 seq2    433 99  35M =   259 -209    AAAATCAGCAAGAGAAAAGCATACAGTCATCTATA =&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS192_3:8:6:237:885    147 seq2    433 99  35M =   269 -199    AAAATCAGCAAGAGAAAAGCATACAGTCATCTATA &lt;&lt;&lt;&lt;1:&lt;;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:2:104:402:732  163 seq2    434 99  35M =   610 211 AAATCAGCAAGAGAAAAGCATACAGTCATCTATAA =========================7=;===;=:= MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_53:3:134:126:465  147 seq2    434 99  35M =   245 -224    AAATCAGCAAGAGAAAAGCATACAGTCATCTATAA &lt;&lt;;:&amp;&lt;3)&lt;&lt;7&lt;:&lt;&lt;&lt;&lt;.:&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:56 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS218_4:3:65:85:1547   83  seq2    434 99  35M =   257 -212    AAATCAGCAAGAGAAAAGCATACAGTCATCTATAA &lt;&lt;&lt;&lt;&lt;&lt;;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_71:2:85:686:696   163 seq2    435 99  35M =   594 193 AATCAGCAAGAGAAAAGCATACAGTCATCTATAAA ==================&lt;=====:==&lt;=&lt;;=:== MF:i:18 Aq:i:47 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_28:1:144:242:602 163 seq2    436 99  36M =   611 211 ATCAGCAAGAGAAAAGCATACAGTCATCTATAAAGG    ========================;=====&lt;;;&lt;&lt;;    MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_81:7:124:253:889  163 seq2    437 99  35M =   598 196 TCAGCAAGAGAAAAGCATACAGTCATCTATAAAGG &lt;&lt;&lt;&lt;&lt;&lt;6&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_108:2:204:737:61   83  seq2    437 99  35M =   247 -225    TCAGCAAGAGAAAAGCATACAGTCATCTATAAAGG (7=72=;==2=====&lt;===&lt;&lt;============== MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_30:7:310:155:312 163 seq2    438 99  35M =   606 203 CAGCAAGAGAAAAGCATACAGTCATCTATAAAGGA ;&lt;&lt;&lt;;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;8&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS192_3:7:78:692:671   99  seq2    438 99  35M =   610 207 CAGCAAGAGAAAAGCATACAGTCATCTATAAAGGA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;:&lt;&lt;&lt;:8&lt;&lt;0;; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_11:7:60:163:1612 163 seq2    439 99  35M =   617 213 AGCAAGAGAAAAGCATACAGTCATCTATAAAGGAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;21&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;3&lt;--&lt;+&lt;&lt;&lt;+&lt;&lt;63&lt; MF:i:18 Aq:i:59 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_71:7:130:260:553  147 seq2    439 99  35M =   250 -224    AGCAAGAGAAAAGCATACAGTCATCTATAAAGGAA &lt;*;&lt;&lt;7&lt;);&lt;&lt;;9;&lt;5&lt;*&lt;9&lt;;&lt;&lt;;;&lt;7&lt;&lt;&lt;&lt;&lt;1&lt; MF:i:18 Aq:i:42 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_597:6:106:595:322    83  seq2    440 99  35M =   274 -201    GCAAGAGAAAAGCATACAGTCATCTATAAAGGAAA ;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_65:5:211:84:84    147 seq2    440 99  35M =   268 -207    GCAAGAGAAAAGCATACAGTCATCTATAAAGGAAA 6:&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;;;&lt;;&lt;3; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_105:2:280:662:939  147 seq2    442 99  35M =   294 -183    AAGAGAAAAGCATACAGTCATCTATAAAGGAAATC &lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:48 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_103:2:234:167:381  163 seq2    443 99  35M =   625 217 AGAGAAAAGCATACAGTCATCTATAAAGGAAATCC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;;7&lt;;; MF:i:18 Aq:i:49 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_595:6:52:751:360 83  seq2    443 99  35M =   263 -215    AGAGAAAAGCATACAGTCATCTATAAAGGAAATCC &lt;-&lt;9&lt;&lt;&lt;&lt;&lt;6&lt;&lt;&lt;8&lt;&lt;;;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:45 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_45:6:37:156:134  83  seq2    443 99  35M =   261 -217    AGAGAAAAGCATACAGTCATCTATAAAGGAAATCC 99998&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:49 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS112_34:7:96:489:453  99  seq2    445 99  35M =   625 215 AGAAAAGCATACAGTCATCTATAAAGGAAATCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;;: MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_28:2:167:905:852 163 seq2    445 99  36M =   647 238 AGAAAAGCATACAGTCATCTATAAAGAAAATCCCAT    &lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;:&lt;&lt;:::&amp;.&lt;:&lt;66:3&lt;    MF:i:18 Aq:i:43 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
-EAS219_FC30151:3:13:674:1717    163 seq2    445 99  35M =   623 213 AGAAAAGCATGCAGTCATCTATAAAGGAAATCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;%&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;:;;; MF:i:18 Aq:i:45 NM:i:1  UQ:i:4  H0:i:0  H1:i:1
-EAS56_59:1:93:490:901   83  seq2    445 99  35M =   280 -200    AGAAAAGCATACAGTCATCTATAAAGGAAATCCCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_26:6:46:13:880   147 seq2    445 99  35M =   290 -190    AGAAAAGCATACAGTCATCTATAAAGGAAATCCCA =&amp;====8==========0================= MF:i:18 Aq:i:43 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_62:7:196:511:896  83  seq2    446 99  35M =   283 -198    GAAAAGCATACAGTCATCTATAAAGGAAATCCCAT 8&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:52 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_53:1:154:118:488  163 seq2    447 99  35M =   624 212 AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:7&lt;&lt;&lt;&lt;7&lt;:;;:: MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_28:4:215:246:640 99  seq2    447 99  36M =   624 213 AAAAGCATACAGTCATCTATAAAGGAAATCCCATCA    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9;&lt;&lt;&lt;&lt;&lt;&lt;3;&lt;;3    MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_57:2:44:153:969   83  seq2    447 95  35M =   245 -237    AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;5&lt;:7&lt;72&lt;51&lt;7&lt;*79&lt;&lt;&lt;&lt;&lt;5&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2&lt; MF:i:18 Aq:i:36 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS219_1:7:94:1655:1921 147 seq2    447 85  35M =   258 -224    AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;&lt;&lt;;:===&lt;==;&lt;==&lt;;================; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS221_1:6:60:1037:1146 147 seq2    447 99  35M =   250 -232    AAAAGCATACAGTCATCTATAAAGGAAATCCCATC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_65:1:23:536:229   99  seq2    448 99  35M =   614 201 AAAGCATACAGTCATCTATAAAGGAAATCCCATCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;8&lt;:&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt; MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS112_34:6:130:865:838 163 seq2    448 99  35M =   649 236 AAAGCATACAGTCATCTATAAAGGAAATCCCATCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;:&lt;;3 MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:2:239:1001:406 99  seq2    450 99  35M =   634 219 AGCATACAGTCATCTATAAAGGAAATCCCATCAGA &lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;36&lt;&lt;3&lt;:33 MF:i:18 Aq:i:49 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_67:3:172:196:746  99  seq2    451 99  35M =   620 204 GCATACAGTCATCTATAAAGGAAATCCCATCAGAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;6&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_97:3:147:423:584   147 seq2    451 99  35M =   277 -209    GCATACAGTCATCTATAAAGGAAATCCCATCAGAA 27&lt;;&lt;3&lt;&lt;&lt;+&lt;&lt;;&lt;&lt;&lt;;;-4&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_99:1:187:715:521   83  seq2    451 99  35M =   291 -195    GCATACAGTCATCTATAAAGGAAATCCCATCAGAA &lt;7&lt;:&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_71:3:267:821:860  83  seq2    451 99  34M =   296 -189    GCATACAGTCATCTATAAAGGAAATCCCATCAGA  $&amp;&lt;&lt;&lt;.&lt;:;6&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;  MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
-EAS56_61:7:7:682:201    83  seq2    452 99  35M =   288 -199    CATACAGTCATCTATAAAGGAAATCCCATCAGAAT 0:8;5&lt;8&lt;1:78&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:8&lt;&lt;2&lt;&lt;&lt;&lt;:&lt; MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_589:3:82:13:897  163 seq2    453 99  35M =   606 188 ATACAGTCATCTATAAAGGAAATCCCAGCAGAATA &lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;;5&lt;51;&lt;1&lt;&lt;&lt;&lt;%&lt;&lt;&lt;&lt;,58 MF:i:18 Aq:i:41 NM:i:1  UQ:i:4  H0:i:0  H1:i:1
-EAS56_53:6:180:695:621  99  seq2    453 99  35M =   637 219 ATACAGTCATCTATAAAGGAAATCCCATCAGAATA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;::&lt;&lt;&lt; MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_57:2:158:909:321  83  seq2    453 99  35M =   271 -217    ATACAGTCATCTATAAAGGAAATCCCATCAGAATA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_26:2:237:497:165 99  seq2    454 99  35M =   619 200 TACAGTCATCTATAAAGGAAATCCCATCAGAATAA 8===&lt;8===========37=&lt;===7=;7=8===== MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS220_1:4:100:20:1199  163 seq2    456 99  35M =   614 193 CAGTCATCTATAAAGGAAATCCCATCAGAATAACA 7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;4&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_99:2:152:355:962   83  seq2    456 99  35M =   269 -222    CAGTCATCTATAAAGGAAATCCCATCAGAATAACA &amp;&lt;.9.&lt;;+;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;::&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:2
-EAS192_3:4:255:549:422  83  seq2    456 99  35M =   295 -196    AAGTCATCTATAAAGGAAATCCCATCAGAATAACA &amp;&lt;;;+&lt;;4;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:1  UQ:i:5  H0:i:1  H1:i:2
-EAS54_67:5:71:408:741   163 seq2    457 99  35M =   637 215 AGTCATCTATAAAGGAAATCCCATCAGAATAACAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_73:3:4:854:140    99  seq2    458 72  35M =   638 215 GTCATCTATAAAGGAAATCCCATCAGAATAACAAT &lt;&lt;&lt;6&lt;&lt;&lt;:&lt;6&lt;&lt;&lt;:36:&lt;&lt;&lt;&lt;3&lt;&lt;8:.6&lt;38::4&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS188_7:6:107:636:642  163 seq2    458 99  35M =   630 207 GTCATCTATAAAGGAAATCCCATCAGAATAACAAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_66:5:285:395:450  147 seq2    458 99  35M =   269 -224    GTCATCTATAAAGGAAATCCCATCAGAATAACAAT 8)3&lt;8+;&lt;)&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;97:7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:65 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:6:227:657:95   147 seq2    458 99  35M =   280 -213    GTCATCTATAAAGGAAATCCCATCAGAATAACAAT ;3;&lt;);&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;18&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:59 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_28:7:57:324:546  83  seq2    458 99  36M =   281 -213    GTCATCTATAAAGGAAATCCCATCAGAATAACAATG    ;;5&lt;;,&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;97&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_19:4:26:274:1078 83  seq2    458 99  40M =   282 -216    GTCATCTATAAAGGAAATCCCATCAGAATAACAATGGGCT    9:*:64&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;8;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS192_3:4:312:915:751  99  seq2    461 99  35M =   621 195 ATCTATAAAGGAAATCCCATCAGAATAACAATGGG &lt;2&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;84,4: MF:i:18 Aq:i:41 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_81:7:226:869:36   147 seq2    461 99  35M =   273 -223    ATATATAAAGGAAATCCCATCAGAATAACAATGGG &lt;0/)&lt;/&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;)&lt;&lt;7&lt;&lt;&lt;&lt;&lt;+55&lt;&lt;1&lt;&lt;&lt;:&lt; MF:i:18 Aq:i:59 NM:i:1  UQ:i:14 H0:i:1  H1:i:0
-EAS188_4:7:96:899:106   99  seq2    462 99  35M =   636 209 TCTATAAAGGAAATCCCATCAGAATAACAATGGGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_65:6:67:56:806    99  seq2    464 99  35M =   637 208 TATAAAGGAAATCCCATCAGAATAACAATGGGCTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;:7: MF:i:18 Aq:i:70 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_65:5:37:611:267   99  seq2    464 99  35M =   610 181 TATAAAGGAAATCCCATAAGAATAACAATGGGCTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS1_93:5:62:969:12 147 seq2    464 99  35M =   303 -196    TATAAAGGAAATCCCATCAGAATAACAATGGGCTT &lt;&lt;;&lt;;&lt;::&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_105:8:96:720:940   163 seq2    467 99  35M =   654 222 AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;9&lt;&lt;8&lt;&lt;6&lt;;:;&lt;;;.;; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_53:2:59:286:290   99  seq2    467 99  35M =   628 196 AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;&lt;;7;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_57:2:236:841:20   163 seq2    467 99  35M =   652 220 AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;:&lt;&lt;9&lt;&lt;&lt;&lt;;&lt;:&lt;9 MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_93:7:319:280:57    147 seq2    467 99  35M =   306 -196    AAAGGAAATCCCATCAGAATAACAATGGGCTTCTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_30:6:49:656:507  99  seq2    468 99  35M =   637 204 AAGGAAATCCCATCAGAATAACAATGGGCTTCTCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;9 MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS221_3:4:78:1314:1275 147 seq2    469 99  35M =   277 -227    AGGAAATCCCATCAGAATAACAATGGGCTTCTCAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_62:2:133:8:379    163 seq2    470 99  35M =   653 218 GGAAATCCCATCAGAATAACAATGGGCTTCTCAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8;&lt;&lt;8&lt;&lt;&lt;:6&lt; MF:i:18 Aq:i:70 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_99:6:181:392:500   147 seq2    470 99  35M =   299 -206    GGAAATCCCATCAGAATAACAATGGGCTTCTCAGC /5&lt;&lt;;(88&lt;&lt;&lt;;&lt;;&lt;&lt;6&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt; MF:i:18 Aq:i:63 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:5:198:929:684  163 seq2    471 99  35M =   624 188 GAAATCCCATCAGAATAACAATGGGCTTCTCAGCA &lt;7&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;::&lt;:7 MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_30:3:181:582:435 99  seq2    471 99  35M =   629 193 GAAATCCCATCAGAATAACAATGGGCTTCTCAGCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;:: MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_93:1:214:784:690   99  seq2    472 99  35M =   657 220 AAATCCCATCAGAATAACAATGGGCTTCTCAGCGG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;4&lt;44 MF:i:18 Aq:i:30 NM:i:1  UQ:i:19 H0:i:1  H1:i:0
-EAS114_39:3:11:1238:1728    83  seq2    475 99  35M =   310 -200    TCCCATCAGAATAACAATGGGCTTCTCAGCGGAAA :677&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:45 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS112_34:4:12:273:89   163 seq2    477 99  35M =   631 189 CCATCAGAATAACAATGGGCTTCTCAGCGGAAACC ==========&lt;====:=========+===4414;; MF:i:18 Aq:i:71 NM:i:1  UQ:i:28 H0:i:1  H1:i:0
-EAS56_63:2:119:161:322  147 seq2    479 99  35M =   297 -217    ATCAGAATAACAATGGGCTTCTCAGCAGAAACCTT &lt;83&lt;;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:1
-EAS114_30:2:111:142:21  83  seq2    479 99  35M =   304 -210    ATCAGAATAACAATGGGCTTCACAGCGGAAACCTT ;88&lt;:&lt;;;&lt;6&lt;;;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:28 NM:i:2  UQ:i:53 H0:i:0  H1:i:0
-EAS1_99:1:34:649:318    83  seq2    481 65  35M =   328 -188    AAGAATAACAATGGGCTTCACAGCGGAACCCTTAC )&lt;7&lt;&lt;3&lt;&lt;&lt;&lt;&lt;&lt;+&lt;1&lt;;&lt;8&amp;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:130    Aq:i:65 NM:i:3  UQ:i:59 H0:i:0  H1:i:0
-EAS114_30:6:214:565:337 147 seq2    481 99  35M =   326 -190    CAGAATAACAATGGGCTTCTCAGCAGAAACCTTAC ;;&lt;;&lt;1&lt;9&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_11:6:13:682:680  99  seq2    482 99  35M =   685 238 AGAATAACAATGGGCTTCTCAGCGGAAACCTTACA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS56_61:6:226:370:91   147 seq2    482 99  35M =   335 -182    AGAATAACAATGGGCTTCTCAGCGGAAACCTTACA &lt;':&lt;6&lt;;&lt;&lt;&lt;;2&lt;;&lt;-7;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;&lt;7;&lt; MF:i:18 Aq:i:43 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-B7_593:2:273:348:37 163 seq2    483 99  36M =   688 241 GAATAACAATGGGCTTCTCAGCAGAAACCTTACACG    &lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;49&lt;&lt;&lt;;&lt;&lt;&lt;&lt;*&lt;&lt;19&lt;15;&lt;&lt;/5&lt;;.5    MF:i:18 Aq:i:41 NM:i:1  UQ:i:13 H0:i:1  H1:i:0
-EAS139_11:8:76:205:587  83  seq2    483 99  35M =   306 -212    GAATAACAATGGGCTTCTCAGCGGAAACCTTACGA 8&lt;&lt;5&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;/&lt; MF:i:18 Aq:i:28 NM:i:2  UQ:i:41 H0:i:0  H1:i:0
-B7_591:2:27:280:592 147 seq2    484 99  36M =   310 -210    AATAACAATGGGCTTCTCAGCGGAAACCTTACAAGC    &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS1_99:7:171:196:287   163 seq2    485 99  35M =   658 208 ATAACAATGGGCTTCTCAGCAGAAACCTTACAAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;6&lt;&lt;&lt;&lt;&lt;&lt;2:8&lt;0: MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_65:2:224:579:433  163 seq2    485 99  35M =   662 212 ATAACAATGGGCTTCTCAGCAGAAACCTTACAAGC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;+8;: MF:i:18 Aq:i:31 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS219_1:1:22:490:2011  147 seq2    485 99  35M =   307 -213    ATAACAATGGGCTTCTCAGCGGAAACCTTACAAGC &lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS56_65:6:46:173:214   83  seq2    487 99  35M =   308 -214    AACAATGGGCTTCTCAGCAGAAACCTTACAAGCCA &lt;&lt;2&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;5&lt;&lt;5&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:29 NM:i:0  UQ:i:0  H0:i:4  H1:i:6
-EAS1_103:4:164:79:134   99  seq2    488 99  35M =   656 203 ACAATGGGCTTCTCAGCGGAAACCTTACAAGCCAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS114_32:2:283:577:398 147 seq2    488 99  35M =   308 -215    ACAATGGGCTTCTCAGCGGAAACCTTACAAGCCAG ;8;;&amp;&lt;&lt;&lt;;&lt;;67&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:29 NM:i:1  UQ:i:27 H0:i:0  H1:i:2
-EAS54_67:5:149:639:910  163 seq2    489 99  35M =   669 215 CAATGGGCTTCTCAGCAGAAACCTTACAAGCCAGA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;;;&lt;&lt;;&lt;&lt;;&lt; MF:i:18 Aq:i:42 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_28:3:250:628:423 83  seq2    489 99  36M =   295 -230    CAATGGGCTTCTCAGCGGAAACCTTACAAGCCAGAA    +&lt;&lt;4;;9;;7.;7&lt;;7&lt;;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:27 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS1_108:1:242:419:512  163 seq2    490 94  35M =   672 217 AATGGGCTTCTCAGCAGAAACCTTACAAGCCAGAA &lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;8&lt;(&lt;30 MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:1  H1:i:2
-EAS114_45:1:95:1530:28  83  seq2    490 74  35M =   332 -193    AATGGGCTTCTCAGCAGAAACCTTACAAGCCAGAA 77741(9;;994;5;;4;;1;;;;;1;&lt;;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:9  NM:i:0  UQ:i:0  H0:i:42 H1:i:45
-EAS192_3:6:326:887:180  163 seq2    492 73  35M =   672 215 TGGGCTTCTCAGCAGAAACCTTACAAGCCAGAAGC ;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;;;&lt;+ MF:i:18 Aq:i:0  NM:i:1  UQ:i:25 H0:i:3  H1:i:7
-EAS1_99:1:86:871:319    99  seq2    494 71  35M =   651 192 GGCTTCTCAGCGGAAACCTTACAAGCCAGAAGAGA &lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;:&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;:&lt;1;&lt;::) MF:i:18 Aq:i:0  NM:i:1  UQ:i:25 H0:i:0  H1:i:4
-EAS56_57:1:189:130:136  147 seq2    494 79  35M =   314 -215    GGCTTCTCAGCAGAAACCTTACAAGCCAGAAGAGA 823;23&lt;7&lt;57&lt;7&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:63 H1:i:85
-EAS51_64:7:140:752:822  99  seq2    495 76  35M =   667 207 GCTTCTCAGCGGAAACCTTACAAGCCAGAAGAGAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;:; MF:i:18 Aq:i:0  NM:i:1  UQ:i:27 H0:i:0  H1:i:5
-EAS56_57:5:53:544:889   147 seq2    495 76  35M =   335 -195    GCTTCTCAGCGGAAACCTTACAAGCCAGAAGAGAT ,&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:1  UQ:i:27 H0:i:2  H1:i:32
-EAS54_65:4:61:346:384   83  seq2    496 68  35M =   324 -207    CAACTAAGAAGAAACCTTACAAGCCAGAAGAGATT 7&amp;$+&amp;,&lt;&lt;+;;&lt;;;&lt;&lt;6&lt;&lt;8&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:3  UQ:i:19 H0:i:1  H1:i:53
-EAS54_81:8:177:800:714  83  seq2    497 76  35M =   324 -208    TTCTCAGCAGAAACCTTACAAGCCAGAAGAGATTG =;3=+=&lt;:=&lt;========8================ MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:29 H1:i:85
-B7_597:6:20:592:496 83  seq2    498 75  35M =   338 -195    TCTCAGCGGAAACCTTACAAGCCAGAAGAGATTGG 97&lt;7;&lt;;&lt;;&lt;&lt;&lt;&lt;;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:5  H1:i:48
-B7_591:5:243:557:560    83  seq2    499 75  36M =   331 -204    CTAAGCAGAAACCTTACAAGCCAGAAGAGATTGGAT    69&amp;&lt;;&amp;&lt;&amp;&lt;&lt;;6.&lt;&lt;&lt;+&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:0  NM:i:1  UQ:i:5  H0:i:1  H1:i:9
-EAS188_7:5:163:982:695  147 seq2    499 77  35M =   339 -195    CTCAGCAGAAACCTTACAAGCCAGAAGAGATTGGA &lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:7  H1:i:42
-EAS139_19:6:78:1029:512 163 seq2    500 99  40M =   656 196 TCAGCAGAAACCTTACAAGCCAGAAGAGATTGGATCTAAT    &lt;0:;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;:;&lt;&lt;&lt;;&lt;7&lt;&lt;;&lt;7;;;:6;::672    MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS221_3:6:51:1486:1131 163 seq2    500 77  35M =   685 220 TCAGCAGAAACCTTACAAGCCAGAAGAGATTGGAT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt;5&lt;&lt;8&lt;&lt;&lt;'&lt;;&lt;&lt;;1 MF:i:18 Aq:i:3  NM:i:0  UQ:i:0  H0:i:22 H1:i:22
-EAS139_19:1:1:1598:843  83  seq2    500 99  40M =   347 -193    TCAGCGGAAACCTTACAAGCCAGAAGAGATTGGATCTAAT    1)::6::&lt;&lt;;&lt;98&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:74 NM:i:1  UQ:i:25 H0:i:1  H1:i:0
-EAS218_1:4:14:1872:1521 83  seq2    500 62  35M =   339 -196    TCATCAAAAACCTTACAAGCCAGAAGAGATTGGAT /1&lt;%73&amp;7&lt;1&lt;3577,&lt;&lt;&lt;7/733&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt;&lt; MF:i:18 Aq:i:2  NM:i:2  UQ:i:9  H0:i:1  H1:i:8
-EAS192_3:6:45:183:25    163 seq2    501 95  35M =   672 206 CAGCGGAAACCTTACAAGCCAGAAGAGATTGGATC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;86;&lt;;:; MF:i:18 Aq:i:23 NM:i:1  UQ:i:27 H0:i:0  H1:i:2
-EAS114_45:1:30:1882:1210    163 seq2    503 82  35M =   665 197 GCAGAAACCTTACAAGCCAGAAGAGATTGGATCTA ;;::;;;;:;;;;;:;;;;;;9;;:7;;8:77777 MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0
-B7_597:4:38:999:463 147 seq2    503 39  35M =   317 -221    GCGGAAACCTTACAAGCCAGAAGAGATTGGATCTA .*:&amp;&lt;&lt;0&lt;0!&lt;&lt;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:39 NM:i:2  UQ:i:25 H0:i:0  H1:i:1
-EAS1_108:6:222:579:961  163 seq2    504 99  35M =   679 210 CAGAAACCTTACAAGCCAGAAGAGATTGGATCTAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;:7;;;68 MF:i:18 Aq:i:70 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_53:1:92:875:345   163 seq2    504 99  35M =   690 221 CGGAAACCTTACAAGCCAGAAGAGATTGGATCTAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS221_1:2:23:127:880   99  seq2    504 99  35M =   686 217 CGGAAACCTTACAAGCCAGAAGAGATTGGATCTAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:47 NM:i:1  UQ:i:27 H0:i:0  H1:i:1
-EAS56_63:8:62:125:888   83  seq2    504 99  35M =   347 -192    CGGAAACCTTACAAGCCAGAAGAGATTGGATCTAA ,;3&lt;&lt;&lt;8;;3&lt;,&lt;&lt;&lt;8;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:69 NM:i:1  UQ:i:26 H0:i:1  H1:i:0
-EAS51_66:8:43:972:506   163 seq2    505 99  35M =   686 216 AGAAACCTTACAAGCCAGAAGAGATTGGATCTAAT &lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:;;&lt;;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_26:6:183:697:555 83  seq2    505 84  35M =   341 -199    AGAAATCTTAGAAGCCAGAAGAGATTGGATCTAAT &lt;&lt;&lt;;&amp;,.;);&amp;96&lt;84&lt;&lt;81&lt;&lt;&amp;&lt;&lt;&lt;9&lt;&lt;8&lt;8&lt;&lt;1 MF:i:18 Aq:i:37 NM:i:2  UQ:i:16 H0:i:0  H1:i:1
-EAS221_3:8:65:463:703   99  seq2    506 99  35M =   693 222 GAAACCTTACAAGCCAGAAGAGATTGGATCTAATT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_67:7:101:752:996  163 seq2    508 99  35M =   687 214 AACCTTACAAGCCAGAAGAGATTGGATCTAATTTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;;;; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_105:6:267:953:459  99  seq2    509 99  35M =   667 193 ACCTTACAAGCCAGAAGAGATTGGATCTAATTTTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS221_3:8:33:1240:846  99  seq2    509 99  35M =   685 211 ACCTTACAAGCCAGAAGAGATTGGATCTAATTTTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;2&lt;;&lt;&lt;;&lt;&lt;&lt;;&lt;&lt;&lt;:6:&lt;&lt;&lt;: MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS112_32:7:135:401:735 99  seq2    510 99  35M =   703 228 CCTTACAAGCCAGAAGAGATTGGATCTAATTTTTG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:6:3:186:68 99  seq2    512 99  35M =   687 210 TTACAAGCCAGAAGAGATTGGATCTAATTTTTGTA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;&amp;%8 MF:i:18 Aq:i:71 NM:i:1  UQ:i:4  H0:i:1  H1:i:0
-EAS51_78:7:164:727:977  163 seq2    513 99  35M =   689 211 TACAAGCCAGAAGAGATTGGATCTAATTTTTCGAC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;&lt;&lt;;;79; MF:i:18 Aq:i:75 NM:i:1  UQ:i:26 H0:i:1  H1:i:0
-B7_589:1:110:543:934    163 seq2    514 99  35M =   700 221 ACAAGCCAGAAGAGATTGGATCTAATTTTTGGACT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;,,;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:5:325:544:349  163 seq2    515 99  35M =   716 236 CAAGCCAGAAGAGATTGGATCTAATTTTTGGACTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6;;;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_591:4:329:339:408    147 seq2    515 99  36M =   325 -226    CAATCCAGAAGAGATTGGATCTAATTTTTGGACTTC    7&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:76 NM:i:1  UQ:i:27 H0:i:1  H1:i:0
-EAS1_105:1:3:903:957    99  seq2    516 99  35M =   661 180 AAGCCAGAAGAGATTGGATCTAATTTTTGGACTTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;66&lt;;&lt;&lt;; MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_593:1:85:361:418 147 seq2    517 99  36M =   353 -200    AGCCAGAAGAGATTGGATCTAATTTTTGGACTTCTT    ;;;5&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_63:8:138:186:459  83  seq2    518 97  35M =   360 -193    GCCAGAAGAGATTGGAGCTAATTTTTGGACTTCTT +/2/;&lt;:&lt;&amp;7:7&lt;/&lt;2&amp;&lt;&lt;&lt;&amp;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8&lt;&lt;:3 MF:i:18 Aq:i:37 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
-EAS139_11:4:36:1184:994 83  seq2    518 99  35M =   358 -195    GCCAGAAGAGATTGGATCTAATTTTTGGACTTCTT &lt;84&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:77 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_593:2:270:430:269    83  seq2    519 99  36M =   331 -224    CCAGAAGAGATTGGATCTAATTTTTGGACTTCTTAA    28&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_62:5:295:882:282  163 seq2    520 99  35M =   691 206 CAGAAGAGATTGGATCTAATTTTTGGACTTCTTAA ========================&lt;6&lt;======8; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_61:5:272:240:950  163 seq2    520 97  35M =   696 211 CAGCAGAGCTTGGATCTAATTTTTGGACTTCTTCA 6&lt;&lt;&amp;:&lt;&lt;&lt;&amp;&lt;::;&amp;7&lt;&lt;&lt;3&lt;;&lt;&lt;;&lt;:;:&lt;8:&lt;&lt;(&lt; MF:i:18 Aq:i:25 NM:i:3  UQ:i:17 H0:i:0  H1:i:0
-EAS56_57:3:41:739:907   83  seq2    520 99  35M =   344 -211    CAGAAGAGATTGGATCTAATTTTTGGACTTCTTAA ;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_65:7:155:629:357  83  seq2    521 99  35M =   333 -223    AGAAGAGATTGGATCTAATTTTTGGACTTCTTAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_71:4:14:88:306    147 seq2    521 99  35M =   341 -215    AGAAGAGATTAGATCTAATTTTTGGACTTCTTAAA &lt;1;&lt;;&lt;;&lt;4&lt;&amp;&lt;&lt;&lt;:&lt;&lt;&lt;:&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:45 NM:i:1  UQ:i:5  H0:i:0  H1:i:1
-EAS1_108:5:115:193:231  163 seq2    522 99  35M =   684 197 GAAGAGATTGGATCTAATTTTTGGACTTCTTAAAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;7 MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS219_FC30151:1:88:1454:418    83  seq2    522 99  35M =   349 -208    GAAGAGATTGGATCTAATTTTTGGACTTCTTAAAG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;96&lt;&lt;&lt;1911&lt;&lt;&lt;1&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1 MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_595:5:36:649:554 83  seq2    523 99  35M =   350 -208    AAGAGATTGGATCTAATTTTTGGACTTCTTAAAGA &lt;&lt;&lt;&lt;&lt;888;&lt;&lt;&lt;;&lt;&lt;&lt;;&lt;;&lt;8&lt;&lt;&lt;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:4:119:651:88   83  seq2    527 99  35M =   337 -225    GATTGGATCTAATTTTTGGACTTCTTAAAGAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_57:7:57:826:977   163 seq2    528 99  35M =   693 200 ATTGGATCTAATTTTTGGACTTCTTAAAGAAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6&lt;9:6&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_64:3:285:417:147  99  seq2    529 99  35M =   712 218 TTGGATCTAATTTTTGGACTTCTTAAAGAAAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;6&lt;:&lt;;&lt;&lt;; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_105:8:160:130:351  99  seq2    530 99  35M =   697 202 TGGATCTAATTTTTGGACTTCTTAAAGAAAAAAAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;4&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;:&lt;&lt;:&lt; MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_26:3:287:665:495 163 seq2    530 99  35M =   702 207 TGGATCTAATTTTTGGACTTCTTAAAGAAAAAAAA ==========================98====8=8 MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_108:6:71:187:824   147 seq2    534 99  35M =   367 -202    TCTAATTTTTGGACTTCTTAAAGAAAAAAAAACCT 0040;&lt;7&lt;&lt;&lt;&lt;0&lt;7&lt;&lt;&lt;;&lt;7*&lt;&lt;&lt;&lt;&lt;7&lt;&lt;771&lt;&lt;&lt; MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS218_1:8:70:445:1289  99  seq2    535 99  35M =   702 202 CTAATTTTTGGACTTCTTAAAGAAAAAAAAACCTG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;;&lt;: MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_61:7:41:745:603   83  seq2    536 99  35M =   360 -211    TAATTTTTGGACTTCTTAAAGAAAAAAAAACCTGT ;&lt;&lt;;;&lt;;&lt;8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_65:6:197:759:975  163 seq2    537 99  35M =   698 196 AATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;; MF:i:18 Aq:i:78 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_26:6:140:253:322 99  seq2    537 99  35M =   689 187 AATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTC &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;&lt;; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_597:5:58:684:520 147 seq2    538 99  35M =   367 -206    ATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCA &lt;85;;:&lt;&lt;&lt;7&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_11:6:19:306:982  147 seq2    538 99  35M =   368 -205    ATTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;9&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:78 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_57:7:273:562:954  99  seq2    539 99  35M =   722 218 TTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;;:;;;; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_11:5:78:775:555  99  seq2    539 99  35M =   691 187 TTTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAA 6:&lt;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;6:&lt;&lt;)::8&lt;6&lt;&lt;:&lt;&lt;)&lt;::63832 MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_81:2:49:330:699   163 seq2    540 99  35M =   722 217 TTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAAA ==;=================;======5;;;==5= MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS114_28:2:329:437:643 147 seq2    540 99  36M =   354 -222    TTTTGGACTTCTTAAAGAAAAAAAAACCTGTCAAAC    885&lt;8;;&lt;;3,8&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_57:1:125:884:276  83  seq2    541 99  35M =   362 -214    TTTGGACTTCTTAAAGAAAAAAAAACCTGTCAAAC ,;;3,&lt;7&lt;;7&lt;&lt;===;============;====== MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_593:4:315:201:673    83  seq2    542 45  36M =   381 -197    TTGGACTTATTAAAGAAAAAAAAACCTGTCAAACAC    ;;;;&lt;-;;&amp;;;&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    MF:i:18 Aq:i:0  NM:i:1  UQ:i:5  H0:i:0  H1:i:1
-B7_597:3:10:394:392 147 seq2    542 99  35M =   376 -201    TTGGACTTCTTAAAGAAAAAAAAACCTGTCAAACA 28-:;0-&lt;0&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:68 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_103:1:228:736:747  83  seq2    542 68  35M =   381 -196    TTGGACTTCTTAAAGAAAAAAAAACCTGTCAAACA &lt;07&lt;&lt;&amp;&lt;;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_59:4:267:394:437  163 seq2    544 99  35M =   735 226 GGACTTCTTAAAGAAAAAAAAACCTGTCAAACACG &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;&lt;&lt;&lt;&lt;&lt;;;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;:;8&lt;;&lt;8 MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_19:5:66:1381:181 83  seq2    544 99  40M =   362 -222    GGACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAATGT    ;;;+;;&amp;&lt;7&lt;&lt;&lt;+&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;;8&lt;&lt;&lt;;&lt;&lt;&lt;&lt;8&lt;&lt;&lt;;&lt;&lt;&lt;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS139_19:5:74:668:424  99  seq2    545 99  40M =   707 202 GACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAATGTT    ;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;::;;    MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS56_61:6:307:208:477  163 seq2    546 99  35M =   710 199 ACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAA &lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;:&lt;&lt;&lt;88; MF:i:18 Aq:i:75 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS51_66:4:322:350:374  83  seq2    546 99  35M =   360 -221    ACTTCTTAAAGAAAAAAAAACCTGTCAAACACGAA &lt;+;8&amp;84&lt;&lt;&lt;:&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt;&lt;&lt;;&lt;&lt;&lt;&lt;&lt; MF:i:18 Aq:i:69 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS1_95:2:228:915:631   83  seq2    547 66  35M =   381 -201    ATTATTAAAGAAAAAAAAACCTGTCAAACACGAAT &amp;-))-*===/=========9====4========== MF:i:18 Aq:i:0  NM:i:2  UQ:i:13 H0:i:1  H1:i:0
-EAS1_93:5:246:177:525   99  seq2    549 98  35M =   738 224 TCTTAAAGAAAAAAAAACCTGTCAAACACGAATGT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;1&lt;&lt;&lt;&lt;&lt;&lt;;;;&lt;8;; MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-B7_589:7:93:634:323 99  seq2    550 99  35M =   721 206 CTTAAAGAAAAAAAAACCTGTCAAACACGAATGTT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;7&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;,&lt;&lt;&lt; MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
-EAS54_61:8:165:441:708  163 seq2    550 99  35M =   737 222 CTTAAAGAAAAAAAAACCTGTCAAACACGAATGTT =&lt;===============================99 MF:i:18 Aq:i:54 NM:i:0  UQ:i:0  H0:i:1  H1:i:0</code></pre>
+EAS51_62:5:119:38:945   147 seq2    428 99  35M =   221 -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT =;;8=====:========&lt;================ MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0</code></pre>
 </div>
 </div>
 </section>
+<section id="samtools-view-常用於進行篩選" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="samtools-view-常用於進行篩選"><span class="header-section-number">6.5</span> samtools view 常用於進行篩選</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 22%">
+<col style="width: 23%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>選項</th>
+<th>說明</th>
+<th>常見用途</th>
+<th>範例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-q INT</code></td>
+<td>依 <strong>mapping quality</strong> 過濾 reads</td>
+<td>去除低品質比對</td>
+<td><code>samtools view -q 20 sample.bam</code></td>
+</tr>
+<tr class="even">
+<td><code>-f FLAG</code></td>
+<td>只保留符合 FLAG 的 reads</td>
+<td>保留 properly paired、first/second</td>
+<td><code>samtools view -f 2 sample.bam</code></td>
+</tr>
+<tr class="odd">
+<td><code>-F FLAG</code></td>
+<td>排除符合 FLAG 的 reads</td>
+<td>排除 unmapped、secondary、duplicate</td>
+<td><code>samtools view -F 4 sample.bam</code></td>
+</tr>
+<tr class="even">
+<td><code>-h</code></td>
+<td>輸出 header + reads</td>
+<td>保留 header 的 SAM 格式輸出</td>
+<td><code>samtools view -h sample.bam</code></td>
+</tr>
+<tr class="odd">
+<td><code>-H</code></td>
+<td>只輸出 header</td>
+<td>查看 BAM header</td>
+<td><code>samtools view -H sample.bam</code></td>
+</tr>
+<tr class="even">
+<td><code>-L bed-file</code></td>
+<td>依 BED 區域擷取 reads</td>
+<td>多區域抽取</td>
+<td><code>samtools view -L targets.bed sample.bam</code></td>
+</tr>
+<tr class="odd">
+<td><code>-@ INT</code></td>
+<td>使用多核心運算</td>
+<td>加速大 BAM 解析</td>
+<td><code>samtools view -@ 8 sample.bam</code></td>
+</tr>
+<tr class="even">
+<td><code>--bam</code> / <code>--cram</code></td>
+<td>指定輸出格式</td>
+<td>強制轉換格式</td>
+<td><code>samtools view --cram input.bam</code></td>
+</tr>
+<tr class="odd">
+<td><code>region</code>（如 chr:start-end）</td>
+<td>擷取特定座標區段</td>
+<td>基因區域分析</td>
+<td><code>samtools view sample.bam chr1:10000-20000</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="samtools-flagstat" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> samtools flagstat</h1>
+</section>
+<section id="samtools-flags-flag-解讀" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> samtools flags (flag 解讀)</h1>
+<p><code>samtools flags</code> 用於查詢 SAM/BAM FLAG 的 bit 組合與含義，可協助判讀 <code>samtools view -f</code> 與 <code>-F</code> 的篩選條件。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> flagstat ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> flags</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>About: Convert between textual and numeric flag representation
+Usage: samtools flags FLAGS...
+
+Each FLAGS argument is either an INT (in decimal/hexadecimal/octal) representing
+a combination of the following numeric flag values, or a comma-separated string
+NAME,...,NAME representing a combination of the following flag names:
+
+   0x1     1  PAIRED         paired-end / multiple-segment sequencing technology
+   0x2     2  PROPER_PAIR    each segment properly aligned according to aligner
+   0x4     4  UNMAP          segment unmapped
+   0x8     8  MUNMAP         next segment in the template unmapped
+  0x10    16  REVERSE        SEQ is reverse complemented
+  0x20    32  MREVERSE       SEQ of next segment in template is rev.complemented
+  0x40    64  READ1          the first segment in the template
+  0x80   128  READ2          the last segment in the template
+ 0x100   256  SECONDARY      secondary alignment
+ 0x200   512  QCFAIL         not passing quality controls or other filters
+ 0x400  1024  DUP            PCR or optical duplicate
+ 0x800  2048  SUPPLEMENTARY  supplementary alignment</code></pre>
+</div>
+</div>
+<p><code>samtools flags &lt;INT&gt;</code> 可以解析該 FLAG 整數所代表的 bit 與狀態</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> flags 2</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> flags 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0x2 2   PROPER_PAIR
+0x4 4   UNMAP</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="samtools-flagstat" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> samtools flagstat</h1>
+<p><code>samtools flagstat</code> 會讀取 BAM/SAM/CRAM，並輸出一段簡短但非常重要的 mapping 統計，包括： read 總數、mapped reads 比例、properly paired 比例、duplicates 數量、singletons 數量、mate mapping 狀況（同 chr / diff chr）、QC-failed reads</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> flagstat ../.test/ex1.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>3307 + 0 in total (QC-passed reads + QC-failed reads)
 3307 + 0 primary
@@ -483,41 +616,314 @@ EAS54_61:8:165:441:708  163 seq2    550 99  35M =   737 222 CTTAAAGAAAAAAAAACCTG
 0 + 0 with mate mapped to a different chr (mapQ&gt;=5)</code></pre>
 </div>
 </div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 27%">
+<col style="width: 25%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>欄位名稱</th>
+<th>說明</th>
+<th>代表意義</th>
+<th>常見 QC 解讀</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>in total</strong></td>
+<td>總 reads 數（QC-passed + QC-failed）</td>
+<td>原始讀序的整體數量</td>
+<td>數量是否符合預期？太低可能是 library 問題</td>
+</tr>
+<tr class="even">
+<td><strong>primary</strong></td>
+<td>primary alignment 數（排除 secondary/supplementary）</td>
+<td>用於主要分析的 reads</td>
+<td>primary 過低 → mapping 混亂或多重比對過多</td>
+</tr>
+<tr class="odd">
+<td><strong>secondary</strong></td>
+<td>secondary alignment（多重比對）</td>
+<td>aligner 找到多個 mapping 位置</td>
+<td>過高 → 重複序列或 mapping 參數寬鬆</td>
+</tr>
+<tr class="even">
+<td><strong>supplementary</strong></td>
+<td>supplementary alignment（如 chimeric read）</td>
+<td>split-read mapping</td>
+<td>過高可能代表結構變異或 chimera</td>
+</tr>
+<tr class="odd">
+<td><strong>mapped</strong></td>
+<td>成功比對到參考序列的 reads（%）</td>
+<td>mapping rate（最重要 QC 指標之一）</td>
+<td>WGS/WES 通常 &gt;90%；太低可能是污染或物種不符</td>
+</tr>
+<tr class="even">
+<td><strong>paired in sequencing</strong></td>
+<td>paired-end 資料中成對的 reads</td>
+<td>應等於總 PE reads</td>
+<td>若意外偏低 → 資料不完整或文件損壞</td>
+</tr>
+<tr class="odd">
+<td><strong>read1 / read2</strong></td>
+<td>read1 及 read2 的數量</td>
+<td>正常應接近相等</td>
+<td>不平衡 → sample degrade 或跑 Lane 不均</td>
+</tr>
+<tr class="even">
+<td><strong>properly paired</strong></td>
+<td>合理方向 + 合理距離的 read pairs</td>
+<td>alignment 品質是否正常</td>
+<td>WGS 通常 &gt;90%；太低 → insert size 問題或 contamination</td>
+</tr>
+<tr class="odd">
+<td><strong>with itself and mate mapped</strong></td>
+<td>read 與其 mate 都成功比對</td>
+<td>paired-end mapping 完整性</td>
+<td>若低 → read2 不齊全（如跑丟一端）</td>
+</tr>
+<tr class="even">
+<td><strong>singletons</strong></td>
+<td>只有一端比對成功</td>
+<td>library degrade、read 质量差或 RNA fragmentation</td>
+<td>WGS 通常 &lt;3%；高可能代表 sample degrade</td>
+</tr>
+<tr class="odd">
+<td><strong>mate mapped to a different chr</strong></td>
+<td>mate pair 在不同染色體</td>
+<td>可能是真實結構變異、錯配、或 mapping 錯誤</td>
+<td>過高可能是污染或 aligner 參數過寬</td>
+</tr>
+<tr class="even">
+<td><strong>duplicate</strong>（如果 BAM 有標記）</td>
+<td>PCR duplicates 數量</td>
+<td>library PCR bias 或 over-amplification</td>
+<td>WGS 通常 &lt;15%，RNA-seq 可自然偏高</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="samtools-merge" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> samtools merge</h1>
+<section id="samtools-merge" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> samtools merge</h1>
 <p>用於合併多個 BAM 檔為單一檔案。</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> merge <span class="at">-o</span> ../.test/merge.bam ../.test/ex1.bam ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> merge <span class="at">-o</span> ../.test/merge.bam ../.test/ex1.bam ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
-<section id="samtools-coverage" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> samtools coverage</h1>
-<p>alignment depth and percent coverage</p>
+<section id="samtools-coverage" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> samtools coverage</h1>
+<p><code>samtools coverage</code> 用於計算每條染色體的平均深度（mean depth）、覆蓋率（coverage%）與一些區域性統計資訊。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> coverage ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> coverage ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#rname  startpos    endpos  numreads    covbases    coverage    meandepth   meanbaseq   meanmapq
 seq1    1   1575    1482    1569    99.619  33.1213 25.5    96.1
 seq2    1   1584    1789    1567    98.9268 39.7822 26  90.8</code></pre>
 </div>
 </div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 25%">
+<col style="width: 17%">
+<col style="width: 43%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>欄位名稱</th>
+<th>說明</th>
+<th>代表意義</th>
+<th>常見 QC 解讀</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>rname</strong></td>
+<td>參考序列名稱（染色體/contig）</td>
+<td>統計對應到哪條染色體</td>
+<td>用於檢查 coverage 是否在不同染色體間均勻</td>
+</tr>
+<tr class="even">
+<td><strong>startpos</strong></td>
+<td>區域起始位置</td>
+<td>一般為 1</td>
+<td>無特別 QC 使用，作為範圍參考</td>
+</tr>
+<tr class="odd">
+<td><strong>endpos</strong></td>
+<td>區域終止位置</td>
+<td>等於染色體長度</td>
+<td>無特別 QC 使用，作為範圍參考</td>
+</tr>
+<tr class="even">
+<td><strong>numreads</strong></td>
+<td>覆蓋該染色體的 reads 數量</td>
+<td>用來判斷 reads 在各染色體的分布狀況</td>
+<td>若某染色體過低 → 可能 mapping 偏差或樣本問題</td>
+</tr>
+<tr class="odd">
+<td><strong>covbases</strong></td>
+<td>被 ≥1 read 覆蓋的碱基數量</td>
+<td>計算 coverage% 的分子</td>
+<td>若明顯偏低 → dropout、capture 不良、mapping 問題</td>
+</tr>
+<tr class="even">
+<td><strong>coverage (%)</strong></td>
+<td>covbases / endpos × 100</td>
+<td>染色體實際覆蓋率</td>
+<td>WGS/WES 需接近 100%；panel 低 coverage 會造成 false negative</td>
+</tr>
+<tr class="odd">
+<td><strong>meandepth</strong></td>
+<td>平均深度（mean depth）</td>
+<td>最重要深度 QC 指標</td>
+<td>WGS 30X/60X；WES/panel 依設計不同，過低會影響 variant calling</td>
+</tr>
+<tr class="even">
+<td><strong>meanbaseq</strong></td>
+<td>覆蓋到之碱基的平均 base quality</td>
+<td>Reads 序列品質代表</td>
+<td>若偏低 → read 品質差或 instrument 問題</td>
+</tr>
+<tr class="odd">
+<td><strong>meanmapq</strong></td>
+<td>覆蓋到之 reads 的平均 mapping quality</td>
+<td>對齊品質指標</td>
+<td>&lt;30 代表 mapping 可能不可靠、參考序列不符或比對參數錯誤</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="samtools-idxstats" class="level1" data-number="10">
-<h1 data-number="10"><span class="header-section-number">10</span> samtools idxstats</h1>
+<section id="samtools-depth" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> samtools depth</h1>
+<p><code>samtools depth</code> 用於輸出 BAM 中 每個位置（per-base） 的深度（depth）</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> idxstats ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> depth ../.test/ex1.sorted.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>seq1    1   1
+seq1    2   1
+seq1    3   2
+seq1    4   2
+seq1    5   3
+seq1    6   4
+seq1    7   4
+seq1    8   4
+seq1    9   5
+seq1    10  5</code></pre>
+</div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 23%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>欄位</th>
+<th>名稱</th>
+<th>說明</th>
+<th>QC 用途</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>chrom</strong></td>
+<td>染色體名稱</td>
+<td>比對到的參考序列名稱</td>
+<td>用於識別區域 depth 分布</td>
+</tr>
+<tr class="even">
+<td><strong>pos</strong></td>
+<td>位置（1-based）</td>
+<td>該位置在參考基因組的座標</td>
+<td>用來定位 low-depth 或 dropout 位置</td>
+</tr>
+<tr class="odd">
+<td><strong>depth</strong></td>
+<td>read 深度</td>
+<td>覆蓋該位置的 reads 數目</td>
+<td>panel/WES 最主要 coverage QC 資料</td>
+</tr>
+</tbody>
+</table>
+<section id="計算平均深度" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="計算平均深度"><span class="header-section-number">11.1</span> 計算平均深度</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> depth ../.test/ex1.sorted.bam <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{sum += $3} END {print sum/NR}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>36.7286</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="samtools-idxstats" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> samtools idxstats</h1>
+<p><code>samtools idxstats</code> 用於顯示 每條染色體的 read 數量與參考序列長度，依靠 BAM 的 index (.bai 或 .csi)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> idxstats ../.test/ex1.sorted.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>seq1    1575    1482    19
 seq2    1584    1789    17
 *   0   0   0</code></pre>
 </div>
 </div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>欄位</th>
+<th>名稱</th>
+<th>說明</th>
+<th>意義 / QC 用途</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>chrom</strong></td>
+<td>染色體 / contig 名稱</td>
+<td>參考序列名稱</td>
+<td>用來檢查 contig 是否異常或有污染</td>
+</tr>
+<tr class="even">
+<td><strong>length</strong></td>
+<td>序列長度</td>
+<td>該 chromosome 在參考序列中的大小</td>
+<td>檢查 reference build 是否一致</td>
+</tr>
+<tr class="odd">
+<td><strong>mapped</strong></td>
+<td>成功比對到該染色體的 reads 數量</td>
+<td>染色體層級 mapping 數</td>
+<td>mapping 是否均勻；chrM 是否過高</td>
+</tr>
+<tr class="even">
+<td><strong>unmapped</strong></td>
+<td>比對失敗但位於此條目的 reads</td>
+<td>代表某些 read 無法比對</td>
+<td>unmapped 太多可能是污染或品質差</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="samtools-stats" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> samtools stats</h1>
+<section id="samtools-stats" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> samtools stats</h1>
+<p>samtools stats 是 最完整的 mapping 統計，提供： mapping 深度、read 長度分布、GC 分布、按距離區分的 insert size 分布、mismatch / error rate 與 per-chromosome 統計</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> stats ../.test/ex1.sorted.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> stats ../.test/ex1.sorted.bam <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># This file was produced by samtools stats (1.23+htslib-1.23) and can be plotted using plot-bamstats
 # This file contains statistics for all reads.
@@ -531,12 +937,79 @@ SN  filtered sequences: 0
 SN  sequences:  3307</code></pre>
 </div>
 </div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 21%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>欄位</th>
+<th>說明</th>
+<th>意義 / QC 用途</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>raw total sequences</strong></td>
+<td>原始讀序數量</td>
+<td>檢查整體資料量是否足夠</td>
+</tr>
+<tr class="even">
+<td><strong>filtered sequences</strong></td>
+<td>被 filter 掉的 reads</td>
+<td>若 &gt;0 → 上游 pipeline 有過濾步驟</td>
+</tr>
+<tr class="odd">
+<td><strong>sequences</strong></td>
+<td>參與比對的 reads</td>
+<td>通常 = raw total - filtered</td>
+</tr>
+<tr class="even">
+<td><strong>is sorted</strong></td>
+<td>BAM 是否已排序</td>
+<td>GATK / bcftools pipeline 必須為 1</td>
+</tr>
+<tr class="odd">
+<td><strong>average length</strong></td>
+<td>read 平均長度</td>
+<td>檢查是否符合平台（Illumina 150bp）</td>
+</tr>
+<tr class="even">
+<td><strong>average quality</strong></td>
+<td>base quality 平均值</td>
+<td>&lt;30 可能是低品質序列</td>
+</tr>
+<tr class="odd">
+<td><strong>insert size average</strong></td>
+<td>插入片段長度</td>
+<td>WES/WGS 中非常關鍵</td>
+</tr>
+<tr class="even">
+<td><strong>insert size standard deviation</strong></td>
+<td>插入長度變異</td>
+<td>變異大 → library 不均勻</td>
+</tr>
+<tr class="odd">
+<td><strong>average depth</strong></td>
+<td>整體平均深度</td>
+<td>判斷是否達到 WGS 30X / WES 100X</td>
+</tr>
+<tr class="even">
+<td><strong>error rate</strong></td>
+<td>mismatches / bases</td>
+<td>高 error rate → 可能污染</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="samtools-help" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> samtools –help</h1>
+<section id="samtools-help" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> samtools –help</h1>
 <p>顯示 samtools 提供的主要參數與使用說明，適合作為快速查詢指令用途。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Program: samtools (Tools for alignments in the SAM format)
@@ -600,19 +1073,19 @@ Commands:
      version        detailed version information</code></pre>
 </div>
 </div>
+<hr>
 </section>
-<section id="conda-環境資訊" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> Conda 環境資訊</h1>
+<section id="conda-環境資訊" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> Conda 環境資訊</h1>
 <p>完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">" Conda Environment: </span><span class="va">$(</span><span class="ex">conda</span> info <span class="at">--envs</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Conda Environment: </span><span class="va">$(</span><span class="ex">mamba</span> env list <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'*'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"======================================="</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>=======================================
- Conda Environment: #
-bio-tools
+Conda Environment: bio-tools
 =======================================
 # packages in environment at /home/benson/miniforge3/envs/bio-tools:
 #
