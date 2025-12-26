@@ -9,6 +9,7 @@ format:
     toc-location: left
     toc-depth: 4
     toc-expand: 1
+    css: ../styles/quarto.css
     other-links:
       - text: home
         icon: house

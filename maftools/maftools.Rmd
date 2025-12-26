@@ -9,7 +9,7 @@ output:
     toc_float: true
     number_sections: true
     self_contained: yes
-    css: styles.css
+    css: ../styles/rmarkdown.css
     highlight: pygments
 vignette: >
   %\VignetteIndexEntry{01: Summarize, Analyze, and Visualize MAF Files}
