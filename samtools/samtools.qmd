@@ -206,7 +206,6 @@ samtools flagstat ../.test/ex1.bam
 | **with itself and mate mapped**    | read 與其 mate 都成功比對                              | paired-end mapping 完整性                      | 若低 → read2 不齊全（如跑丟一端）                          |
 | **singletons**                     | 只有一端比對成功                                        | library degrade、read 质量差或 RNA fragmentation | WGS 通常 <3%；高可能代表 sample degrade                |
 | **mate mapped to a different chr** | mate pair 在不同染色體                                | 可能是真實結構變異、錯配、或 mapping 錯誤                   | 過高可能是污染或 aligner 參數過寬                          |
-| **duplicate**（如果 BAM 有標記）          | PCR duplicates 數量                               | library PCR bias 或 over-amplification       | WGS 通常 <15%，RNA-seq 可自然偏高                      |
 
 ---
 
