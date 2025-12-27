@@ -1,0 +1,79 @@
+---
+title: "vcftools 基本使用"
+date: today
+date-format: "YYYY-MM-DD"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: left
+    toc-depth: 4
+    toc-expand: 1
+    css: ../styles/quarto.css
+    other-links:
+      - text: home
+        icon: house
+        href: https://benson1231.github.io/tools/
+    code-links:
+      - text: github
+        icon: github
+        href: https://github.com/benson1231/tools
+number-sections: true
+execute: 
+  enabled: false  
+engine: knitr
+---
+
+# vcftools 介紹
+
+[VCFtools](https://github.com/vcftools/vcftools) 是一套專門用於處理與分析 VCF（Variant Call Format） 的指令列工具集 [(見詳細官方文檔)](https://vcftools.github.io/man_latest.html)，由 Adam Auton, Anthony Marcketta 與 Petr Danecek 於 2009 年開發。VCF 是目前基因體變異資料的主要交換格式，而 VCFtools 提供一系列常用功能，可用於檢查、篩選、轉換與統計變異資料，是變異分析流程中最經典、最常見的工具之一。
+
+VCFtools 的核心概念非常簡單：
+讀入一個 VCF → 依選項進行篩選或統計 → 輸出結果。
+它不會重新呼叫 variants，而是協助使用者快速檢查變異品質、過濾特定條件的變異，或輸出 QC 所需的統計指標。
+
+> The Variant Call Format and VCFtools, Petr Danecek, Adam Auton, Goncalo Abecasis, Cornelis A. Albers, Eric Banks, Mark A. DePristo, Robert Handsaker, Gerton Lunter, Gabor Marth, Stephen T. Sherry, Gilean McVean, Richard Durbin and 1000 Genomes Project Analysis Group, Bioinformatics, 2011 http://dx.doi.org/10.1093/bioinformatics/btr330
+
+---
+
+# vcftools --version (版本)
+
+```{bash}
+vcftools --version
+```
+
+# vcftools <command> (基本指令)
+
+輸入: 
+- --vcf <輸入檔名>: VCF 格式 v4.0、v4.1 或 v4.2 的檔案
+- --gzvcf <輸入檔名>: 壓縮（gzip 壓縮）的 VCF 檔案
+- --bcf <輸入檔名>: 直接讀取 BCF2 檔案
+
+輸出:
+- --輸出 <output_prefix>
+- --stdout 或 -c: 定向到標準輸出
+- --temp <暫存目錄>: 建立的任何暫存檔案重定向到指定目錄
+
+```
+vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE] [ --out OUTPUT PREFIX ] [ FILTERING OPTIONS ] [ OUTPUT OPTIONS ]
+```
+
+---
+
+# vcftools --depth
+
+```{bash}
+vcftools --gzvcf ../.test/Strelka_1234N_variants.vcf.gz --out results/results --depth
+```
+
+
+
+
+
+---
+
+# vcftools --help
+
+```{bash}
+man vcftools | head -n 20
+```

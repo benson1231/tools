@@ -1,0 +1,52 @@
+---
+title: "bcftools 基本使用"
+date: today
+date-format: "YYYY-MM-DD"
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: left
+    toc-depth: 4
+    toc-expand: 1
+    css: ../styles/quarto.css
+    other-links:
+      - text: home
+        icon: house
+        href: https://benson1231.github.io/tools/
+    code-links:
+      - text: github
+        icon: github
+        href: https://github.com/benson1231/tools
+number-sections: true
+execute: 
+  enabled: false  
+engine: knitr
+---
+
+# bcftools 介紹
+
+---
+
+# bcftools --version
+
+```{bash}
+bcftools --version
+```
+
+---
+
+
+
+
+
+
+
+
+---
+
+# bcftools --help
+
+```{bash}
+bcftools --help
+```
