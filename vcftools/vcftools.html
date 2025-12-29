@@ -162,6 +162,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1 data-number="2"><span class="header-section-number">2</span> vcftools –version (版本)</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>VCFtools (0.1.16)</code></pre>
+</div>
 </div>
 </section>
 <section id="vcftools-基本指令" class="level1" data-number="3">
@@ -174,8 +177,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>–stdout 或 -c</strong>: 定向到標準輸出</p></li>
 <li><p><strong>–temp <code>&lt;暫存目錄&gt;</code></strong>: 建立的任何暫存檔案重定向到指定目錄</p></li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> [ <span class="at">--vcf</span> FILE <span class="kw">|</span> <span class="ex">--gzvcf</span> FILE <span class="kw">|</span> <span class="ex">--bcf</span> FILE] </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> --out OUTPUT PREFIX <span class="bu">]</span> <span class="bu">[</span> FILTERING OPTIONS <span class="bu">]</span> <span class="bu">[</span> OUTPUT OPTIONS <span class="bu">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> [ <span class="at">--vcf</span> FILE <span class="kw">|</span> <span class="ex">--gzvcf</span> FILE <span class="kw">|</span> <span class="ex">--bcf</span> FILE] </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> --out OUTPUT PREFIX <span class="bu">]</span> <span class="bu">[</span> FILTERING OPTIONS <span class="bu">]</span> <span class="bu">[</span> OUTPUT OPTIONS <span class="bu">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 <section id="vcftools-過濾" class="level1" data-number="4">
@@ -441,7 +444,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="man-vcftools" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> man vcftools</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> vcftools <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> vcftools <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 30</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>vcftools(1)                                                                                       vcftools man page                                                                                       vcftools(1)
+
+NAME
+       vcftools - Utilities for the variant call format (VCF) and binary variant call format (BCF)
+
+SYNOPSIS
+       vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE] [ --out OUTPUT PREFIX ] [ FILTERING OPTIONS ]  [ OUTPUT OPTIONS ]
+
+DESCRIPTION
+       vcftools  is a suite of functions for use on genetic variation data in the form of VCF and BCF files. The tools provided will be used mainly to summarize data, run calculations on data, filter out data, and
+       convert data into other useful file formats.
+
+EXAMPLES
+       Output allele frequency for all sites in the input vcf file from chromosome 1
+         vcftools --gzvcf input_file.vcf.gz --freq --chr 1 --out chr1_analysis
+
+       Output a new vcf file from the input vcf file that removes any indel sites
+         vcftools --vcf input_file.vcf --remove-indels --recode --recode-INFO-all --out SNPs_only
+
+       Output file comparing the sites in two vcf files
+         vcftools --gzvcf input_file1.vcf.gz --gzdiff input_file2.vcf.gz --diff-site --out in1_v_in2
+
+       Output a new vcf file to standard out without any sites that have a filter tag, then compress it with gzip
+         vcftools --gzvcf input_file.vcf.gz --remove-filtered-all --recode --stdout | gzip -c &gt; output_PASS_only.vcf.gz
+
+       Output a Hardy-Weinberg p-value for every site in the bcf file that does not have any missing genotypes
+         vcftools --bcf input_file.bcf --hardy --max-missing 1.0 --out output_noMissing
+
+       Output nucleotide diversity at a list of positions
+         zcat input_file.vcf.gz | vcftools --vcf - --site-pi --positions SNP_list.txt --out nucleotide_diversity</code></pre>
+</div>
 </div>
 </section>
 

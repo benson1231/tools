@@ -19,8 +19,6 @@ format:
         icon: github
         href: https://github.com/benson1231/tools
 number-sections: true
-execute: 
-  enabled: false  
 engine: knitr
 ---
 
@@ -319,5 +317,5 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 # man vcftools
 
 ```{bash}
-man vcftools | head -n 20
+man vcftools | head -n 30
 ```
