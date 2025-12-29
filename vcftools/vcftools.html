@@ -99,7 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#過濾品質" id="toc-過濾品質" class="nav-link" data-scroll-target="#過濾品質"><span class="header-section-number">4.8</span> 過濾品質</a></li>
   <li><a href="#樣本過濾" id="toc-樣本過濾" class="nav-link" data-scroll-target="#樣本過濾"><span class="header-section-number">4.9</span> 樣本過濾</a></li>
   </ul></li>
-  <li><a href="#vcftools-輸出選項" id="toc-vcftools-輸出選項" class="nav-link" data-scroll-target="#vcftools-輸出選項"><span class="header-section-number">5</span> vcftools 輸出選項</a>
+  <li><a href="#vcftools-統計分析" id="toc-vcftools-統計分析" class="nav-link" data-scroll-target="#vcftools-統計分析"><span class="header-section-number">5</span> vcftools 統計分析</a>
   <ul>
   <li><a href="#等位基因統計" id="toc-等位基因統計" class="nav-link" data-scroll-target="#等位基因統計"><span class="header-section-number">5.1</span> 等位基因統計</a></li>
   <li><a href="#深度統計" id="toc-深度統計" class="nav-link" data-scroll-target="#深度統計"><span class="header-section-number">5.2</span> 深度統計</a></li>
@@ -111,12 +111,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#核苷酸多樣性-π" id="toc-核苷酸多樣性-π" class="nav-link" data-scroll-target="#核苷酸多樣性-π"><span class="header-section-number">5.5</span> 核苷酸多樣性 π</a></li>
   <li><a href="#fst-statistics族群遺傳分化" id="toc-fst-statistics族群遺傳分化" class="nav-link" data-scroll-target="#fst-statistics族群遺傳分化"><span class="header-section-number">5.6</span> Fst Statistics（族群遺傳分化）</a></li>
   <li><a href="#其他分析統計" id="toc-其他分析統計" class="nav-link" data-scroll-target="#其他分析統計"><span class="header-section-number">5.7</span> 其他分析統計</a></li>
-  <li><a href="#output-formatinfo-extraction擷取格式或info欄位置" id="toc-output-formatinfo-extraction擷取格式或info欄位置" class="nav-link" data-scroll-target="#output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">5.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</a></li>
-  <li><a href="#output-vcfbcf重新編碼輸出" id="toc-output-vcfbcf重新編碼輸出" class="nav-link" data-scroll-target="#output-vcfbcf重新編碼輸出"><span class="header-section-number">5.9</span> Output VCF/BCF（重新編碼輸出）</a></li>
-  <li><a href="#other-format-outputs轉換為其他格式" id="toc-other-format-outputs轉換為其他格式" class="nav-link" data-scroll-target="#other-format-outputs轉換為其他格式"><span class="header-section-number">5.10</span> Other Format Outputs（轉換為其他格式）</a></li>
   </ul></li>
-  <li><a href="#vcf檔案比較" id="toc-vcf檔案比較" class="nav-link" data-scroll-target="#vcf檔案比較"><span class="header-section-number">6</span> VCF檔案比較</a></li>
-  <li><a href="#man-vcftools" id="toc-man-vcftools" class="nav-link" data-scroll-target="#man-vcftools"><span class="header-section-number">7</span> man vcftools</a></li>
+  <li><a href="#vcftools-輸出參數" id="toc-vcftools-輸出參數" class="nav-link" data-scroll-target="#vcftools-輸出參數"><span class="header-section-number">6</span> vcftools 輸出參數</a>
+  <ul>
+  <li><a href="#output-formatinfo-extraction擷取格式或info欄位置" id="toc-output-formatinfo-extraction擷取格式或info欄位置" class="nav-link" data-scroll-target="#output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">6.1</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</a></li>
+  <li><a href="#output-vcfbcf重新編碼輸出" id="toc-output-vcfbcf重新編碼輸出" class="nav-link" data-scroll-target="#output-vcfbcf重新編碼輸出"><span class="header-section-number">6.2</span> Output VCF/BCF（重新編碼輸出）</a></li>
+  <li><a href="#other-format-outputs轉換為其他格式" id="toc-other-format-outputs轉換為其他格式" class="nav-link" data-scroll-target="#other-format-outputs轉換為其他格式"><span class="header-section-number">6.3</span> Other Format Outputs（轉換為其他格式）</a></li>
+  </ul></li>
+  <li><a href="#vcf檔案比較" id="toc-vcf檔案比較" class="nav-link" data-scroll-target="#vcf檔案比較"><span class="header-section-number">7</span> VCF檔案比較</a></li>
+  <li><a href="#man-vcftools-手冊" id="toc-man-vcftools-手冊" class="nav-link" data-scroll-target="#man-vcftools-手冊"><span class="header-section-number">8</span> man vcftools (手冊)</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://benson1231.github.io/tools/"><i class="bi bi-house"></i>home</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/benson1231/tools"><i class="bi bi-github"></i>github</a></li></ul></div></nav>
 </div>
@@ -292,8 +295,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="vcftools-輸出選項" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> vcftools 輸出選項</h1>
+<section id="vcftools-統計分析" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> vcftools 統計分析</h1>
 <p>這些選項用於指定 <strong>vcftools 在完成所有篩選後要輸出哪些分析結果</strong>，涵蓋等位基因統計、深度、LD、Fst、Ts/Tv、missingness、ROH、relatedness、以及格式轉換等功能。</p>
 <hr>
 <section id="等位基因統計" class="level2" data-number="5.1">
@@ -386,16 +389,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="output-formatinfo-extraction擷取格式或info欄位置" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">5.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</h2>
+</section>
+<section id="vcftools-輸出參數" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> vcftools 輸出參數</h1>
+<section id="output-formatinfo-extraction擷取格式或info欄位置" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">6.1</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</h2>
 <ul>
 <li><strong><code>--extract-FORMAT-info &lt;ID&gt;</code></strong>：擷取指定 FORMAT 欄位（.FORMAT）。</li>
 <li><strong><code>--get-INFO &lt;ID&gt;</code></strong>：擷取指定 INFO 欄位，可重複使用（.INFO）。</li>
 </ul>
 <hr>
 </section>
-<section id="output-vcfbcf重新編碼輸出" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="output-vcfbcf重新編碼輸出"><span class="header-section-number">5.9</span> Output VCF/BCF（重新編碼輸出）</h2>
+<section id="output-vcfbcf重新編碼輸出" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="output-vcfbcf重新編碼輸出"><span class="header-section-number">6.2</span> Output VCF/BCF（重新編碼輸出）</h2>
 <ul>
 <li><strong><code>--recode / --recode-bcf</code></strong>：依過濾後結果輸出 VCF 或 BCF（.recode.vcf/.recode.bcf）。</li>
 <li><strong><code>--recode-INFO &lt;ID&gt;</code></strong>：保留指定 INFO 欄位。</li>
@@ -404,8 +410,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="other-format-outputs轉換為其他格式" class="level2" data-number="5.10">
-<h2 data-number="5.10" class="anchored" data-anchor-id="other-format-outputs轉換為其他格式"><span class="header-section-number">5.10</span> Other Format Outputs（轉換為其他格式）</h2>
+<section id="other-format-outputs轉換為其他格式" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="other-format-outputs轉換為其他格式"><span class="header-section-number">6.3</span> Other Format Outputs（轉換為其他格式）</h2>
 <ul>
 <li><strong><code>--012</code></strong>：輸出 genotype matrix（.012/.012.pos/.012.indv）。</li>
 <li><strong><code>--IMPUTE</code></strong>：輸出 phased haplotypes（IMPUTE 格式）。</li>
@@ -417,8 +423,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="vcf檔案比較" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> VCF檔案比較</h1>
+<section id="vcf檔案比較" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> VCF檔案比較</h1>
 <p>這些選項用於比較兩個 VCF/BCF 檔案之間的差異，包括位點是否一致、樣本是否一致、基因型是否不相符（discordance）、以及 phased 資料的 switch error 等。使用比較功能時，兩個檔案必須：</p>
 <ul>
 <li>具有相同染色體集合</li>
@@ -445,23 +451,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="man-vcftools" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> man vcftools</h1>
+<section id="man-vcftools-手冊" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> man vcftools (手冊)</h1>
 <p>可以輸入 <code>man vcftools</code> 詳細查看指令資訊</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> vcftools <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 30</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>vcftools(1)                                                                                       vcftools man page                                                                                       vcftools(1)
+<pre><code>vcftools(1)                                     vcftools man page                                     vcftools(1)
 
 NAME
        vcftools - Utilities for the variant call format (VCF) and binary variant call format (BCF)
 
 SYNOPSIS
-       vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE] [ --out OUTPUT PREFIX ] [ FILTERING OPTIONS ]  [ OUTPUT OPTIONS ]
+       vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE] [ --out OUTPUT PREFIX ] [ FILTERING OPTIONS ]  [ OUTPUT
+       OPTIONS ]
 
 DESCRIPTION
-       vcftools  is a suite of functions for use on genetic variation data in the form of VCF and BCF files. The tools provided will be used mainly to summarize data, run calculations on data, filter out data, and
-       convert data into other useful file formats.
+       vcftools  is  a suite of functions for use on genetic variation data in the form of VCF and BCF files. The
+       tools provided will be used mainly to summarize data, run calculations on data, filter out data, and  con‐
+       vert data into other useful file formats.
 
 EXAMPLES
        Output allele frequency for all sites in the input vcf file from chromosome 1
@@ -474,13 +482,11 @@ EXAMPLES
          vcftools --gzvcf input_file1.vcf.gz --gzdiff input_file2.vcf.gz --diff-site --out in1_v_in2
 
        Output a new vcf file to standard out without any sites that have a filter tag, then compress it with gzip
-         vcftools --gzvcf input_file.vcf.gz --remove-filtered-all --recode --stdout | gzip -c &gt; output_PASS_only.vcf.gz
+         vcftools   --gzvcf   input_file.vcf.gz   --remove-filtered-all  --recode  --stdout  |  gzip  -c  &gt;  out‐
+         put_PASS_only.vcf.gz
 
        Output a Hardy-Weinberg p-value for every site in the bcf file that does not have any missing genotypes
-         vcftools --bcf input_file.bcf --hardy --max-missing 1.0 --out output_noMissing
-
-       Output nucleotide diversity at a list of positions
-         zcat input_file.vcf.gz | vcftools --vcf - --site-pi --positions SNP_list.txt --out nucleotide_diversity</code></pre>
+         vcftools --bcf input_file.bcf --hardy --max-missing 1.0 --out output_noMissing</code></pre>
 </div>
 </div>
 </section>

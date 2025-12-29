@@ -169,7 +169,7 @@ vcftools 可以透過各種 `--過濾指令` 過濾特定資訊
 
 ---
 
-# vcftools 輸出選項
+# vcftools 統計分析
 
 這些選項用於指定 **vcftools 在完成所有篩選後要輸出哪些分析結果**，涵蓋等位基因統計、深度、LD、Fst、Ts/Tv、missingness、ROH、relatedness、以及格式轉換等功能。
 
@@ -256,6 +256,8 @@ vcftools 可以透過各種 `--過濾指令` 過濾特定資訊
 
 ---
 
+# vcftools 輸出參數
+
 ## Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）
 
 * **`--extract-FORMAT-info <ID>`**：擷取指定 FORMAT 欄位（.FORMAT）。
@@ -316,7 +318,7 @@ vcftools 可以透過各種 `--過濾指令` 過濾特定資訊
 
 ---
 
-# man vcftools
+# man vcftools (手冊)
 
 可以輸入 `man vcftools` 詳細查看指令資訊
 
