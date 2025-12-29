@@ -89,15 +89,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#vcftools-基本指令" id="toc-vcftools-基本指令" class="nav-link" data-scroll-target="#vcftools-基本指令"><span class="header-section-number">3</span> vcftools 基本指令</a></li>
   <li><a href="#vcftools-過濾" id="toc-vcftools-過濾" class="nav-link" data-scroll-target="#vcftools-過濾"><span class="header-section-number">4</span> vcftools 過濾</a>
   <ul>
-  <li><a href="#vcftools-位置過濾" id="toc-vcftools-位置過濾" class="nav-link" data-scroll-target="#vcftools-位置過濾"><span class="header-section-number">4.1</span> vcftools 位置過濾</a></li>
-  <li><a href="#位點id過濾" id="toc-位點id過濾" class="nav-link" data-scroll-target="#位點id過濾"><span class="header-section-number">4.2</span> 位點ID過濾</a></li>
-  <li><a href="#變異類型過濾" id="toc-變異類型過濾" class="nav-link" data-scroll-target="#變異類型過濾"><span class="header-section-number">4.3</span> 變異類型過濾</a></li>
-  <li><a href="#filter欄位過濾" id="toc-filter欄位過濾" class="nav-link" data-scroll-target="#filter欄位過濾"><span class="header-section-number">4.4</span> FILTER欄位過濾</a></li>
-  <li><a href="#info-欄位過濾" id="toc-info-欄位過濾" class="nav-link" data-scroll-target="#info-欄位過濾"><span class="header-section-number">4.5</span> INFO 欄位過濾</a></li>
-  <li><a href="#等位基因過濾" id="toc-等位基因過濾" class="nav-link" data-scroll-target="#等位基因過濾"><span class="header-section-number">4.6</span> 等位基因過濾</a></li>
-  <li><a href="#基因型層級過濾" id="toc-基因型層級過濾" class="nav-link" data-scroll-target="#基因型層級過濾"><span class="header-section-number">4.7</span> 基因型層級過濾</a></li>
-  <li><a href="#品質過濾" id="toc-品質過濾" class="nav-link" data-scroll-target="#品質過濾"><span class="header-section-number">4.8</span> 品質過濾</a></li>
-  <li><a href="#樣本層級過濾" id="toc-樣本層級過濾" class="nav-link" data-scroll-target="#樣本層級過濾"><span class="header-section-number">4.9</span> 樣本層級過濾</a></li>
+  <li><a href="#過濾位置" id="toc-過濾位置" class="nav-link" data-scroll-target="#過濾位置"><span class="header-section-number">4.1</span> 過濾位置</a></li>
+  <li><a href="#過濾位點id" id="toc-過濾位點id" class="nav-link" data-scroll-target="#過濾位點id"><span class="header-section-number">4.2</span> 過濾位點ID</a></li>
+  <li><a href="#過濾變異類型" id="toc-過濾變異類型" class="nav-link" data-scroll-target="#過濾變異類型"><span class="header-section-number">4.3</span> 過濾變異類型</a></li>
+  <li><a href="#過濾filter欄位資訊" id="toc-過濾filter欄位資訊" class="nav-link" data-scroll-target="#過濾filter欄位資訊"><span class="header-section-number">4.4</span> 過濾FILTER欄位資訊</a></li>
+  <li><a href="#過濾info欄位" id="toc-過濾info欄位" class="nav-link" data-scroll-target="#過濾info欄位"><span class="header-section-number">4.5</span> 過濾INFO欄位</a></li>
+  <li><a href="#過濾等位基因" id="toc-過濾等位基因" class="nav-link" data-scroll-target="#過濾等位基因"><span class="header-section-number">4.6</span> 過濾等位基因</a></li>
+  <li><a href="#過濾基因型層級" id="toc-過濾基因型層級" class="nav-link" data-scroll-target="#過濾基因型層級"><span class="header-section-number">4.7</span> 過濾基因型層級</a></li>
+  <li><a href="#過濾品質" id="toc-過濾品質" class="nav-link" data-scroll-target="#過濾品質"><span class="header-section-number">4.8</span> 過濾品質</a></li>
+  <li><a href="#樣本過濾" id="toc-樣本過濾" class="nav-link" data-scroll-target="#樣本過濾"><span class="header-section-number">4.9</span> 樣本過濾</a></li>
   </ul></li>
   <li><a href="#vcftools-輸出選項" id="toc-vcftools-輸出選項" class="nav-link" data-scroll-target="#vcftools-輸出選項"><span class="header-section-number">5</span> vcftools 輸出選項</a>
   <ul>
@@ -172,12 +172,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1 data-number="3"><span class="header-section-number">3</span> vcftools 基本指令</h1>
 <p>以下為基本指令，vcftools 統一使用 <code>--指令</code> 的方式設定參數，首先需要給輸入與輸出:</p>
 <ul>
-<li><p><strong>–vcf <code>&lt;輸入檔名&gt;</code></strong>: VCF 格式 v4.0、v4.1 或 v4.2 的檔案</p></li>
-<li><p><strong>–gzvcf <code>&lt;輸入檔名&gt;</code></strong>: 壓縮（gzip 壓縮）的 VCF 檔案</p></li>
-<li><p><strong>–bcf <code>&lt;輸入檔名&gt;</code></strong>: 直接讀取 BCF2 檔案</p></li>
-<li><p><strong>–out <code>&lt;輸出前綴&gt;</code></strong></p></li>
-<li><p><strong>–stdout 或 -c</strong>: 定向到標準輸出</p></li>
-<li><p><strong>–temp <code>&lt;暫存目錄&gt;</code></strong>: 建立的任何暫存檔案重定向到指定目錄</p></li>
+<li><p><strong><code>--vcf &lt;輸入檔名&gt;</code></strong>: VCF 格式 v4.0、v4.1 或 v4.2 的檔案</p></li>
+<li><p><strong><code>--gzvcf &lt;輸入檔名&gt;</code></strong>: 壓縮（gzip 壓縮）的 VCF 檔案</p></li>
+<li><p><strong><code>--bcf &lt;輸入檔名&gt;</code></strong>: 直接讀取 BCF2 檔案</p></li>
+<li><p><strong><code>--out &lt;輸出前綴&gt;</code></strong></p></li>
+<li><p><strong><code>--stdout 或 -c</code></strong>: 定向到標準輸出</p></li>
+<li><p><strong><code>--temp &lt;暫存目錄&gt;</code></strong>: 建立的任何暫存檔案重定向到指定目錄</p></li>
 </ul>
 <p>基礎指令如下:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> [ <span class="at">--vcf</span> FILE <span class="kw">|</span> <span class="ex">--gzvcf</span> FILE <span class="kw">|</span> <span class="ex">--bcf</span> FILE] </span>
@@ -187,103 +187,103 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vcftools-過濾" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> vcftools 過濾</h1>
 <p>vcftools 可以透過各種 <code>--過濾指令</code> 過濾特定資訊</p>
-<section id="vcftools-位置過濾" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="vcftools-位置過濾"><span class="header-section-number">4.1</span> vcftools 位置過濾</h2>
+<section id="過濾位置" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="過濾位置"><span class="header-section-number">4.1</span> 過濾位置</h2>
 <ul>
-<li><strong>–chr <code>&lt;chromosome&gt;</code></strong>：只保留指定染色體的變異。可重複使用以包含多條染色體。</li>
-<li><strong>–not-chr <code>&lt;chromosome&gt;</code></strong>：排除指定染色體的變異。可重複使用以排除多條染色體。</li>
-<li><strong>–from-bp <code>&lt;integer&gt;</code></strong>：設定區間下界（bp）。需搭配 <code>--chr</code> 使用。</li>
-<li><strong>–to-bp <code>&lt;integer&gt;</code></strong>：設定區間上界（bp）。可單獨或與 <code>--from-bp</code> 一起使用。</li>
-<li><strong>–positions <code>&lt;filename&gt;</code></strong>：依據檔案中列出的 (chr, position) 清單保留位點。</li>
-<li><strong>–exclude-positions <code>&lt;filename&gt;</code></strong>：依據清單排除指定位置。</li>
-<li><strong>–positions-overlap <code>&lt;filename&gt;</code></strong>：保留 REF 等位基因「有重疊」指定位置的位點。</li>
-<li><strong>–exclude-positions-overlap <code>&lt;filename&gt;</code></strong>：排除 REF 與指定位置重疊的位點。</li>
-<li><strong>–bed <code>&lt;filename&gt;</code></strong>：依 BED 區域保留位點（REF 或 ALT 任一落入範圍即可）。</li>
-<li><strong>–exclude-bed <code>&lt;filename&gt;</code></strong>：依 BED 區域排除位點。</li>
-<li><strong>–thin <code>&lt;integer&gt;</code></strong>：對位點進行間距過濾，確保任兩個位點之間至少相隔指定距離（bp）。</li>
-<li><strong>–mask <code>&lt;filename&gt;</code></strong>：依 mask 檔（FASTA-like）中的數值決定保留或排除的位置。</li>
-<li><strong>–invert-mask <code>&lt;filename&gt;</code></strong>：反轉 mask 檔的選擇邏輯（0→排除、其他→保留）。</li>
-<li><strong>–mask-min <code>&lt;integer&gt;</code></strong>：設定保留的最小閾值，僅保留 mask 值 ≤ 該數字的位置（預設為 0）。</li>
+<li><strong><code>--chr &lt;chromosome&gt;</code></strong>：只保留指定染色體的變異。可重複使用以包含多條染色體。</li>
+<li><strong><code>--not-chr &lt;chromosome&gt;</code></strong>：排除指定染色體的變異。可重複使用以排除多條染色體。</li>
+<li><strong><code>--from-bp &lt;integer&gt;</code></strong>：設定區間下界（bp）。需搭配 <code>--chr</code> 使用。</li>
+<li><strong><code>--to-bp &lt;integer&gt;</code></strong>：設定區間上界（bp）。可單獨或與 <code>--from-bp</code> 一起使用。</li>
+<li><strong><code>--positions &lt;filename&gt;</code></strong>：依據檔案中列出的 (chr, position) 清單保留位點。</li>
+<li><strong><code>--exclude-positions &lt;filename&gt;</code></strong>：依據清單排除指定位置。</li>
+<li><strong><code>--positions-overlap &lt;filename&gt;</code></strong>：保留 REF 等位基因「有重疊」指定位置的位點。</li>
+<li><strong><code>--exclude-positions-overlap &lt;filename&gt;</code></strong>：排除 REF 與指定位置重疊的位點。</li>
+<li><strong><code>--bed &lt;filename&gt;</code></strong>：依 BED 區域保留位點（REF 或 ALT 任一落入範圍即可）。</li>
+<li><strong><code>--exclude-bed &lt;filename&gt;</code></strong>：依 BED 區域排除位點。</li>
+<li><strong><code>--thin &lt;integer&gt;</code></strong>：對位點進行間距過濾，確保任兩個位點之間至少相隔指定距離（bp）。</li>
+<li><strong><code>--mask &lt;filename&gt;</code></strong>：依 mask 檔（FASTA-like）中的數值決定保留或排除的位置。</li>
+<li><strong><code>--invert-mask &lt;filename&gt;</code></strong>：反轉 mask 檔的選擇邏輯（0→排除、其他→保留）。</li>
+<li><strong><code>--mask-min &lt;integer&gt;</code></strong>：設定保留的最小閾值，僅保留 mask 值 ≤ 該數字的位置（預設為 0）。</li>
 </ul>
 <hr>
 </section>
-<section id="位點id過濾" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="位點id過濾"><span class="header-section-number">4.2</span> 位點ID過濾</h2>
+<section id="過濾位點id" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="過濾位點id"><span class="header-section-number">4.2</span> 過濾位點ID</h2>
 <ul>
-<li><strong>–snp <code>&lt;string&gt;</code></strong>：只保留具有指定 SNP ID（如 dbSNP rsID）之位點。可重複使用。</li>
-<li><strong>–snps <code>&lt;filename&gt;</code></strong>：依檔案中的 SNP ID 清單保留位點（每行一個 ID）。</li>
-<li><strong>–exclude <code>&lt;filename&gt;</code></strong>：依檔案中的 SNP ID 清單排除位點。</li>
+<li><strong><code>--snp &lt;string&gt;</code></strong>：只保留具有指定 SNP ID（如 dbSNP rsID）之位點。可重複使用。</li>
+<li><strong><code>--snps &lt;filename&gt;</code></strong>：依檔案中的 SNP ID 清單保留位點（每行一個 ID）。</li>
+<li><strong><code>--exclude &lt;filename&gt;</code></strong>：依檔案中的 SNP ID 清單排除位點。</li>
 </ul>
 <hr>
 </section>
-<section id="變異類型過濾" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="變異類型過濾"><span class="header-section-number">4.3</span> 變異類型過濾</h2>
+<section id="過濾變異類型" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="過濾變異類型"><span class="header-section-number">4.3</span> 過濾變異類型</h2>
 <ul>
-<li><strong>–keep-only-indels</strong>：只保留含有 indel 的位點（REF 與 ALT 長度不同）。</li>
-<li><strong>–remove-indels</strong>：排除所有 indel 位點，僅保留 SNP。</li>
+<li><strong><code>--keep-only-indels</code></strong>：只保留含有 indel 的位點（REF 與 ALT 長度不同）。</li>
+<li><strong><code>--remove-indels</code></strong>：排除所有 indel 位點，僅保留 SNP。</li>
 </ul>
 <hr>
 </section>
-<section id="filter欄位過濾" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="filter欄位過濾"><span class="header-section-number">4.4</span> FILTER欄位過濾</h2>
+<section id="過濾filter欄位資訊" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="過濾filter欄位資訊"><span class="header-section-number">4.4</span> 過濾FILTER欄位資訊</h2>
 <ul>
-<li><strong>–remove-filtered-all</strong>：移除所有 FILTER 標記不是 PASS 的位點。</li>
-<li><strong>–keep-filtered <code>&lt;string&gt;</code></strong>：只保留特定 FILTER 標記的位點（可多次使用）。</li>
-<li><strong>–remove-filtered <code>&lt;string&gt;</code></strong>：排除具有指定 FILTER 標記的位點（可多次使用）。</li>
+<li><strong><code>--remove-filtered-all</code></strong>：移除所有 FILTER 標記不是 PASS 的位點。</li>
+<li><strong><code>--keep-filtered &lt;string&gt;</code></strong>：只保留特定 FILTER 標記的位點（可多次使用）。</li>
+<li><strong><code>--remove-filtered &lt;string&gt;</code></strong>：排除具有指定 FILTER 標記的位點（可多次使用）。</li>
 </ul>
 <hr>
 </section>
-<section id="info-欄位過濾" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="info-欄位過濾"><span class="header-section-number">4.5</span> INFO 欄位過濾</h2>
+<section id="過濾info欄位" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="過濾info欄位"><span class="header-section-number">4.5</span> 過濾INFO欄位</h2>
 <ul>
-<li><strong>–keep-INFO <code>&lt;string&gt;</code></strong>：保留具有指定 INFO flag 的位點（僅依 flag 是否存在，不比較其值）。</li>
-<li><strong>–remove-INFO <code>&lt;string&gt;</code></strong>：排除具有特定 INFO flag 的位點。可重複使用。</li>
+<li><strong><code>--keep-INFO &lt;string&gt;</code></strong>：保留具有指定 INFO flag 的位點（僅依 flag 是否存在，不比較其值）。</li>
+<li><strong><code>--remove-INFO &lt;string&gt;</code></strong>：排除具有特定 INFO flag 的位點。可重複使用。</li>
 </ul>
 <hr>
 </section>
-<section id="等位基因過濾" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="等位基因過濾"><span class="header-section-number">4.6</span> 等位基因過濾</h2>
+<section id="過濾等位基因" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="過濾等位基因"><span class="header-section-number">4.6</span> 過濾等位基因</h2>
 <ul>
-<li><strong>–maf <code>&lt;float&gt;</code></strong>：只保留 Minor Allele Frequency ≥ 指定值的位點。</li>
-<li><strong>–max-maf <code>&lt;float&gt;</code></strong>：只保留 Minor Allele Frequency ≤ 指定值的位點。</li>
-<li><strong>–non-ref-af <code>&lt;float&gt;</code></strong>, <strong>–max-non-ref-af <code>&lt;float&gt;</code></strong>：根據 ALT 等位基因頻率（全部 ALT 需符合門檻）。</li>
-<li><strong>–non-ref-ac <code>&lt;integer&gt;</code></strong>, <strong>–max-non-ref-ac <code>&lt;integer&gt;</code></strong>：根據 ALT 等位基因計數做過濾（全部 ALT 需符合）。</li>
-<li><strong>–non-ref-af-any <code>&lt;float&gt;</code></strong>, <strong>–max-non-ref-af-any <code>&lt;float&gt;</code></strong>：只要任一 ALT 等位基因符合條件即可保留。</li>
-<li><strong>–non-ref-ac-any <code>&lt;integer&gt;</code></strong>, <strong>–max-non-ref-ac-any <code>&lt;integer&gt;</code></strong>：ALT 計數只要任一符合即可保留。</li>
-<li><strong>–mac <code>&lt;integer&gt;</code></strong>：Minor Allele Count ≥ 指定數值才保留該位點。</li>
-<li><strong>–max-mac <code>&lt;integer&gt;</code></strong>：Minor Allele Count ≤ 指定數值才保留該位點。</li>
-<li><strong>–min-alleles <code>&lt;integer&gt;</code></strong>：只保留等位基因數量 ≥ 指定值的位點。</li>
-<li><strong>–max-alleles <code>&lt;integer&gt;</code></strong>：只保留等位基因數量 ≤ 指定值的位點。</li>
+<li><strong><code>--maf &lt;float&gt;</code></strong>：只保留 Minor Allele Frequency ≥ 指定值的位點。</li>
+<li><strong><code>--max-maf &lt;float&gt;</code></strong>：只保留 Minor Allele Frequency ≤ 指定值的位點。</li>
+<li><strong><code>--non-ref-af &lt;float&gt;</code></strong>, <strong><code>--max-non-ref-af &lt;float&gt;</code></strong>：根據 ALT 等位基因頻率（全部 ALT 需符合門檻）。</li>
+<li><strong><code>--non-ref-ac &lt;integer&gt;</code></strong>, <strong><code>--max-non-ref-ac &lt;integer&gt;</code></strong>：根據 ALT 等位基因計數做過濾（全部 ALT 需符合）。</li>
+<li><strong><code>--non-ref-af-any &lt;float&gt;</code></strong>, <strong><code>--max-non-ref-af-any &lt;float&gt;</code></strong>：只要任一 ALT 等位基因符合條件即可保留。</li>
+<li><strong><code>--non-ref-ac-any &lt;integer&gt;</code></strong>, <strong><code>--max-non-ref-ac-any &lt;integer&gt;</code></strong>：ALT 計數只要任一符合即可保留。</li>
+<li><strong><code>--mac &lt;integer&gt;</code></strong>：Minor Allele Count ≥ 指定數值才保留該位點。</li>
+<li><strong><code>--max-mac &lt;integer&gt;</code></strong>：Minor Allele Count ≤ 指定數值才保留該位點。</li>
+<li><strong><code>--min-alleles &lt;integer&gt;</code></strong>：只保留等位基因數量 ≥ 指定值的位點。</li>
+<li><strong><code>--max-alleles &lt;integer&gt;</code></strong>：只保留等位基因數量 ≤ 指定值的位點。</li>
 </ul>
 <hr>
 </section>
-<section id="基因型層級過濾" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="基因型層級過濾"><span class="header-section-number">4.7</span> 基因型層級過濾</h2>
+<section id="過濾基因型層級" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="過濾基因型層級"><span class="header-section-number">4.7</span> 過濾基因型層級</h2>
 <ul>
-<li><strong>–min-meanDP <code>&lt;float&gt;</code></strong> / <strong>–max-meanDP <code>&lt;float&gt;</code></strong>：依平均深度篩選位點（需 FORMAT 中含 DP 欄位）。</li>
-<li><strong>–hwe <code>&lt;float&gt;</code></strong>：排除不符合 Hardy-Weinberg 平衡的位點（p-value 小於設定值）。</li>
-<li><strong>–max-missing <code>&lt;float&gt;</code></strong>：依缺失比例（0–1）過濾位點。</li>
-<li><strong>–max-missing-count <code>&lt;integer&gt;</code></strong>：排除缺失 genotypes 數量超過此值的位點。</li>
-<li><strong>–phased</strong>：僅保留具有 phased（如 0|1）基因型的位點。</li>
+<li><strong><code>--min-meanDP &lt;float&gt;</code></strong> / <strong><code>--max-meanDP &lt;float&gt;</code></strong>：依平均深度篩選位點（需 FORMAT 中含 DP 欄位）。</li>
+<li><strong><code>--hwe &lt;float&gt;</code></strong>：排除不符合 Hardy-Weinberg 平衡的位點（p-value 小於設定值）。</li>
+<li><strong><code>--max-missing &lt;float&gt;</code></strong>：依缺失比例（0–1）過濾位點。</li>
+<li><strong><code>--max-missing-count &lt;integer&gt;</code></strong>：排除缺失 genotypes 數量超過此值的位點。</li>
+<li><strong><code>--phased</code></strong>：僅保留具有 phased（如 0|1）基因型的位點。</li>
 </ul>
 <hr>
 </section>
-<section id="品質過濾" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="品質過濾"><span class="header-section-number">4.8</span> 品質過濾</h2>
+<section id="過濾品質" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="過濾品質"><span class="header-section-number">4.8</span> 過濾品質</h2>
 <ul>
-<li><strong>–minQ <code>&lt;float&gt;</code></strong>：只保留 QUAL 值 ≥ 指定 threshold 的位點。</li>
+<li><strong><code>--minQ &lt;float&gt;</code></strong>：只保留 QUAL 值 ≥ 指定 threshold 的位點。</li>
 </ul>
 <hr>
 </section>
-<section id="樣本層級過濾" class="level2" data-number="4.9">
-<h2 data-number="4.9" class="anchored" data-anchor-id="樣本層級過濾"><span class="header-section-number">4.9</span> 樣本層級過濾</h2>
+<section id="樣本過濾" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="樣本過濾"><span class="header-section-number">4.9</span> 樣本過濾</h2>
 <p>這些選項用於 <strong>保留或排除特定樣本（individuals）</strong>，適用於任何基於樣本的分析，如 missingness、depth、HWE、Fst 等檢定。</p>
 <ul>
-<li><p><strong>–indv <code>&lt;string&gt;</code></strong>：保留指定樣本。可多次使用以包含多個樣本。</p></li>
-<li><p><strong>–remove-indv <code>&lt;string&gt;</code></strong>：排除指定樣本。可多次使用以排除多個樣本。</p></li>
-<li><p><strong>–keep <code>&lt;filename&gt;</code></strong>：依檔案中的樣本清單保留樣本（每行一個樣本 ID）。</p></li>
-<li><p><strong>–remove <code>&lt;filename&gt;</code></strong>：依檔案中的樣本清單排除樣本。</p></li>
-<li><p><strong>–max-indv <code>&lt;integer&gt;</code></strong>：隨機保留指定數量的樣本，用於避免族群大小差異造成偏差。</p></li>
+<li><p><strong><code>--indv &lt;string&gt;</code></strong>：保留指定樣本。可多次使用以包含多個樣本。</p></li>
+<li><p><strong><code>--remove-indv &lt;string&gt;</code></strong>：排除指定樣本。可多次使用以排除多個樣本。</p></li>
+<li><p><strong><code>--keep &lt;filename&gt;</code></strong>：依檔案中的樣本清單保留樣本（每行一個樣本 ID）。</p></li>
+<li><p><strong><code>--remove &lt;filename&gt;</code></strong>：依檔案中的樣本清單排除樣本。</p></li>
+<li><p><strong><code>--max-indv &lt;integer&gt;</code></strong>：隨機保留指定數量的樣本，用於避免族群大小差異造成偏差。</p></li>
 </ul>
 <blockquote class="blockquote">
 <p><code>若同時使用</code>–indv<code>與</code>–remove-indv<code>，會先執行</code>–indv<code>再執行</code>–remove-indv`。</p>
@@ -299,39 +299,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="等位基因統計" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="等位基因統計"><span class="header-section-number">5.1</span> 等位基因統計</h2>
 <ul>
-<li><strong>–freq / –freq2</strong>：輸出各位點的等位基因頻率（.frq）。<code>--freq2</code> 不輸出等位基因資訊。</li>
-<li><strong>–counts / –counts2</strong>：輸出等位基因計數（.frq.count）。<code>--counts2</code> 不輸出 allele 訊息。</li>
-<li><strong>–derived</strong>：搭配 freq/count 重新排序等位基因，使 ancestral allele (AA) 在前。</li>
+<li><strong><code>--freq / --freq2**：輸出各位點的等位基因頻率（.frq）。</code></strong> :–freq2` 不輸出等位基因資訊。</li>
+<li><strong><code>--counts / --counts2**：輸出等位基因計數（.frq.count）。</code></strong>: –counts2` 不輸出 allele 訊息。</li>
+<li><strong><code>--derived</code></strong>：搭配 freq/count 重新排序等位基因，使 ancestral allele (AA) 在前。</li>
 </ul>
 <hr>
 </section>
 <section id="深度統計" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="深度統計"><span class="header-section-number">5.2</span> 深度統計</h2>
 <ul>
-<li><strong>–depth</strong>：每個樣本的平均深度（.idepth）。</li>
-<li><strong>–site-depth</strong>：每個位點的總深度（.ldepth）。</li>
-<li><strong>–site-mean-depth</strong>：每個位點的平均深度（.ldepth.mean）。</li>
-<li><strong>–geno-depth</strong>：每個 genotype 的深度矩陣（.gdepth）。缺失以 -1 表示。</li>
+<li><strong><code>--depth</code></strong>：每個樣本的平均深度（.idepth）。</li>
+<li><strong><code>--site-depth</code></strong>：每個位點的總深度（.ldepth）。</li>
+<li><strong><code>--site-mean-depth</code></strong>：每個位點的平均深度（.ldepth.mean）。</li>
+<li><strong><code>--geno-depth</code></strong>：每個 genotype 的深度矩陣（.gdepth）。缺失以 -1 表示。</li>
 </ul>
 <hr>
 </section>
 <section id="連鎖不平衡-ld" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="連鎖不平衡-ld"><span class="header-section-number">5.3</span> 連鎖不平衡 LD</h2>
 <ul>
-<li><strong>–hap-r2</strong>：用 phased haplotypes 計算 r²、D、D’（.hap.ld）。</li>
-<li><strong>–geno-r2</strong>：以 0/1/2 genotype 計算 r²（PLINK 方式）（.geno.ld）。</li>
-<li><strong>–geno-chisq</strong>：多等位 SNP 的 genotype 獨立性檢定（.geno.chisq）。</li>
-<li><strong>–hap-r2-positions / –geno-r2-positions</strong>：計算清單中位點與所有位點的 LD（.list.*.ld）。</li>
+<li><strong><code>--hap-r2</code></strong>：用 phased haplotypes 計算 r²、D、D’（.hap.ld）。</li>
+<li><strong><code>--geno-r2</code></strong>：以 0/1/2 genotype 計算 r²（PLINK 方式）（.geno.ld）。</li>
+<li><strong><code>--geno-chisq</code></strong>：多等位 SNP 的 genotype 獨立性檢定（.geno.chisq）。</li>
+<li><strong><code>--hap-r2-positions</code> / <code>--geno-r2-positions</code></strong>：計算清單中位點與所有位點的 LD（.list.*.ld）。</li>
 </ul>
 <section id="ld-計算範圍控制" class="level3" data-number="5.3.1">
 <h3 data-number="5.3.1" class="anchored" data-anchor-id="ld-計算範圍控制"><span class="header-section-number">5.3.1</span> LD 計算範圍控制</h3>
 <ul>
-<li><strong>–ld-window</strong>：最多相隔多少 SNP。</li>
-<li><strong>–ld-window-bp</strong>：最多相隔多少 bp。</li>
-<li><strong>–ld-window-min</strong>：最少要相隔多少 SNP。</li>
-<li><strong>–ld-window-bp-min</strong>：最少要相隔多少 bp。</li>
-<li><strong>–min-r2</strong>：設定 LD r² 門檻，低於此值不輸出。</li>
-<li><strong>–interchrom-hap-r2 / –interchrom-geno-r2</strong>：跨染色體 LD。</li>
+<li><strong><code>--ld-window</code></strong>：最多相隔多少 SNP。</li>
+<li><strong><code>--ld-window-bp</code></strong>：最多相隔多少 bp。</li>
+<li><strong><code>--ld-window-min</code></strong>：最少要相隔多少 SNP。</li>
+<li><strong><code>--ld-window-bp-min</code></strong>：最少要相隔多少 bp。</li>
+<li><strong><code>--min-r2</code></strong>：設定 LD r² 門檻，低於此值不輸出。</li>
+<li><strong><code>--interchrom-hap-r2</code> / <code>--interchrom-geno-r2</code></strong>：跨染色體 LD。</li>
 </ul>
 <hr>
 </section>
@@ -339,80 +339,80 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="transitiontransversion-statistics" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="transitiontransversion-statistics"><span class="header-section-number">5.4</span> Transition/Transversion Statistics</h2>
 <ul>
-<li><strong>–TsTv <code>&lt;integer&gt;</code></strong>：依 bin 大小計算 Ts/Tv（.TsTv）。</li>
-<li><strong>–TsTv-summary</strong>：總 Ts/Tv 摘要（.TsTv.summary）。</li>
-<li><strong>–TsTv-by-count</strong>：依 ALT allele count 計算 Ts/Tv（.TsTv.count）。</li>
-<li><strong>–TsTv-by-qual</strong>：依 SNP QUAL 門檻計算 Ts/Tv（.TsTv.qual）。</li>
-<li><strong>–FILTER-summary</strong>：每個 FILTER 類別的 SNP/ Ts/Tv 統計（.FILTER.summary）。</li>
+<li><strong><code>--TsTv &lt;integer&gt;</code></strong>：依 bin 大小計算 Ts/Tv（.TsTv）。</li>
+<li><strong><code>--TsTv-summary</code></strong>：總 Ts/Tv 摘要（.TsTv.summary）。</li>
+<li><strong><code>--TsTv-by-count</code></strong>：依 ALT allele count 計算 Ts/Tv（.TsTv.count）。</li>
+<li><strong><code>--TsTv-by-qual</code></strong>：依 SNP QUAL 門檻計算 Ts/Tv（.TsTv.qual）。</li>
+<li><strong><code>--FILTER-summary</code></strong>：每個 FILTER 類別的 SNP/ Ts/Tv 統計（.FILTER.summary）。</li>
 </ul>
 <hr>
 </section>
 <section id="核苷酸多樣性-π" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="核苷酸多樣性-π"><span class="header-section-number">5.5</span> 核苷酸多樣性 π</h2>
 <ul>
-<li><strong>–site-pi</strong>：每位點的 pi（.sites.pi）。</li>
-<li><strong>–window-pi <code>&lt;size&gt;</code></strong>：以 window 計算 pi（.windowed.pi）。</li>
-<li><strong>–window-pi-step <code>&lt;step&gt;</code></strong>：設定 window 移動步長。</li>
+<li><strong><code>--site-pi</code></strong>：每位點的 pi（.sites.pi）。</li>
+<li><strong><code>--window-pi &lt;size&gt;</code></strong>：以 window 計算 pi（.windowed.pi）。</li>
+<li><strong><code>--window-pi-step &lt;step&gt;</code></strong>：設定 window 移動步長。</li>
 </ul>
 <hr>
 </section>
 <section id="fst-statistics族群遺傳分化" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="fst-statistics族群遺傳分化"><span class="header-section-number">5.6</span> Fst Statistics（族群遺傳分化）</h2>
 <ul>
-<li><strong>–weir-fst-pop <code>&lt;file&gt;</code></strong>：計算 Weir &amp; Cockerham Fst（.weir.fst）。可多次指定多族群。</li>
-<li><strong>–fst-window-size / –fst-window-step</strong>：以 windows 計算 Fst。</li>
+<li><strong><code>--weir-fst-pop &lt;file&gt;</code></strong>：計算 Weir &amp; Cockerham Fst（.weir.fst）。可多次指定多族群。</li>
+<li><strong><code>--fst-window-size</code> / <code>--fst-window-step</code></strong>：以 windows 計算 Fst。</li>
 </ul>
 <hr>
 </section>
 <section id="其他分析統計" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="其他分析統計"><span class="header-section-number">5.7</span> 其他分析統計</h2>
 <ul>
-<li><strong>–het</strong>：輸出個體的 heterozygosity 與 inbreeding F 值（.het）。</li>
-<li><strong>–hardy</strong>：每位點 HWE p-value（.hwe）。</li>
-<li><strong>–TajimaD <code>&lt;size&gt;</code></strong>：Tajima’s D（.Tajima.D）。</li>
-<li><strong>–indv-freq-burden</strong>：個體中不同頻率變異的負擔量（.ifreqburden）。</li>
-<li><strong>–LROH</strong>：長片段同質（Runs of Homozygosity）（.LROH）。</li>
-<li><strong>–relatedness / –relatedness2</strong>：兩種 relatedness 指標（.relatedness）。</li>
-<li><strong>–site-quality</strong>：每位點 QUAL（.lqual）。</li>
-<li><strong>–missing-indv</strong>：個體層級缺失率（.imiss）。</li>
-<li><strong>–missing-site</strong>：位點層級缺失率（.lmiss）。</li>
-<li><strong>–SNPdensity <code>&lt;size&gt;</code></strong>：每 bin SNP 數與密度（.snpden）。</li>
-<li><strong>–kept-sites</strong>：保留位點清單（.kept.sites）。</li>
-<li><strong>–removed-sites</strong>：移除位點清單（.removed.sites）。</li>
-<li><strong>–singletons</strong>：偵測 singleton 與 private doubleton（.singletons）。</li>
-<li><strong>–hist-indel-len</strong>：Indel 長度分布（.indel.hist）。</li>
-<li><strong>–hapcount <code>&lt;BED&gt;</code></strong>：計算各 bin haplotype 數（.hapcount）。</li>
-<li><strong>–mendel <code>&lt;PED&gt;</code></strong>：以 PED 族譜偵測親子不相容（.mendel）。</li>
+<li><strong><code>--het</code></strong>：輸出個體的 heterozygosity 與 inbreeding F 值（.het）。</li>
+<li><strong><code>--hardy</code></strong>：每位點 HWE p-value（.hwe）。</li>
+<li><strong><code>--TajimaD &lt;size&gt;</code></strong>：Tajima’s D（.Tajima.D）。</li>
+<li><strong><code>--indv-freq-burden</code></strong>：個體中不同頻率變異的負擔量（.ifreqburden）。</li>
+<li><strong><code>--LROH</code></strong>：長片段同質（Runs of Homozygosity）（.LROH）。</li>
+<li><strong><code>--relatedness / --relatedness2</code></strong>：兩種 relatedness 指標（.relatedness）。</li>
+<li><strong><code>--site-quality</code></strong>：每位點 QUAL（.lqual）。</li>
+<li><strong><code>--missing-indv</code></strong>：個體層級缺失率（.imiss）。</li>
+<li><strong><code>--missing-site</code></strong>：位點層級缺失率（.lmiss）。</li>
+<li><strong><code>--SNPdensity &lt;size&gt;</code></strong>：每 bin SNP 數與密度（.snpden）。</li>
+<li><strong><code>--kept-sites</code></strong>：保留位點清單（.kept.sites）。</li>
+<li><strong><code>--removed-sites</code></strong>：移除位點清單（.removed.sites）。</li>
+<li><strong><code>--singletons</code></strong>：偵測 singleton 與 private doubleton（.singletons）。</li>
+<li><strong><code>--hist-indel-len</code></strong>：Indel 長度分布（.indel.hist）。</li>
+<li><strong><code>--hapcount &lt;BED&gt;</code></strong>：計算各 bin haplotype 數（.hapcount）。</li>
+<li><strong><code>--mendel &lt;PED&gt;</code></strong>：以 PED 族譜偵測親子不相容（.mendel）。</li>
 </ul>
 <hr>
 </section>
 <section id="output-formatinfo-extraction擷取格式或info欄位置" class="level2" data-number="5.8">
 <h2 data-number="5.8" class="anchored" data-anchor-id="output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">5.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</h2>
 <ul>
-<li><strong>–extract-FORMAT-info <code>&lt;ID&gt;</code></strong>：擷取指定 FORMAT 欄位（.FORMAT）。</li>
-<li><strong>–get-INFO <code>&lt;ID&gt;</code></strong>：擷取指定 INFO 欄位，可重複使用（.INFO）。</li>
+<li><strong><code>--extract-FORMAT-info &lt;ID&gt;</code></strong>：擷取指定 FORMAT 欄位（.FORMAT）。</li>
+<li><strong><code>--get-INFO &lt;ID&gt;</code></strong>：擷取指定 INFO 欄位，可重複使用（.INFO）。</li>
 </ul>
 <hr>
 </section>
 <section id="output-vcfbcf重新編碼輸出" class="level2" data-number="5.9">
 <h2 data-number="5.9" class="anchored" data-anchor-id="output-vcfbcf重新編碼輸出"><span class="header-section-number">5.9</span> Output VCF/BCF（重新編碼輸出）</h2>
 <ul>
-<li><strong>–recode / –recode-bcf</strong>：依過濾後結果輸出 VCF 或 BCF（.recode.vcf/.recode.bcf）。</li>
-<li><strong>–recode-INFO <code>&lt;ID&gt;</code></strong>：保留指定 INFO 欄位。</li>
-<li><strong>–recode-INFO-all</strong>：保留所有 INFO 欄位。</li>
-<li><strong>–contigs <code>&lt;file&gt;</code></strong>：為 BCF 加入 contig header。</li>
+<li><strong><code>--recode / --recode-bcf</code></strong>：依過濾後結果輸出 VCF 或 BCF（.recode.vcf/.recode.bcf）。</li>
+<li><strong><code>--recode-INFO &lt;ID&gt;</code></strong>：保留指定 INFO 欄位。</li>
+<li><strong><code>--recode-INFO-all</code></strong>：保留所有 INFO 欄位。</li>
+<li><strong><code>--contigs &lt;file&gt;</code></strong>：為 BCF 加入 contig header。</li>
 </ul>
 <hr>
 </section>
 <section id="other-format-outputs轉換為其他格式" class="level2" data-number="5.10">
 <h2 data-number="5.10" class="anchored" data-anchor-id="other-format-outputs轉換為其他格式"><span class="header-section-number">5.10</span> Other Format Outputs（轉換為其他格式）</h2>
 <ul>
-<li><strong>–012</strong>：輸出 genotype matrix（.012/.012.pos/.012.indv）。</li>
-<li><strong>–IMPUTE</strong>：輸出 phased haplotypes（IMPUTE 格式）。</li>
-<li><strong>–ldhat / –ldhat-geno</strong>：輸出 LDhat 格式（需指定 –chr）。</li>
-<li><strong>–BEAGLE-GL / –BEAGLE-PL</strong>：輸出 BEAGLE likelihood 格式。</li>
-<li><strong>–plink / –plink-tped</strong>：輸出 PLINK 格式（PED/MAP 或 TPED/TFAM）。</li>
-<li><strong>–chrom-map <code>&lt;file&gt;</code></strong>：指定染色體名稱→編號映射表（用於非人類物種）。</li>
+<li><strong><code>--012</code></strong>：輸出 genotype matrix（.012/.012.pos/.012.indv）。</li>
+<li><strong><code>--IMPUTE</code></strong>：輸出 phased haplotypes（IMPUTE 格式）。</li>
+<li><strong><code>--ldhat / --ldhat-geno</code></strong>：輸出 LDhat 格式（需指定 –chr）。</li>
+<li><strong><code>--BEAGLE-GL</code> / <code>--BEAGLE-PL</code></strong>：輸出 BEAGLE likelihood 格式。</li>
+<li><strong><code>--plink</code> / <code>--plink-tped</code></strong>：輸出 PLINK 格式（PED/MAP 或 TPED/TFAM）。</li>
+<li><strong><code>--chrom-map &lt;file&gt;</code></strong>：指定染色體名稱→編號映射表（用於非人類物種）。</li>
 </ul>
 <hr>
 </section>
@@ -427,21 +427,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 <ul>
-<li><strong>–diff <code>&lt;filename&gt;</code></strong>：比較原始 VCF 與指定的未壓縮 VCF。</li>
-<li><strong>–gzdiff <code>&lt;filename&gt;</code></strong>：比較原始 VCF 與指定的 <code>.vcf.gz</code> 檔。</li>
-<li><strong>–diff-bcf <code>&lt;filename&gt;</code></strong>：比較原始 VCF 與指定的 BCF 檔。</li>
+<li><strong><code>--diff &lt;filename&gt;</code></strong>：比較原始 VCF 與指定的未壓縮 VCF。</li>
+<li><strong><code>--gzdiff &lt;filename&gt;</code></strong>：比較原始 VCF 與指定的 <code>.vcf.gz</code> 檔。</li>
+<li><strong><code>--diff-bcf &lt;filename&gt;</code></strong>：比較原始 VCF 與指定的 BCF 檔。</li>
 </ul>
 <blockquote class="blockquote">
 <p>` 以上選項都必須搭配至少一個 “diff option”（如下方） 才會執行比較。</p>
 </blockquote>
 <ul>
-<li><strong>–diff-site</strong>：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.sites_in_files</code></li>
-<li><strong>–diff-site-discordance</strong>：逐位點計算基因型不一致（discordance）。 → 輸出：<code>.diff.sites</code></li>
-<li><strong>–diff-indv</strong>：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.indv_in_files</code></li>
-<li><strong>–diff-indv-discordance</strong>：比較每個樣本在兩檔案中的基因型不一致程度。 → 輸出：<code>.diff.indv</code></li>
-<li><strong>–diff-indv-map <code>&lt;filename&gt;</code></strong>：提供樣本 ID 對照表（file1_ID ↔︎ file2_ID），用於樣本名稱不同但實為同一個人的情況。 檔案格式：<code>sample_in_file1</code><tab><code>sample_in_file2</code></tab></li>
-<li><strong>–diff-discordance-matrix</strong>：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。 → 輸出：<code>.diff.discordance.matrix</code></li>
-<li><strong>–diff-switch-error</strong>：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。 → 輸出：<code>.diff.switch</code></li>
+<li><strong><code>--diff-site</code></strong>：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.sites_in_files</code></li>
+<li><strong><code>--diff-site-discordance</code></strong>：逐位點計算基因型不一致（discordance）。 → 輸出：<code>.diff.sites</code></li>
+<li><strong><code>--diff-indv</code></strong>：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.indv_in_files</code></li>
+<li><strong><code>--diff-indv-discordance</code></strong>：比較每個樣本在兩檔案中的基因型不一致程度。 → 輸出：<code>.diff.indv</code></li>
+<li><strong><code>--diff-indv-map &lt;filename&gt;</code></strong>：提供樣本 ID 對照表（file1_ID ↔︎ file2_ID），用於樣本名稱不同但實為同一個人的情況。 檔案格式：<code>sample_in_file1&lt;TAB&gt;</code>sample_in_file2`</li>
+<li><strong><code>--diff-discordance-matrix</code></strong>：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。 → 輸出：<code>.diff.discordance.matrix</code></li>
+<li><strong><code>--diff-switch-error</code></strong>：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。 → 輸出：<code>.diff.switch</code></li>
 </ul>
 <hr>
 </section>
