@@ -87,44 +87,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#vcftools-介紹" id="toc-vcftools-介紹" class="nav-link active" data-scroll-target="#vcftools-介紹"><span class="header-section-number">1</span> vcftools 介紹</a></li>
   <li><a href="#vcftools-version-版本" id="toc-vcftools-version-版本" class="nav-link" data-scroll-target="#vcftools-version-版本"><span class="header-section-number">2</span> vcftools –version (版本)</a></li>
   <li><a href="#vcftools-基本指令" id="toc-vcftools-基本指令" class="nav-link" data-scroll-target="#vcftools-基本指令"><span class="header-section-number">3</span> vcftools 基本指令</a></li>
-  <li><a href="#vcftools-位置過濾" id="toc-vcftools-位置過濾" class="nav-link" data-scroll-target="#vcftools-位置過濾"><span class="header-section-number">4</span> vcftools 位置過濾</a></li>
-  <li><a href="#vcftools-id-filtering位點id過濾" id="toc-vcftools-id-filtering位點id過濾" class="nav-link" data-scroll-target="#vcftools-id-filtering位點id過濾"><span class="header-section-number">5</span> vcftools <code>&lt;ID-Filtering&gt;</code>（位點ID過濾）</a></li>
-  <li><a href="#vcftools-variant-type-filtering變異類型過濾" id="toc-vcftools-variant-type-filtering變異類型過濾" class="nav-link" data-scroll-target="#vcftools-variant-type-filtering變異類型過濾"><span class="header-section-number">6</span> vcftools <code>&lt;Variant-Type-Filtering&gt;</code>（變異類型過濾）</a></li>
-  <li><a href="#vcftools-filter-flag-filteringfilter欄位過濾" id="toc-vcftools-filter-flag-filteringfilter欄位過濾" class="nav-link" data-scroll-target="#vcftools-filter-flag-filteringfilter欄位過濾"><span class="header-section-number">7</span> vcftools <code>&lt;Filter-Flag-Filtering&gt;</code>（FILTER欄位過濾）</a></li>
-  <li><a href="#vcftools-info-filteringinfo-欄位過濾" id="toc-vcftools-info-filteringinfo-欄位過濾" class="nav-link" data-scroll-target="#vcftools-info-filteringinfo-欄位過濾"><span class="header-section-number">8</span> vcftools <code>&lt;Info-Filtering&gt;</code>（INFO 欄位過濾）</a></li>
-  <li><a href="#vcftools-allele-filtering等位基因過濾" id="toc-vcftools-allele-filtering等位基因過濾" class="nav-link" data-scroll-target="#vcftools-allele-filtering等位基因過濾"><span class="header-section-number">9</span> vcftools <code>&lt;Allele-Filtering&gt;</code>（等位基因過濾）</a></li>
-  <li><a href="#vcftools-genotype-filtering基因型層級過濾" id="toc-vcftools-genotype-filtering基因型層級過濾" class="nav-link" data-scroll-target="#vcftools-genotype-filtering基因型層級過濾"><span class="header-section-number">10</span> vcftools <code>&lt;Genotype-Filtering&gt;</code>（基因型層級過濾）</a></li>
-  <li><a href="#vcftools-quality-filtering品質過濾" id="toc-vcftools-quality-filtering品質過濾" class="nav-link" data-scroll-target="#vcftools-quality-filtering品質過濾"><span class="header-section-number">11</span> vcftools <code>&lt;Quality-Filtering&gt;</code>（品質過濾）</a></li>
-  <li><a href="#vcftools-individual-filtering樣本層級過濾" id="toc-vcftools-individual-filtering樣本層級過濾" class="nav-link" data-scroll-target="#vcftools-individual-filtering樣本層級過濾"><span class="header-section-number">12</span> vcftools <code>&lt;Individual-Filtering&gt;</code>（樣本層級過濾）</a>
+  <li><a href="#vcftools-過濾" id="toc-vcftools-過濾" class="nav-link" data-scroll-target="#vcftools-過濾"><span class="header-section-number">4</span> vcftools 過濾</a>
   <ul>
-  <li><a href="#個別樣本過濾" id="toc-個別樣本過濾" class="nav-link" data-scroll-target="#個別樣本過濾"><span class="header-section-number">12.1</span> 個別樣本過濾</a></li>
-  <li><a href="#使用樣本清單進行過濾" id="toc-使用樣本清單進行過濾" class="nav-link" data-scroll-target="#使用樣本清單進行過濾"><span class="header-section-number">12.2</span> 使用樣本清單進行過濾</a></li>
-  <li><a href="#隨機抽樣樣本樣本-thinning" id="toc-隨機抽樣樣本樣本-thinning" class="nav-link" data-scroll-target="#隨機抽樣樣本樣本-thinning"><span class="header-section-number">12.3</span> 隨機抽樣樣本（樣本 thinning）</a></li>
+  <li><a href="#vcftools-位置過濾" id="toc-vcftools-位置過濾" class="nav-link" data-scroll-target="#vcftools-位置過濾"><span class="header-section-number">4.1</span> vcftools 位置過濾</a></li>
+  <li><a href="#vcftools-id-filtering位點id過濾" id="toc-vcftools-id-filtering位點id過濾" class="nav-link" data-scroll-target="#vcftools-id-filtering位點id過濾"><span class="header-section-number">4.2</span> vcftools <code>&lt;ID-Filtering&gt;</code>（位點ID過濾）</a></li>
+  <li><a href="#vcftools-variant-type-filtering變異類型過濾" id="toc-vcftools-variant-type-filtering變異類型過濾" class="nav-link" data-scroll-target="#vcftools-variant-type-filtering變異類型過濾"><span class="header-section-number">4.3</span> vcftools <code>&lt;Variant-Type-Filtering&gt;</code>（變異類型過濾）</a></li>
+  <li><a href="#vcftools-filter-flag-filteringfilter欄位過濾" id="toc-vcftools-filter-flag-filteringfilter欄位過濾" class="nav-link" data-scroll-target="#vcftools-filter-flag-filteringfilter欄位過濾"><span class="header-section-number">4.4</span> vcftools <code>&lt;Filter-Flag-Filtering&gt;</code>（FILTER欄位過濾）</a></li>
+  <li><a href="#vcftools-info-filteringinfo-欄位過濾" id="toc-vcftools-info-filteringinfo-欄位過濾" class="nav-link" data-scroll-target="#vcftools-info-filteringinfo-欄位過濾"><span class="header-section-number">4.5</span> vcftools <code>&lt;Info-Filtering&gt;</code>（INFO 欄位過濾）</a></li>
+  <li><a href="#vcftools-allele-filtering等位基因過濾" id="toc-vcftools-allele-filtering等位基因過濾" class="nav-link" data-scroll-target="#vcftools-allele-filtering等位基因過濾"><span class="header-section-number">4.6</span> vcftools <code>&lt;Allele-Filtering&gt;</code>（等位基因過濾）</a></li>
+  <li><a href="#vcftools-genotype-filtering基因型層級過濾" id="toc-vcftools-genotype-filtering基因型層級過濾" class="nav-link" data-scroll-target="#vcftools-genotype-filtering基因型層級過濾"><span class="header-section-number">4.7</span> vcftools <code>&lt;Genotype-Filtering&gt;</code>（基因型層級過濾）</a></li>
+  <li><a href="#vcftools-quality-filtering品質過濾" id="toc-vcftools-quality-filtering品質過濾" class="nav-link" data-scroll-target="#vcftools-quality-filtering品質過濾"><span class="header-section-number">4.8</span> vcftools <code>&lt;Quality-Filtering&gt;</code>（品質過濾）</a></li>
+  <li><a href="#vcftools-individual-filtering樣本層級過濾" id="toc-vcftools-individual-filtering樣本層級過濾" class="nav-link" data-scroll-target="#vcftools-individual-filtering樣本層級過濾"><span class="header-section-number">4.9</span> vcftools <code>&lt;Individual-Filtering&gt;</code>（樣本層級過濾）</a></li>
   </ul></li>
-  <li><a href="#vcftools-output-options輸出選項" id="toc-vcftools-output-options輸出選項" class="nav-link" data-scroll-target="#vcftools-output-options輸出選項"><span class="header-section-number">13</span> vcftools <code>&lt;Output-Options&gt;</code>（輸出選項）</a>
+  <li><a href="#vcftools-output-options輸出選項" id="toc-vcftools-output-options輸出選項" class="nav-link" data-scroll-target="#vcftools-output-options輸出選項"><span class="header-section-number">5</span> vcftools <code>&lt;Output-Options&gt;</code>（輸出選項）</a>
   <ul>
-  <li><a href="#allele-statistics等位基因統計" id="toc-allele-statistics等位基因統計" class="nav-link" data-scroll-target="#allele-statistics等位基因統計"><span class="header-section-number">13.1</span> Allele Statistics（等位基因統計）</a></li>
-  <li><a href="#depth-statistics深度統計" id="toc-depth-statistics深度統計" class="nav-link" data-scroll-target="#depth-statistics深度統計"><span class="header-section-number">13.2</span> Depth Statistics（深度統計）</a></li>
-  <li><a href="#ld-statistics連鎖不平衡-ld" id="toc-ld-statistics連鎖不平衡-ld" class="nav-link" data-scroll-target="#ld-statistics連鎖不平衡-ld"><span class="header-section-number">13.3</span> LD Statistics（連鎖不平衡 LD）</a>
+  <li><a href="#allele-statistics等位基因統計" id="toc-allele-statistics等位基因統計" class="nav-link" data-scroll-target="#allele-statistics等位基因統計"><span class="header-section-number">5.1</span> Allele Statistics（等位基因統計）</a></li>
+  <li><a href="#depth-statistics深度統計" id="toc-depth-statistics深度統計" class="nav-link" data-scroll-target="#depth-statistics深度統計"><span class="header-section-number">5.2</span> Depth Statistics（深度統計）</a></li>
+  <li><a href="#ld-statistics連鎖不平衡-ld" id="toc-ld-statistics連鎖不平衡-ld" class="nav-link" data-scroll-target="#ld-statistics連鎖不平衡-ld"><span class="header-section-number">5.3</span> LD Statistics（連鎖不平衡 LD）</a>
   <ul class="collapse">
-  <li><a href="#ld-計算範圍控制" id="toc-ld-計算範圍控制" class="nav-link" data-scroll-target="#ld-計算範圍控制"><span class="header-section-number">13.3.1</span> LD 計算範圍控制</a></li>
+  <li><a href="#ld-計算範圍控制" id="toc-ld-計算範圍控制" class="nav-link" data-scroll-target="#ld-計算範圍控制"><span class="header-section-number">5.3.1</span> LD 計算範圍控制</a></li>
   </ul></li>
-  <li><a href="#tstv-statisticstransitiontransversion" id="toc-tstv-statisticstransitiontransversion" class="nav-link" data-scroll-target="#tstv-statisticstransitiontransversion"><span class="header-section-number">13.4</span> Ts/Tv Statistics（Transition/Transversion）</a></li>
-  <li><a href="#nucleotide-diversity核苷酸多樣性-π" id="toc-nucleotide-diversity核苷酸多樣性-π" class="nav-link" data-scroll-target="#nucleotide-diversity核苷酸多樣性-π"><span class="header-section-number">13.5</span> Nucleotide Diversity（核苷酸多樣性 π）</a></li>
-  <li><a href="#fst-statistics族群遺傳分化" id="toc-fst-statistics族群遺傳分化" class="nav-link" data-scroll-target="#fst-statistics族群遺傳分化"><span class="header-section-number">13.6</span> Fst Statistics（族群遺傳分化）</a></li>
-  <li><a href="#other-statistics其他分析統計" id="toc-other-statistics其他分析統計" class="nav-link" data-scroll-target="#other-statistics其他分析統計"><span class="header-section-number">13.7</span> Other Statistics（其他分析統計）</a></li>
-  <li><a href="#output-formatinfo-extraction擷取格式或info欄位置" id="toc-output-formatinfo-extraction擷取格式或info欄位置" class="nav-link" data-scroll-target="#output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">13.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</a></li>
-  <li><a href="#output-vcfbcf重新編碼輸出" id="toc-output-vcfbcf重新編碼輸出" class="nav-link" data-scroll-target="#output-vcfbcf重新編碼輸出"><span class="header-section-number">13.9</span> Output VCF/BCF（重新編碼輸出）</a></li>
-  <li><a href="#other-format-outputs轉換為其他格式" id="toc-other-format-outputs轉換為其他格式" class="nav-link" data-scroll-target="#other-format-outputs轉換為其他格式"><span class="header-section-number">13.10</span> Other Format Outputs（轉換為其他格式）</a></li>
+  <li><a href="#tstv-statisticstransitiontransversion" id="toc-tstv-statisticstransitiontransversion" class="nav-link" data-scroll-target="#tstv-statisticstransitiontransversion"><span class="header-section-number">5.4</span> Ts/Tv Statistics（Transition/Transversion）</a></li>
+  <li><a href="#nucleotide-diversity核苷酸多樣性-π" id="toc-nucleotide-diversity核苷酸多樣性-π" class="nav-link" data-scroll-target="#nucleotide-diversity核苷酸多樣性-π"><span class="header-section-number">5.5</span> Nucleotide Diversity（核苷酸多樣性 π）</a></li>
+  <li><a href="#fst-statistics族群遺傳分化" id="toc-fst-statistics族群遺傳分化" class="nav-link" data-scroll-target="#fst-statistics族群遺傳分化"><span class="header-section-number">5.6</span> Fst Statistics（族群遺傳分化）</a></li>
+  <li><a href="#other-statistics其他分析統計" id="toc-other-statistics其他分析統計" class="nav-link" data-scroll-target="#other-statistics其他分析統計"><span class="header-section-number">5.7</span> Other Statistics（其他分析統計）</a></li>
+  <li><a href="#output-formatinfo-extraction擷取格式或info欄位置" id="toc-output-formatinfo-extraction擷取格式或info欄位置" class="nav-link" data-scroll-target="#output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">5.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</a></li>
+  <li><a href="#output-vcfbcf重新編碼輸出" id="toc-output-vcfbcf重新編碼輸出" class="nav-link" data-scroll-target="#output-vcfbcf重新編碼輸出"><span class="header-section-number">5.9</span> Output VCF/BCF（重新編碼輸出）</a></li>
+  <li><a href="#other-format-outputs轉換為其他格式" id="toc-other-format-outputs轉換為其他格式" class="nav-link" data-scroll-target="#other-format-outputs轉換為其他格式"><span class="header-section-number">5.10</span> Other Format Outputs（轉換為其他格式）</a></li>
   </ul></li>
-  <li><a href="#vcftools-comparison-optionsvcf檔案比較" id="toc-vcftools-comparison-optionsvcf檔案比較" class="nav-link" data-scroll-target="#vcftools-comparison-optionsvcf檔案比較"><span class="header-section-number">14</span> vcftools <code>&lt;Comparison-Options&gt;</code>（VCF檔案比較）</a>
+  <li><a href="#vcftools-comparison-optionsvcf檔案比較" id="toc-vcftools-comparison-optionsvcf檔案比較" class="nav-link" data-scroll-target="#vcftools-comparison-optionsvcf檔案比較"><span class="header-section-number">6</span> vcftools <code>&lt;Comparison-Options&gt;</code>（VCF檔案比較）</a>
   <ul>
-  <li><a href="#位點層級比較" id="toc-位點層級比較" class="nav-link" data-scroll-target="#位點層級比較"><span class="header-section-number">14.1</span> 位點層級比較</a></li>
-  <li><a href="#樣本層級比較" id="toc-樣本層級比較" class="nav-link" data-scroll-target="#樣本層級比較"><span class="header-section-number">14.2</span> 樣本層級比較</a></li>
-  <li><a href="#更進階比較模式" id="toc-更進階比較模式" class="nav-link" data-scroll-target="#更進階比較模式"><span class="header-section-number">14.3</span> 更進階比較模式</a></li>
+  <li><a href="#位點層級比較" id="toc-位點層級比較" class="nav-link" data-scroll-target="#位點層級比較"><span class="header-section-number">6.1</span> 位點層級比較</a></li>
+  <li><a href="#樣本層級比較" id="toc-樣本層級比較" class="nav-link" data-scroll-target="#樣本層級比較"><span class="header-section-number">6.2</span> 樣本層級比較</a></li>
+  <li><a href="#更進階比較模式" id="toc-更進階比較模式" class="nav-link" data-scroll-target="#更進階比較模式"><span class="header-section-number">6.3</span> 更進階比較模式</a></li>
   </ul></li>
-  <li><a href="#vcftools-depth" id="toc-vcftools-depth" class="nav-link" data-scroll-target="#vcftools-depth"><span class="header-section-number">15</span> vcftools –depth</a></li>
-  <li><a href="#man-vcftools" id="toc-man-vcftools" class="nav-link" data-scroll-target="#man-vcftools"><span class="header-section-number">16</span> man vcftools</a></li>
+  <li><a href="#vcftools-depth" id="toc-vcftools-depth" class="nav-link" data-scroll-target="#vcftools-depth"><span class="header-section-number">7</span> vcftools –depth</a></li>
+  <li><a href="#man-vcftools" id="toc-man-vcftools" class="nav-link" data-scroll-target="#man-vcftools"><span class="header-section-number">8</span> man vcftools</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://benson1231.github.io/tools/"><i class="bi bi-house"></i>home</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/benson1231/tools"><i class="bi bi-github"></i>github</a></li></ul></div></nav>
 </div>
@@ -175,20 +173,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vcftools-基本指令" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> vcftools 基本指令</h1>
 <ul>
-<li><p>輸入:</p></li>
 <li><p><strong>–vcf <code>&lt;輸入檔名&gt;</code></strong>: VCF 格式 v4.0、v4.1 或 v4.2 的檔案</p></li>
 <li><p><strong>–gzvcf <code>&lt;輸入檔名&gt;</code></strong>: 壓縮（gzip 壓縮）的 VCF 檔案</p></li>
 <li><p><strong>–bcf <code>&lt;輸入檔名&gt;</code></strong>: 直接讀取 BCF2 檔案</p></li>
-<li><p>輸出:</p></li>
-<li><p><strong>–out <code>&lt;output_prefix&gt;</code></strong></p></li>
+<li><p><strong>–out <code>&lt;輸出前綴&gt;</code></strong></p></li>
 <li><p><strong>–stdout 或 -c</strong>: 定向到標準輸出</p></li>
 <li><p><strong>–temp <code>&lt;暫存目錄&gt;</code></strong>: 建立的任何暫存檔案重定向到指定目錄</p></li>
 </ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> [ <span class="at">--vcf</span> FILE <span class="kw">|</span> <span class="ex">--gzvcf</span> FILE <span class="kw">|</span> <span class="ex">--bcf</span> FILE] </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> --out OUTPUT PREFIX <span class="bu">]</span> <span class="bu">[</span> FILTERING OPTIONS <span class="bu">]</span> <span class="bu">[</span> OUTPUT OPTIONS <span class="bu">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
-<section id="vcftools-位置過濾" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> vcftools 位置過濾</h1>
+<section id="vcftools-過濾" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> vcftools 過濾</h1>
+<section id="vcftools-位置過濾" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="vcftools-位置過濾"><span class="header-section-number">4.1</span> vcftools 位置過濾</h2>
 <ul>
 <li><strong>–chr <code>&lt;chromosome&gt;</code></strong>：只保留指定染色體的變異。可重複使用以包含多條染色體。</li>
 <li><strong>–not-chr <code>&lt;chromosome&gt;</code></strong>：排除指定染色體的變異。可重複使用以排除多條染色體。</li>
@@ -207,8 +206,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="vcftools-id-filtering位點id過濾" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> vcftools <code>&lt;ID-Filtering&gt;</code>（位點ID過濾）</h1>
+<section id="vcftools-id-filtering位點id過濾" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="vcftools-id-filtering位點id過濾"><span class="header-section-number">4.2</span> vcftools <code>&lt;ID-Filtering&gt;</code>（位點ID過濾）</h2>
 <ul>
 <li><strong>–snp <code>&lt;string&gt;</code></strong>：只保留具有指定 SNP ID（如 dbSNP rsID）之位點。可重複使用。</li>
 <li><strong>–snps <code>&lt;filename&gt;</code></strong>：依檔案中的 SNP ID 清單保留位點（每行一個 ID）。</li>
@@ -216,16 +215,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="vcftools-variant-type-filtering變異類型過濾" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> vcftools <code>&lt;Variant-Type-Filtering&gt;</code>（變異類型過濾）</h1>
+<section id="vcftools-variant-type-filtering變異類型過濾" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="vcftools-variant-type-filtering變異類型過濾"><span class="header-section-number">4.3</span> vcftools <code>&lt;Variant-Type-Filtering&gt;</code>（變異類型過濾）</h2>
 <ul>
 <li><strong>–keep-only-indels</strong>：只保留含有 indel 的位點（REF 與 ALT 長度不同）。</li>
 <li><strong>–remove-indels</strong>：排除所有 indel 位點，僅保留 SNP。</li>
 </ul>
 <hr>
 </section>
-<section id="vcftools-filter-flag-filteringfilter欄位過濾" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> vcftools <code>&lt;Filter-Flag-Filtering&gt;</code>（FILTER欄位過濾）</h1>
+<section id="vcftools-filter-flag-filteringfilter欄位過濾" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="vcftools-filter-flag-filteringfilter欄位過濾"><span class="header-section-number">4.4</span> vcftools <code>&lt;Filter-Flag-Filtering&gt;</code>（FILTER欄位過濾）</h2>
 <ul>
 <li><strong>–remove-filtered-all</strong>：移除所有 FILTER 標記不是 PASS 的位點。</li>
 <li><strong>–keep-filtered <code>&lt;string&gt;</code></strong>：只保留特定 FILTER 標記的位點（可多次使用）。</li>
@@ -233,16 +232,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="vcftools-info-filteringinfo-欄位過濾" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> vcftools <code>&lt;Info-Filtering&gt;</code>（INFO 欄位過濾）</h1>
+<section id="vcftools-info-filteringinfo-欄位過濾" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="vcftools-info-filteringinfo-欄位過濾"><span class="header-section-number">4.5</span> vcftools <code>&lt;Info-Filtering&gt;</code>（INFO 欄位過濾）</h2>
 <ul>
 <li><strong>–keep-INFO <code>&lt;string&gt;</code></strong>：保留具有指定 INFO flag 的位點（僅依 flag 是否存在，不比較其值）。</li>
 <li><strong>–remove-INFO <code>&lt;string&gt;</code></strong>：排除具有特定 INFO flag 的位點。可重複使用。</li>
 </ul>
 <hr>
 </section>
-<section id="vcftools-allele-filtering等位基因過濾" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> vcftools <code>&lt;Allele-Filtering&gt;</code>（等位基因過濾）</h1>
+<section id="vcftools-allele-filtering等位基因過濾" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="vcftools-allele-filtering等位基因過濾"><span class="header-section-number">4.6</span> vcftools <code>&lt;Allele-Filtering&gt;</code>（等位基因過濾）</h2>
 <ul>
 <li><strong>–maf <code>&lt;float&gt;</code></strong>：只保留 Minor Allele Frequency ≥ 指定值的位點。</li>
 <li><strong>–max-maf <code>&lt;float&gt;</code></strong>：只保留 Minor Allele Frequency ≤ 指定值的位點。</li>
@@ -257,8 +256,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="vcftools-genotype-filtering基因型層級過濾" class="level1" data-number="10">
-<h1 data-number="10"><span class="header-section-number">10</span> vcftools <code>&lt;Genotype-Filtering&gt;</code>（基因型層級過濾）</h1>
+<section id="vcftools-genotype-filtering基因型層級過濾" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="vcftools-genotype-filtering基因型層級過濾"><span class="header-section-number">4.7</span> vcftools <code>&lt;Genotype-Filtering&gt;</code>（基因型層級過濾）</h2>
 <ul>
 <li><strong>–min-meanDP <code>&lt;float&gt;</code></strong> / <strong>–max-meanDP <code>&lt;float&gt;</code></strong>：依平均深度篩選位點（需 FORMAT 中含 DP 欄位）。</li>
 <li><strong>–hwe <code>&lt;float&gt;</code></strong>：排除不符合 Hardy-Weinberg 平衡的位點（p-value 小於設定值）。</li>
@@ -268,53 +267,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="vcftools-quality-filtering品質過濾" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> vcftools <code>&lt;Quality-Filtering&gt;</code>（品質過濾）</h1>
+<section id="vcftools-quality-filtering品質過濾" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="vcftools-quality-filtering品質過濾"><span class="header-section-number">4.8</span> vcftools <code>&lt;Quality-Filtering&gt;</code>（品質過濾）</h2>
 <ul>
 <li><strong>–minQ <code>&lt;float&gt;</code></strong>：只保留 QUAL 值 ≥ 指定 threshold 的位點。</li>
 </ul>
 <hr>
 </section>
-<section id="vcftools-individual-filtering樣本層級過濾" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> vcftools <code>&lt;Individual-Filtering&gt;</code>（樣本層級過濾）</h1>
+<section id="vcftools-individual-filtering樣本層級過濾" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="vcftools-individual-filtering樣本層級過濾"><span class="header-section-number">4.9</span> vcftools <code>&lt;Individual-Filtering&gt;</code>（樣本層級過濾）</h2>
 <p>這些選項用於 <strong>保留或排除特定樣本（individuals）</strong>，適用於任何基於樣本的分析，如 missingness、depth、HWE、Fst 等檢定。</p>
-<hr>
-<section id="個別樣本過濾" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="個別樣本過濾"><span class="header-section-number">12.1</span> 個別樣本過濾</h2>
 <ul>
-<li><strong>–indv <code>&lt;string&gt;</code></strong>：保留指定樣本。可多次使用以包含多個樣本。</li>
-<li><strong>–remove-indv <code>&lt;string&gt;</code></strong>：排除指定樣本。可多次使用以排除多個樣本。</li>
+<li><p><strong>–indv <code>&lt;string&gt;</code></strong>：保留指定樣本。可多次使用以包含多個樣本。</p></li>
+<li><p><strong>–remove-indv <code>&lt;string&gt;</code></strong>：排除指定樣本。可多次使用以排除多個樣本。</p></li>
+<li><p><strong>–keep <code>&lt;filename&gt;</code></strong>：依檔案中的樣本清單保留樣本（每行一個樣本 ID）。</p></li>
+<li><p><strong>–remove <code>&lt;filename&gt;</code></strong>：依檔案中的樣本清單排除樣本。</p></li>
+<li><p><strong>–max-indv <code>&lt;integer&gt;</code></strong>：隨機保留指定數量的樣本，用於避免族群大小差異造成偏差。</p></li>
 </ul>
 <blockquote class="blockquote">
 <p><code>若同時使用</code>–indv<code>與</code>–remove-indv<code>，會先執行</code>–indv<code>再執行</code>–remove-indv`。</p>
-</blockquote>
-<hr>
-</section>
-<section id="使用樣本清單進行過濾" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="使用樣本清單進行過濾"><span class="header-section-number">12.2</span> 使用樣本清單進行過濾</h2>
-<ul>
-<li><strong>–keep <code>&lt;filename&gt;</code></strong>：依檔案中的樣本清單保留樣本（每行一個樣本 ID）。</li>
-<li><strong>–remove <code>&lt;filename&gt;</code></strong>：依檔案中的樣本清單排除樣本。</li>
-</ul>
-<blockquote class="blockquote">
 <p><code>若同時使用</code>–keep<code>與</code>–remove<code>：</code> <code>* 先執行</code>–keep<code></code> * 再從保留的集合中移除 <code>--remove</code> 的樣本 ` * 多個清單檔案會取「聯集」，再進行篩選</p>
 </blockquote>
 <hr>
 </section>
-<section id="隨機抽樣樣本樣本-thinning" class="level2" data-number="12.3">
-<h2 data-number="12.3" class="anchored" data-anchor-id="隨機抽樣樣本樣本-thinning"><span class="header-section-number">12.3</span> 隨機抽樣樣本（樣本 thinning）</h2>
-<ul>
-<li><strong>–max-indv <code>&lt;integer&gt;</code></strong>：隨機保留指定數量的樣本，用於避免族群大小差異造成偏差。</li>
-</ul>
-<hr>
 </section>
-</section>
-<section id="vcftools-output-options輸出選項" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> vcftools <code>&lt;Output-Options&gt;</code>（輸出選項）</h1>
+<section id="vcftools-output-options輸出選項" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> vcftools <code>&lt;Output-Options&gt;</code>（輸出選項）</h1>
 <p>這些選項用於指定 <strong>vcftools 在完成所有篩選後要輸出哪些分析結果</strong>，涵蓋等位基因統計、深度、LD、Fst、Ts/Tv、missingness、ROH、relatedness、以及格式轉換等功能。</p>
 <hr>
-<section id="allele-statistics等位基因統計" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="allele-statistics等位基因統計"><span class="header-section-number">13.1</span> Allele Statistics（等位基因統計）</h2>
+<section id="allele-statistics等位基因統計" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="allele-statistics等位基因統計"><span class="header-section-number">5.1</span> Allele Statistics（等位基因統計）</h2>
 <ul>
 <li><strong>–freq / –freq2</strong>：輸出各位點的等位基因頻率（.frq）。<code>--freq2</code> 不輸出等位基因資訊。</li>
 <li><strong>–counts / –counts2</strong>：輸出等位基因計數（.frq.count）。<code>--counts2</code> 不輸出 allele 訊息。</li>
@@ -322,8 +304,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="depth-statistics深度統計" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="depth-statistics深度統計"><span class="header-section-number">13.2</span> Depth Statistics（深度統計）</h2>
+<section id="depth-statistics深度統計" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="depth-statistics深度統計"><span class="header-section-number">5.2</span> Depth Statistics（深度統計）</h2>
 <ul>
 <li><strong>–depth</strong>：每個樣本的平均深度（.idepth）。</li>
 <li><strong>–site-depth</strong>：每個位點的總深度（.ldepth）。</li>
@@ -332,16 +314,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="ld-statistics連鎖不平衡-ld" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="ld-statistics連鎖不平衡-ld"><span class="header-section-number">13.3</span> LD Statistics（連鎖不平衡 LD）</h2>
+<section id="ld-statistics連鎖不平衡-ld" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="ld-statistics連鎖不平衡-ld"><span class="header-section-number">5.3</span> LD Statistics（連鎖不平衡 LD）</h2>
 <ul>
 <li><strong>–hap-r2</strong>：用 phased haplotypes 計算 r²、D、D’（.hap.ld）。</li>
 <li><strong>–geno-r2</strong>：以 0/1/2 genotype 計算 r²（PLINK 方式）（.geno.ld）。</li>
 <li><strong>–geno-chisq</strong>：多等位 SNP 的 genotype 獨立性檢定（.geno.chisq）。</li>
 <li><strong>–hap-r2-positions / –geno-r2-positions</strong>：計算清單中位點與所有位點的 LD（.list.*.ld）。</li>
 </ul>
-<section id="ld-計算範圍控制" class="level3" data-number="13.3.1">
-<h3 data-number="13.3.1" class="anchored" data-anchor-id="ld-計算範圍控制"><span class="header-section-number">13.3.1</span> LD 計算範圍控制</h3>
+<section id="ld-計算範圍控制" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="ld-計算範圍控制"><span class="header-section-number">5.3.1</span> LD 計算範圍控制</h3>
 <ul>
 <li><strong>–ld-window</strong>：最多相隔多少 SNP。</li>
 <li><strong>–ld-window-bp</strong>：最多相隔多少 bp。</li>
@@ -353,8 +335,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="tstv-statisticstransitiontransversion" class="level2" data-number="13.4">
-<h2 data-number="13.4" class="anchored" data-anchor-id="tstv-statisticstransitiontransversion"><span class="header-section-number">13.4</span> Ts/Tv Statistics（Transition/Transversion）</h2>
+<section id="tstv-statisticstransitiontransversion" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="tstv-statisticstransitiontransversion"><span class="header-section-number">5.4</span> Ts/Tv Statistics（Transition/Transversion）</h2>
 <ul>
 <li><strong>–TsTv <code>&lt;integer&gt;</code></strong>：依 bin 大小計算 Ts/Tv（.TsTv）。</li>
 <li><strong>–TsTv-summary</strong>：總 Ts/Tv 摘要（.TsTv.summary）。</li>
@@ -364,8 +346,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="nucleotide-diversity核苷酸多樣性-π" class="level2" data-number="13.5">
-<h2 data-number="13.5" class="anchored" data-anchor-id="nucleotide-diversity核苷酸多樣性-π"><span class="header-section-number">13.5</span> Nucleotide Diversity（核苷酸多樣性 π）</h2>
+<section id="nucleotide-diversity核苷酸多樣性-π" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="nucleotide-diversity核苷酸多樣性-π"><span class="header-section-number">5.5</span> Nucleotide Diversity（核苷酸多樣性 π）</h2>
 <ul>
 <li><strong>–site-pi</strong>：每位點的 pi（.sites.pi）。</li>
 <li><strong>–window-pi <code>&lt;size&gt;</code></strong>：以 window 計算 pi（.windowed.pi）。</li>
@@ -373,16 +355,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="fst-statistics族群遺傳分化" class="level2" data-number="13.6">
-<h2 data-number="13.6" class="anchored" data-anchor-id="fst-statistics族群遺傳分化"><span class="header-section-number">13.6</span> Fst Statistics（族群遺傳分化）</h2>
+<section id="fst-statistics族群遺傳分化" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="fst-statistics族群遺傳分化"><span class="header-section-number">5.6</span> Fst Statistics（族群遺傳分化）</h2>
 <ul>
 <li><strong>–weir-fst-pop <code>&lt;file&gt;</code></strong>：計算 Weir &amp; Cockerham Fst（.weir.fst）。可多次指定多族群。</li>
 <li><strong>–fst-window-size / –fst-window-step</strong>：以 windows 計算 Fst。</li>
 </ul>
 <hr>
 </section>
-<section id="other-statistics其他分析統計" class="level2" data-number="13.7">
-<h2 data-number="13.7" class="anchored" data-anchor-id="other-statistics其他分析統計"><span class="header-section-number">13.7</span> Other Statistics（其他分析統計）</h2>
+<section id="other-statistics其他分析統計" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="other-statistics其他分析統計"><span class="header-section-number">5.7</span> Other Statistics（其他分析統計）</h2>
 <ul>
 <li><strong>–het</strong>：輸出個體的 heterozygosity 與 inbreeding F 值（.het）。</li>
 <li><strong>–hardy</strong>：每位點 HWE p-value（.hwe）。</li>
@@ -403,16 +385,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="output-formatinfo-extraction擷取格式或info欄位置" class="level2" data-number="13.8">
-<h2 data-number="13.8" class="anchored" data-anchor-id="output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">13.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</h2>
+<section id="output-formatinfo-extraction擷取格式或info欄位置" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="output-formatinfo-extraction擷取格式或info欄位置"><span class="header-section-number">5.8</span> Output FORMAT/INFO Extraction（擷取格式或INFO欄位置）</h2>
 <ul>
 <li><strong>–extract-FORMAT-info <code>&lt;ID&gt;</code></strong>：擷取指定 FORMAT 欄位（.FORMAT）。</li>
 <li><strong>–get-INFO <code>&lt;ID&gt;</code></strong>：擷取指定 INFO 欄位，可重複使用（.INFO）。</li>
 </ul>
 <hr>
 </section>
-<section id="output-vcfbcf重新編碼輸出" class="level2" data-number="13.9">
-<h2 data-number="13.9" class="anchored" data-anchor-id="output-vcfbcf重新編碼輸出"><span class="header-section-number">13.9</span> Output VCF/BCF（重新編碼輸出）</h2>
+<section id="output-vcfbcf重新編碼輸出" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="output-vcfbcf重新編碼輸出"><span class="header-section-number">5.9</span> Output VCF/BCF（重新編碼輸出）</h2>
 <ul>
 <li><strong>–recode / –recode-bcf</strong>：依過濾後結果輸出 VCF 或 BCF（.recode.vcf/.recode.bcf）。</li>
 <li><strong>–recode-INFO <code>&lt;ID&gt;</code></strong>：保留指定 INFO 欄位。</li>
@@ -421,8 +403,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="other-format-outputs轉換為其他格式" class="level2" data-number="13.10">
-<h2 data-number="13.10" class="anchored" data-anchor-id="other-format-outputs轉換為其他格式"><span class="header-section-number">13.10</span> Other Format Outputs（轉換為其他格式）</h2>
+<section id="other-format-outputs轉換為其他格式" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="other-format-outputs轉換為其他格式"><span class="header-section-number">5.10</span> Other Format Outputs（轉換為其他格式）</h2>
 <ul>
 <li><strong>–012</strong>：輸出 genotype matrix（.012/.012.pos/.012.indv）。</li>
 <li><strong>–IMPUTE</strong>：輸出 phased haplotypes（IMPUTE 格式）。</li>
@@ -434,8 +416,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="vcftools-comparison-optionsvcf檔案比較" class="level1" data-number="14">
-<h1 data-number="14"><span class="header-section-number">14</span> vcftools <code>&lt;Comparison-Options&gt;</code>（VCF檔案比較）</h1>
+<section id="vcftools-comparison-optionsvcf檔案比較" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> vcftools <code>&lt;Comparison-Options&gt;</code>（VCF檔案比較）</h1>
 <p>這些選項用於比較兩個 VCF/BCF 檔案之間的差異，包括位點是否一致、樣本是否一致、基因型是否不相符（discordance）、以及 phased 資料的 switch error 等。使用比較功能時，兩個檔案必須：</p>
 <ul>
 <li>具有相同染色體集合</li>
@@ -452,16 +434,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>` 以上選項都必須搭配至少一個 “diff option”（如下方） 才會執行比較。</p>
 </blockquote>
 <hr>
-<section id="位點層級比較" class="level2" data-number="14.1">
-<h2 data-number="14.1" class="anchored" data-anchor-id="位點層級比較"><span class="header-section-number">14.1</span> 位點層級比較</h2>
+<section id="位點層級比較" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="位點層級比較"><span class="header-section-number">6.1</span> 位點層級比較</h2>
 <ul>
 <li><p><strong>–diff-site</strong>：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.sites_in_files</code></p></li>
 <li><p><strong>–diff-site-discordance</strong>：逐位點計算基因型不一致（discordance）。 → 輸出：<code>.diff.sites</code></p></li>
 </ul>
 <hr>
 </section>
-<section id="樣本層級比較" class="level2" data-number="14.2">
-<h2 data-number="14.2" class="anchored" data-anchor-id="樣本層級比較"><span class="header-section-number">14.2</span> 樣本層級比較</h2>
+<section id="樣本層級比較" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="樣本層級比較"><span class="header-section-number">6.2</span> 樣本層級比較</h2>
 <ul>
 <li><p><strong>–diff-indv</strong>：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.indv_in_files</code></p></li>
 <li><p><strong>–diff-indv-discordance</strong>：比較每個樣本在兩檔案中的基因型不一致程度。 → 輸出：<code>.diff.indv</code></p></li>
@@ -469,8 +451,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="更進階比較模式" class="level2" data-number="14.3">
-<h2 data-number="14.3" class="anchored" data-anchor-id="更進階比較模式"><span class="header-section-number">14.3</span> 更進階比較模式</h2>
+<section id="更進階比較模式" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="更進階比較模式"><span class="header-section-number">6.3</span> 更進階比較模式</h2>
 <ul>
 <li><p><strong>–diff-discordance-matrix</strong>：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。 → 輸出：<code>.diff.discordance.matrix</code></p></li>
 <li><p><strong>–diff-switch-error</strong>：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。 → 輸出：<code>.diff.switch</code></p></li>
@@ -479,15 +461,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="vcftools-depth" class="level1" data-number="15">
-<h1 data-number="15"><span class="header-section-number">15</span> vcftools –depth</h1>
+<section id="vcftools-depth" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> vcftools –depth</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> <span class="at">--gzvcf</span> ../.test/Strelka_1234N_variants.vcf.gz <span class="at">--out</span> results/results <span class="at">--depth</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <hr>
 </section>
-<section id="man-vcftools" class="level1" data-number="16">
-<h1 data-number="16"><span class="header-section-number">16</span> man vcftools</h1>
+<section id="man-vcftools" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> man vcftools</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> vcftools <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>

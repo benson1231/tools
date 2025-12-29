@@ -57,7 +57,11 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 [ --out OUTPUT PREFIX ] [ FILTERING OPTIONS ] [ OUTPUT OPTIONS ]
 ```
 
-# vcftools 位置過濾
+---
+
+# vcftools 過濾
+
+## vcftools 位置過濾
 
 * **--chr `<chromosome>`**：只保留指定染色體的變異。可重複使用以包含多條染色體。
 * **--not-chr `<chromosome>`**：排除指定染色體的變異。可重複使用以排除多條染色體。
@@ -76,7 +80,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<ID-Filtering>`（位點ID過濾）
+## vcftools `<ID-Filtering>`（位點ID過濾）
 
 * **--snp `<string>`**：只保留具有指定 SNP ID（如 dbSNP rsID）之位點。可重複使用。
 * **--snps `<filename>`**：依檔案中的 SNP ID 清單保留位點（每行一個 ID）。
@@ -84,14 +88,14 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<Variant-Type-Filtering>`（變異類型過濾）
+## vcftools `<Variant-Type-Filtering>`（變異類型過濾）
 
 * **--keep-only-indels**：只保留含有 indel 的位點（REF 與 ALT 長度不同）。
 * **--remove-indels**：排除所有 indel 位點，僅保留 SNP。
 
 ---
 
-# vcftools `<Filter-Flag-Filtering>`（FILTER欄位過濾）
+## vcftools `<Filter-Flag-Filtering>`（FILTER欄位過濾）
 
 * **--remove-filtered-all**：移除所有 FILTER 標記不是 PASS 的位點。
 * **--keep-filtered `<string>`**：只保留特定 FILTER 標記的位點（可多次使用）。
@@ -99,14 +103,14 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<Info-Filtering>`（INFO 欄位過濾）
+## vcftools `<Info-Filtering>`（INFO 欄位過濾）
 
 * **--keep-INFO `<string>`**：保留具有指定 INFO flag 的位點（僅依 flag 是否存在，不比較其值）。
 * **--remove-INFO `<string>`**：排除具有特定 INFO flag 的位點。可重複使用。
 
 ---
 
-# vcftools `<Allele-Filtering>`（等位基因過濾）
+## vcftools `<Allele-Filtering>`（等位基因過濾）
 
 * **--maf `<float>`**：只保留 Minor Allele Frequency ≥ 指定值的位點。
 * **--max-maf `<float>`**：只保留 Minor Allele Frequency ≤ 指定值的位點。
@@ -121,7 +125,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<Genotype-Filtering>`（基因型層級過濾）
+## vcftools `<Genotype-Filtering>`（基因型層級過濾）
 
 * **--min-meanDP `<float>`** / **--max-meanDP `<float>`**：依平均深度篩選位點（需 FORMAT 中含 DP 欄位）。
 * **--hwe `<float>`**：排除不符合 Hardy-Weinberg 平衡的位點（p-value 小於設定值）。
@@ -131,43 +135,31 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<Quality-Filtering>`（品質過濾）
+## vcftools `<Quality-Filtering>`（品質過濾）
 
 * **--minQ `<float>`**：只保留 QUAL 值 ≥ 指定 threshold 的位點。
 
 ---
 
-# vcftools `<Individual-Filtering>`（樣本層級過濾）
+## vcftools `<Individual-Filtering>`（樣本層級過濾）
 
 這些選項用於 **保留或排除特定樣本（individuals）**，適用於任何基於樣本的分析，如 missingness、depth、HWE、Fst 等檢定。
-
----
-
-## 個別樣本過濾
 
 * **--indv `<string>`**：保留指定樣本。可多次使用以包含多個樣本。
 * **--remove-indv `<string>`**：排除指定樣本。可多次使用以排除多個樣本。
 
->` 若同時使用 `--indv` 與 `--remove-indv`，會先執行 `--indv` 再執行 `--remove-indv`。
-
----
-
-## 使用樣本清單進行過濾
-
 * **--keep `<filename>`**：依檔案中的樣本清單保留樣本（每行一個樣本 ID）。
 * **--remove `<filename>`**：依檔案中的樣本清單排除樣本。
 
+* **--max-indv `<integer>`**：隨機保留指定數量的樣本，用於避免族群大小差異造成偏差。
+
+>` 若同時使用 `--indv` 與 `--remove-indv`，會先執行 `--indv` 再執行 `--remove-indv`。
+> 
 >` 若同時使用 `--keep` 與 `--remove`：
 >`
 >` * 先執行 `--keep`
 >` * 再從保留的集合中移除 `--remove` 的樣本
 >` * 多個清單檔案會取「聯集」，再進行篩選
-
----
-
-## 隨機抽樣樣本（樣本 thinning）
-
-* **--max-indv `<integer>`**：隨機保留指定數量的樣本，用於避免族群大小差異造成偏差。
 
 ---
 
