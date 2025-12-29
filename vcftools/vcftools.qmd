@@ -80,7 +80,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## vcftools `<ID-Filtering>`（位點ID過濾）
+## 位點ID過濾
 
 * **--snp `<string>`**：只保留具有指定 SNP ID（如 dbSNP rsID）之位點。可重複使用。
 * **--snps `<filename>`**：依檔案中的 SNP ID 清單保留位點（每行一個 ID）。
@@ -88,14 +88,14 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## vcftools `<Variant-Type-Filtering>`（變異類型過濾）
+## 變異類型過濾
 
 * **--keep-only-indels**：只保留含有 indel 的位點（REF 與 ALT 長度不同）。
 * **--remove-indels**：排除所有 indel 位點，僅保留 SNP。
 
 ---
 
-## vcftools `<Filter-Flag-Filtering>`（FILTER欄位過濾）
+## FILTER欄位過濾
 
 * **--remove-filtered-all**：移除所有 FILTER 標記不是 PASS 的位點。
 * **--keep-filtered `<string>`**：只保留特定 FILTER 標記的位點（可多次使用）。
@@ -103,14 +103,14 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## vcftools `<Info-Filtering>`（INFO 欄位過濾）
+## INFO 欄位過濾
 
 * **--keep-INFO `<string>`**：保留具有指定 INFO flag 的位點（僅依 flag 是否存在，不比較其值）。
 * **--remove-INFO `<string>`**：排除具有特定 INFO flag 的位點。可重複使用。
 
 ---
 
-## vcftools `<Allele-Filtering>`（等位基因過濾）
+## 等位基因過濾
 
 * **--maf `<float>`**：只保留 Minor Allele Frequency ≥ 指定值的位點。
 * **--max-maf `<float>`**：只保留 Minor Allele Frequency ≤ 指定值的位點。
@@ -125,7 +125,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## vcftools `<Genotype-Filtering>`（基因型層級過濾）
+## 基因型層級過濾
 
 * **--min-meanDP `<float>`** / **--max-meanDP `<float>`**：依平均深度篩選位點（需 FORMAT 中含 DP 欄位）。
 * **--hwe `<float>`**：排除不符合 Hardy-Weinberg 平衡的位點（p-value 小於設定值）。
@@ -135,13 +135,13 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## vcftools `<Quality-Filtering>`（品質過濾）
+## 品質過濾
 
 * **--minQ `<float>`**：只保留 QUAL 值 ≥ 指定 threshold 的位點。
 
 ---
 
-## vcftools `<Individual-Filtering>`（樣本層級過濾）
+## 樣本層級過濾
 
 這些選項用於 **保留或排除特定樣本（individuals）**，適用於任何基於樣本的分析，如 missingness、depth、HWE、Fst 等檢定。
 
@@ -163,13 +163,13 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<Output-Options>`（輸出選項）
+# 輸出選項
 
 這些選項用於指定 **vcftools 在完成所有篩選後要輸出哪些分析結果**，涵蓋等位基因統計、深度、LD、Fst、Ts/Tv、missingness、ROH、relatedness、以及格式轉換等功能。
 
 ---
 
-## Allele Statistics（等位基因統計）
+## 等位基因統計
 
 * **--freq / --freq2**：輸出各位點的等位基因頻率（.frq）。`--freq2` 不輸出等位基因資訊。
 * **--counts / --counts2**：輸出等位基因計數（.frq.count）。`--counts2` 不輸出 allele 訊息。
@@ -177,7 +177,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## Depth Statistics（深度統計）
+## 深度統計
 
 * **--depth**：每個樣本的平均深度（.idepth）。
 * **--site-depth**：每個位點的總深度（.ldepth）。
@@ -186,7 +186,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## LD Statistics（連鎖不平衡 LD）
+## 連鎖不平衡 LD
 
 * **--hap-r2**：用 phased haplotypes 計算 r²、D、D’（.hap.ld）。
 * **--geno-r2**：以 0/1/2 genotype 計算 r²（PLINK 方式）（.geno.ld）。
@@ -204,7 +204,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## Ts/Tv Statistics（Transition/Transversion）
+## Transition/Transversion Statistics
 
 * **--TsTv `<integer>`**：依 bin 大小計算 Ts/Tv（.TsTv）。
 * **--TsTv-summary**：總 Ts/Tv 摘要（.TsTv.summary）。
@@ -214,7 +214,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## Nucleotide Diversity（核苷酸多樣性 π）
+## 核苷酸多樣性 π
 
 * **--site-pi**：每位點的 pi（.sites.pi）。
 * **--window-pi `<size>`**：以 window 計算 pi（.windowed.pi）。
@@ -229,7 +229,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-## Other Statistics（其他分析統計）
+## 其他分析統計
 
 * **--het**：輸出個體的 heterozygosity 與 inbreeding F 值（.het）。
 * **--hardy**：每位點 HWE p-value（.hwe）。
@@ -277,7 +277,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# vcftools `<Comparison-Options>`（VCF檔案比較）
+# VCF檔案比較
 
 這些選項用於比較兩個 VCF/BCF 檔案之間的差異，包括位點是否一致、樣本是否一致、基因型是否不相符（discordance）、以及 phased 資料的 switch error 等。使用比較功能時，兩個檔案必須：
 
@@ -293,19 +293,11 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 >` 以上選項都必須搭配至少一個 "diff option"（如下方） 才會執行比較。
 
----
-
-## 位點層級比較
-
 * **--diff-site**：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。
   → 輸出：`.diff.sites_in_files`
 
 * **--diff-site-discordance**：逐位點計算基因型不一致（discordance）。
   → 輸出：`.diff.sites`
-
----
-
-## 樣本層級比較
 
 * **--diff-indv**：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。
   → 輸出：`.diff.indv_in_files`
@@ -316,34 +308,11 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 * **--diff-indv-map `<filename>`**：提供樣本 ID 對照表（file1_ID ↔ file2_ID），用於樣本名稱不同但實為同一個人的情況。
   檔案格式：`sample_in_file1`<TAB>`sample_in_file2`
 
----
-
-## 更進階比較模式
-
 * **--diff-discordance-matrix**：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。
   → 輸出：`.diff.discordance.matrix`
 
 * **--diff-switch-error**：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。
   → 輸出：`.diff.switch`
-
----
-
-
-
-
-
-
----
-
-# vcftools --depth
-
-```{bash}
-vcftools --gzvcf ../.test/Strelka_1234N_variants.vcf.gz --out results/results --depth
-```
-
-
-
-
 
 ---
 
