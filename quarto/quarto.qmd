@@ -1,0 +1,61 @@
+---
+title: "quarto 測試"
+date: today
+date-format: "YYYY-MM-DD"
+format:
+  html:
+    theme: 
+      light: Lux
+    toc: true
+    toc-title: Contents
+    toc-location: left
+    toc-depth: 4
+    toc-expand: 1
+    css: ../styles/quarto.css
+    other-links:
+      - text: home
+        icon: house
+        href: https://benson1231.github.io/tools/
+    code-links:
+      - text: github
+        icon: github
+        href: https://github.com/benson1231/tools
+number-sections: true
+engine: knitr
+---
+
+# 測試一
+
+<div class="alert alert-primary">
+這是提示框（Bootstrap alert）
+</div>
+
+<div class="alert alert-danger">
+這也是提示框（Bootstrap alert）
+</div>
+
+# 測試二
+
+<div class="card" style="padding: 15px;">
+  <h5>指令小提醒</h5>
+  vcftools 的 --recode 會重新編寫 VCF。
+</div>
+
+# 測試三
+
+<a class="btn btn-primary" href="https://benson1231.github.io/tools/">查看更多範例</a>
+
+# 測試四
+
+<p>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+    Toggle width collapse
+  </button>
+</p>
+<div style="min-height: 120px;">
+  <div class="collapse collapse-horizontal" id="collapseWidthExample">
+    <div class="card card-body" style="width: 300px;">
+      This is some placeholder content for a horizontal collapse. It’s hidden by default and shown when triggered.
+    </div>
+  </div>
+</div>
