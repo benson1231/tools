@@ -40,7 +40,11 @@ VCFtools 的核心概念非常簡單：
 vcftools --version
 ```
 
+---
+
 # vcftools 基本指令
+
+以下為基本指令，vcftools 統一使用 `--指令` 的方式設定參數，首先需要給輸入與輸出:
 
 * **--vcf `<輸入檔名>`**: VCF 格式 v4.0、v4.1 或 v4.2 的檔案
 * **--gzvcf `<輸入檔名>`**: 壓縮（gzip 壓縮）的 VCF 檔案
@@ -50,6 +54,8 @@ vcftools --version
 * **--stdout 或 -c**: 定向到標準輸出
 * **--temp `<暫存目錄>`**: 建立的任何暫存檔案重定向到指定目錄
 
+基礎指令如下:
+
 ```bash
 vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE] 
 [ --out OUTPUT PREFIX ] [ FILTERING OPTIONS ] [ OUTPUT OPTIONS ]
@@ -58,6 +64,8 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 ---
 
 # vcftools 過濾
+
+vcftools 可以透過各種 `--過濾指令` 過濾特定資訊
 
 ## vcftools 位置過濾
 
@@ -161,7 +169,7 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 ---
 
-# 輸出選項
+# vcftools 輸出選項
 
 這些選項用於指定 **vcftools 在完成所有篩選後要輸出哪些分析結果**，涵蓋等位基因統計、深度、LD、Fst、Ts/Tv、missingness、ROH、relatedness、以及格式轉換等功能。
 
@@ -293,28 +301,24 @@ vcftools [ --vcf FILE | --gzvcf FILE | --bcf FILE]
 
 * **--diff-site**：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。
   → 輸出：`.diff.sites_in_files`
-
 * **--diff-site-discordance**：逐位點計算基因型不一致（discordance）。
   → 輸出：`.diff.sites`
-
 * **--diff-indv**：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。
   → 輸出：`.diff.indv_in_files`
-
 * **--diff-indv-discordance**：比較每個樣本在兩檔案中的基因型不一致程度。
   → 輸出：`.diff.indv`
-
 * **--diff-indv-map `<filename>`**：提供樣本 ID 對照表（file1_ID ↔ file2_ID），用於樣本名稱不同但實為同一個人的情況。
   檔案格式：`sample_in_file1`<TAB>`sample_in_file2`
-
 * **--diff-discordance-matrix**：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。
   → 輸出：`.diff.discordance.matrix`
-
 * **--diff-switch-error**：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。
   → 輸出：`.diff.switch`
 
 ---
 
 # man vcftools
+
+可以輸入 `man vcftools` 詳細查看指令資訊
 
 ```{bash}
 man vcftools | head -n 30

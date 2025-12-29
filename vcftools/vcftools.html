@@ -99,7 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#品質過濾" id="toc-品質過濾" class="nav-link" data-scroll-target="#品質過濾"><span class="header-section-number">4.8</span> 品質過濾</a></li>
   <li><a href="#樣本層級過濾" id="toc-樣本層級過濾" class="nav-link" data-scroll-target="#樣本層級過濾"><span class="header-section-number">4.9</span> 樣本層級過濾</a></li>
   </ul></li>
-  <li><a href="#輸出選項" id="toc-輸出選項" class="nav-link" data-scroll-target="#輸出選項"><span class="header-section-number">5</span> 輸出選項</a>
+  <li><a href="#vcftools-輸出選項" id="toc-vcftools-輸出選項" class="nav-link" data-scroll-target="#vcftools-輸出選項"><span class="header-section-number">5</span> vcftools 輸出選項</a>
   <ul>
   <li><a href="#等位基因統計" id="toc-等位基因統計" class="nav-link" data-scroll-target="#等位基因統計"><span class="header-section-number">5.1</span> 等位基因統計</a></li>
   <li><a href="#深度統計" id="toc-深度統計" class="nav-link" data-scroll-target="#深度統計"><span class="header-section-number">5.2</span> 深度統計</a></li>
@@ -166,9 +166,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>VCFtools (0.1.16)</code></pre>
 </div>
 </div>
+<hr>
 </section>
 <section id="vcftools-基本指令" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> vcftools 基本指令</h1>
+<p>以下為基本指令，vcftools 統一使用 <code>--指令</code> 的方式設定參數，首先需要給輸入與輸出:</p>
 <ul>
 <li><p><strong>–vcf <code>&lt;輸入檔名&gt;</code></strong>: VCF 格式 v4.0、v4.1 或 v4.2 的檔案</p></li>
 <li><p><strong>–gzvcf <code>&lt;輸入檔名&gt;</code></strong>: 壓縮（gzip 壓縮）的 VCF 檔案</p></li>
@@ -177,12 +179,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>–stdout 或 -c</strong>: 定向到標準輸出</p></li>
 <li><p><strong>–temp <code>&lt;暫存目錄&gt;</code></strong>: 建立的任何暫存檔案重定向到指定目錄</p></li>
 </ul>
+<p>基礎指令如下:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vcftools</span> [ <span class="at">--vcf</span> FILE <span class="kw">|</span> <span class="ex">--gzvcf</span> FILE <span class="kw">|</span> <span class="ex">--bcf</span> FILE] </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> --out OUTPUT PREFIX <span class="bu">]</span> <span class="bu">[</span> FILTERING OPTIONS <span class="bu">]</span> <span class="bu">[</span> OUTPUT OPTIONS <span class="bu">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 <section id="vcftools-過濾" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> vcftools 過濾</h1>
+<p>vcftools 可以透過各種 <code>--過濾指令</code> 過濾特定資訊</p>
 <section id="vcftools-位置過濾" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="vcftools-位置過濾"><span class="header-section-number">4.1</span> vcftools 位置過濾</h2>
 <ul>
@@ -288,8 +292,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="輸出選項" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> 輸出選項</h1>
+<section id="vcftools-輸出選項" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> vcftools 輸出選項</h1>
 <p>這些選項用於指定 <strong>vcftools 在完成所有篩選後要輸出哪些分析結果</strong>，涵蓋等位基因統計、深度、LD、Fst、Ts/Tv、missingness、ROH、relatedness、以及格式轉換等功能。</p>
 <hr>
 <section id="等位基因統計" class="level2" data-number="5.1">
@@ -431,18 +435,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>` 以上選項都必須搭配至少一個 “diff option”（如下方） 才會執行比較。</p>
 </blockquote>
 <ul>
-<li><p><strong>–diff-site</strong>：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.sites_in_files</code></p></li>
-<li><p><strong>–diff-site-discordance</strong>：逐位點計算基因型不一致（discordance）。 → 輸出：<code>.diff.sites</code></p></li>
-<li><p><strong>–diff-indv</strong>：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.indv_in_files</code></p></li>
-<li><p><strong>–diff-indv-discordance</strong>：比較每個樣本在兩檔案中的基因型不一致程度。 → 輸出：<code>.diff.indv</code></p></li>
-<li><p><strong>–diff-indv-map <code>&lt;filename&gt;</code></strong>：提供樣本 ID 對照表（file1_ID ↔︎ file2_ID），用於樣本名稱不同但實為同一個人的情況。 檔案格式：<code>sample_in_file1</code><tab><code>sample_in_file2</code></tab></p></li>
-<li><p><strong>–diff-discordance-matrix</strong>：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。 → 輸出：<code>.diff.discordance.matrix</code></p></li>
-<li><p><strong>–diff-switch-error</strong>：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。 → 輸出：<code>.diff.switch</code></p></li>
+<li><strong>–diff-site</strong>：比較位點是否存在於兩檔案中（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.sites_in_files</code></li>
+<li><strong>–diff-site-discordance</strong>：逐位點計算基因型不一致（discordance）。 → 輸出：<code>.diff.sites</code></li>
+<li><strong>–diff-indv</strong>：比較兩檔案的樣本集合（共同 / 僅在 A / 僅在 B）。 → 輸出：<code>.diff.indv_in_files</code></li>
+<li><strong>–diff-indv-discordance</strong>：比較每個樣本在兩檔案中的基因型不一致程度。 → 輸出：<code>.diff.indv</code></li>
+<li><strong>–diff-indv-map <code>&lt;filename&gt;</code></strong>：提供樣本 ID 對照表（file1_ID ↔︎ file2_ID），用於樣本名稱不同但實為同一個人的情況。 檔案格式：<code>sample_in_file1</code><tab><code>sample_in_file2</code></tab></li>
+<li><strong>–diff-discordance-matrix</strong>：計算基因型不一致矩陣（僅適用 bi-allelic 且兩檔案等位基因皆相符）。 → 輸出：<code>.diff.discordance.matrix</code></li>
+<li><strong>–diff-switch-error</strong>：計算 phased genotypes 的 switch error（相鄰位點的相位切換錯誤）。 → 輸出：<code>.diff.switch</code></li>
 </ul>
 <hr>
 </section>
 <section id="man-vcftools" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> man vcftools</h1>
+<p>可以輸入 <code>man vcftools</code> 詳細查看指令資訊</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> vcftools <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 30</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
