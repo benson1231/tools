@@ -21,4 +21,12 @@ quarto render quarto/quarto-bash.qmd
 mamba deactivate
 # remove conda environment
 mamba env remove -n quarto-test-env -y
-````
+```
+
+# 輸出 pdf
+
+需先安裝LaTeX 
+
+```bash
+quarto install tinytex
+```
