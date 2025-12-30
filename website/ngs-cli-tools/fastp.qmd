@@ -1,0 +1,93 @@
+---
+title: "fastp 基本使用"
+date: today
+date-format: "YYYY-MM-DD"
+engine: knitr
+---
+
+# fastp 介紹
+
+> fastp 是目前業界（以及 nf-core、GATK Best Practices）中最常見的測序前處理工具之一。
+> fastp 主要針對 Illumina / MGI `short reads`，若是 Nanopore/PacBio `long reads` 請使用 [fastplong](https://github.com/OpenGene/fastplong)
+
+[fastp](https://github.com/OpenGene/fastp) 是一款快速、全方位的序列品質控制（Quality Control, QC）與前處理（preprocessing）工具，由 [Chen, Shifu et al. (2018)](https://academic.oup.com/bioinformatics/article/34/17/i884/5093234?login=false) 開發。它整合了傳統流程中常見的 FastQC、Trimmomatic 與 Cutadapt 等功能，提供速度快、功能完整、易於使用的測序資料預處理解決方案。
+
+>  Shifu Chen. fastp 1.0: An ultra-fast all-round tool for FASTQ data quality control and preprocessing. iMeta 4.5 (2025): e70078
+
+fastp 以 **C++ 實作並支援多線程運算**，能在極短時間內完成 Illumina 測序資料的多項處理，包含：
+
+* **品質修剪（quality trimming）**：自動根據 per-base quality 進行 trimming 或低品質讀段移除。
+* **自動偵測與移除 adapters**：不需額外提供 adapter 序列，fastp 能從資料中推測並移除。
+* **低品質序列過濾**：依據品質門檻、N 比例、最短長度等條件過濾 reads。
+* **polyG / polyX tail 移除**：特別適用於 Illumina NovaSeq / NextSeq two-color chemistry 所造成的 polyG artifact。
+* **滑動窗口（sliding window）修剪與序列截斷**：依平均品質移除尾端低品質區段。
+* **讀長過濾（length filtering）**：移除過短的 reads 或指定長度閾值。
+
+此外，fastp 會輸出 [HTML](http://opengene.org/fastp/fastp.html) 與 [JSON](http://opengene.org/fastp/fastp.json) 格式的 QC 報告，內容包含：
+
+* 讀序品質分佈（Q20 / Q30）
+* GC 分佈與序列組成
+* duplication 分析
+* 讀長分佈（read length distribution）
+* 過濾與修剪統計（before/after filtering）
+* adapters 偵測與移除結果
+
+透過這些整合式功能，fastp 提供了速度快、資訊完整且操作直觀的測序預處理流程，使其成為現代生物資訊分析（包含 nf-core 與 GATK）中的標準 QC 工具之一。
+
+---
+
+# fastp -v (查看版本)
+
+使用 `-v` 參數確認是否成功安裝，並顯示版本號。
+
+```{bash}
+fastp -v
+```
+
+---
+
+# fastp (執行)
+
+以下示範如何以 `fastp` 對 `FASTQ 檔案` 進行 adapters 修剪、過濾與 QC，並輸出：
+
+* 修剪後的 FASTQ
+* HTML QC 報告
+* JSON QC 統計
+
+執行前請確認：
+
+* 測試 FASTQ 位於 `../.test/`
+
+```{bash}
+fastp \
+-i ../../.test/a.chr21_R1.fastq.gz \
+-I ../../.test/a.chr21_R2.fastq.gz \
+-o ../../results/a.chr21_R1.trimmed.fastq.gz \
+-O ../../results/a.chr21_R2.trimmed.fastq.gz \
+--html ../../results/fastp_report.html \
+--json ../../results/fastp_report.json \
+--thread 4
+```
+
+---
+
+# fastp --help
+
+顯示 fastp 提供的主要參數與使用說明，適合作為快速查詢指令用途。
+
+```{bash}
+fastp --help
+```
+
+---
+
+# 環境紀錄
+
+完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
+
+```{bash}
+echo "======================================="
+echo "Conda Environment: $(mamba env list | grep '*' | awk '{print $1}')"
+echo "======================================="
+mamba list
+```

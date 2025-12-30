@@ -1,0 +1,50 @@
+project:
+  type: website
+
+website:
+  title: "web"
+
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: NGS CLI Tools
+        menu:
+          - href: ngs-cli-tools/vcftools.qmd
+            text: vcftools Example
+          - href: ngs-cli-tools/fastp.qmd
+            text: fastp Example
+
+    tools:
+      - icon: book
+        text: GitBook
+        href: https://benson1231.gitbook.io/benson1231-docs
+      - icon: github
+        menu:
+          - text: Source Code
+            href: https://github.com/benson1231/tools
+          - text: Report a Bug
+            href: https://github.com/benson1231/tools/issues
+
+format:
+  html:
+    theme: cosmo
+    css: styles/quarto.css
+
+    toc: true
+    toc-title: Contents
+    toc-location: left
+    toc-depth: 4
+    toc-expand: true
+
+    other-links:
+      - text: Home
+        icon: house
+        href: https://benson1231.github.io/tools/
+
+    code-links:
+      - text: GitHub Repo
+        icon: github
+        href: https://github.com/benson1231/tools
+
+number-sections: true

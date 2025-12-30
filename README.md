@@ -8,17 +8,54 @@
 
 ```bash
 # create conda env
-mamba env create -f envs/bio-tools.yaml -y
+mamba env create -f envs/envs.yaml -y
 mamba activate bio-tools
-```
 
-## 離開環境與移除環境
-
-測試結束後，可透過以下指令退出並刪除環境
-
-```bash
 # exit conda environment
 mamba deactivate
 # remove conda environment
 mamba env remove -n bio-tools -y
-````
+```
+
+
+# quarto
+
+[quarto](https://quarto.org/docs/get-started/)
+
+#### use quarto to render `html` file
+
+```bash
+quarto render quarto/quarto-python.qmd
+quarto render quarto/quarto-r.qmd
+quarto render quarto/quarto-bash.qmd
+```
+
+```bash
+# create conda environment
+mamba env create -f bio-tools.yaml -y
+mamba activate bio-tools
+
+# exit conda environment
+mamba deactivate
+# remove conda environment
+mamba env remove -n bio-tools -y
+```
+
+```bash
+# create conda environment
+mamba env create -f python-env.yaml -y
+mamba activate python-env
+
+# exit conda environment
+mamba deactivate
+# remove conda environment
+mamba env remove -n python-env -y
+```
+
+# 輸出 pdf
+
+需先安裝LaTeX 
+
+```bash
+quarto install tinytex
+```

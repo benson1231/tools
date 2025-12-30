@@ -1,0 +1,24 @@
+name: bio-tools
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - conda-forge::quarto
+  # R
+  - conda-forge::r-base
+  - conda-forge::r-knitr
+  - conda-forge::r-rmarkdown
+  - conda-forge::r-reticulate
+  # python
+  - conda-forge::python
+  - conda-forge::jupyter
+  - conda-forge::pyyaml
+  # bioinformatics tools
+  - bioconda::fastp
+  - bioconda::fastqc
+  - bioconda::multiqc
+  - bioconda::samtools
+  - bioconda::bcftools
+  - bioconda::vcftools
+  - bioconda::bedtools
+  - bioconda::bioconductor-maftools
