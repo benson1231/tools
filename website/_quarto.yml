@@ -10,10 +10,24 @@ website:
         text: Home
       - text: NGS CLI Tools
         menu:
-          - href: ngs-cli-tools/vcftools.qmd
-            text: vcftools Example
           - href: ngs-cli-tools/fastp.qmd
-            text: fastp Example
+            text: fastp
+          - href: ngs-cli-tools/fastqc.qmd
+            text: fastqc
+          - href: ngs-cli-tools/multiqc.qmd
+            text: multiqc
+          - href: ngs-cli-tools/samtools.qmd
+            text: samtools
+          - href: ngs-cli-tools/vcftools.qmd
+            text: vcftools
+          - href: ngs-cli-tools/bcftools.qmd
+            text: bcftools
+      - text: Environment Tools
+        menu:
+          - href: env-tools/conda.qmd
+            text: conda
+          - href: env-tools/mamba.qmd
+            text: mamba
 
     tools:
       - icon: book

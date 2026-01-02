@@ -164,9 +164,9 @@ fastqc -v
 
 ```{bash}
 fastqc \
-../.test/a.chr21_R1.fastq.gz \
-../.test/a.chr21_R2.fastq.gz \
---outdir ./
+../../.test/a.chr21_R1.fastq.gz \
+../../.test/a.chr21_R2.fastq.gz \
+--outdir ../../results
 ```
 
 ---
@@ -177,17 +177,4 @@ fastqc \
 
 ```{bash}
 fastqc --help
-```
-
----
-
-# 環境資訊
-
-完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
-
-```{bash}
-echo "======================================="
-echo "Conda Environment: $(mamba env list | grep '*' | awk '{print $1}')"
-echo "======================================="
-conda list
 ```

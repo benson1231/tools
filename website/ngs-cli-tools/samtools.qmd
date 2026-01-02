@@ -73,7 +73,7 @@ samtools --version
 建立 FASTA index
 
 ```bash
-samtools faidx ../.test/ex1.fa
+samtools faidx ../../.test/ex1.fa
 ```
 
 ---
@@ -83,7 +83,7 @@ samtools faidx ../.test/ex1.fa
 對 BAM 檔排序，以利後續建立索引或快速查詢。
 
 ```bash
-samtools sort -o ../.test/ex1.sorted.bam ../.test/ex1.bam
+samtools sort -o ../../.test/ex1.sorted.bam ../../.test/ex1.bam
 ```
 
 ---
@@ -93,7 +93,7 @@ samtools sort -o ../.test/ex1.sorted.bam ../.test/ex1.bam
 建立 bam 檔的 index file `bai`，供後續索引
 
 ```bash
-samtools index ../.test/ex1.sorted.bam
+samtools index ../../.test/ex1.sorted.bam
 ```
 
 ---
@@ -111,13 +111,13 @@ samtools view --help
 `-b` 輸出bam，`-t` 提供 FASTA index(.fai)供 SAM 轉換 BAM，`-o <output.bam>` 指定輸出 BAM 檔的名稱
 
 ```bash
-samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+samtools view -b -t ../../.test/ex1.fa.fai -o ../../.test/ex1.bam ../../.test/ex1.sam.gz
 ```
 
 ## BAM 轉 SAM
 
 ```bash
-samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+samtools view -h -o ../../.test/ex1.sam.gz ../../.test/ex1.bam
 ```
 
 ## 查看 bam 檔
@@ -126,29 +126,29 @@ default 不包含header，`-h` 含 header，`-H` 只看 header
 
 ```{bash}
 # 查看所有比對結果（不含 header）
-samtools view ../.test/ex1.bam | head
+samtools view ../../.test/ex1.bam | head
 ```
 
 ```{bash}
 # 查看所有比對結果（含 header）
-samtools view -h ../.test/ex1.bam | head
+samtools view -h ../../.test/ex1.bam | head
 ```
 
 ```{bash}
 # 只輸出 BAM 的 header
-samtools view -H ../.test/ex1.bam
+samtools view -H ../../.test/ex1.bam
 ```
 
 ## 搜尋特定區域
 
 ```{bash}
 # 提取 chr2 450-550 的比對結果
-samtools view ../.test/ex1.sorted.bam seq2:450-550 | head
+samtools view ../../.test/ex1.sorted.bam seq2:450-550 | head
 ```
 
 ```{bash}
 # 根據 BED 檔指定區域提取比對
-samtools view -L ../.test/ex1.bed ../.test/ex1.sorted.bam | head
+samtools view -L ../../.test/ex1.bed ../../.test/ex1.sorted.bam | head
 ```
 
 ## samtools view 常用於進行篩選
@@ -189,7 +189,7 @@ samtools flags 4
 `samtools flagstat` 會讀取 BAM/SAM/CRAM，並輸出一段簡短但非常重要的 mapping 統計，包括： read 總數、mapped reads 比例、properly paired 比例、duplicates 數量、singletons 數量、mate mapping 狀況（同 chr / diff chr）、QC-failed reads
 
 ```{bash}
-samtools flagstat ../.test/ex1.bam
+samtools flagstat ../../.test/ex1.bam
 ```
 
 
@@ -214,7 +214,7 @@ samtools flagstat ../.test/ex1.bam
 用於合併多個 BAM 檔為單一檔案。
 
 ```bash
-samtools merge -o ../.test/merge.bam ../.test/ex1.bam ../.test/ex1.sorted.bam
+samtools merge -o ../../.test/merge.bam ../../.test/ex1.bam ../../.test/ex1.sorted.bam
 ```
 
 ---
@@ -224,7 +224,7 @@ samtools merge -o ../.test/merge.bam ../.test/ex1.bam ../.test/ex1.sorted.bam
 `samtools coverage` 用於計算每條染色體的平均深度（mean depth）、覆蓋率（coverage%）與一些區域性統計資訊。
 
 ```{bash}
-samtools coverage ../.test/ex1.sorted.bam
+samtools coverage ../../.test/ex1.sorted.bam
 ```
 
 | 欄位名稱             | 說明                             | 代表意義                  | 常見 QC 解讀                                             |
@@ -246,7 +246,7 @@ samtools coverage ../.test/ex1.sorted.bam
 `samtools depth` 用於輸出 BAM 中 每個位置（per-base） 的深度（depth）
 
 ```{bash}
-samtools depth ../.test/ex1.sorted.bam | head
+samtools depth ../../.test/ex1.sorted.bam | head
 ```
 
 | 欄位        | 名稱          | 說明              | QC 用途                        |
@@ -259,7 +259,7 @@ samtools depth ../.test/ex1.sorted.bam | head
 ## 計算平均深度
 
 ```{bash}
-samtools depth ../.test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
+samtools depth ../../.test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
 ```
 
 ---
@@ -269,7 +269,7 @@ samtools depth ../.test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
 `samtools idxstats` 用於顯示 每條染色體的 read 數量與參考序列長度，依靠 BAM 的 index (.bai 或 .csi)
 
 ```{bash}
-samtools idxstats ../.test/ex1.sorted.bam
+samtools idxstats ../../.test/ex1.sorted.bam
 ```
 
 | 欄位           | 名稱                  | 說明                     | 意義 / QC 用途              |
@@ -286,7 +286,7 @@ samtools idxstats ../.test/ex1.sorted.bam
 samtools stats 是 最完整的 mapping 統計，提供： mapping 深度、read 長度分布、GC 分布、按距離區分的 insert size 分布、mismatch / error rate 與 per-chromosome 統計
 
 ```{bash}
-samtools stats ../.test/ex1.sorted.bam | head
+samtools stats ../../.test/ex1.sorted.bam | head
 ```
 
 | 欄位                                 | 說明                 | 意義 / QC 用途                     |
@@ -310,17 +310,4 @@ samtools stats ../.test/ex1.sorted.bam | head
 
 ```{bash}
 samtools --help
-```
-
----
-
-# Conda 環境資訊
-
-完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
-
-```{bash}
-echo "======================================="
-echo "Conda Environment: $(mamba env list | grep '*' | awk '{print $1}')"
-echo "======================================="
-conda list
 ```

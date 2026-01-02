@@ -46,7 +46,7 @@ multiqc --version
 `.` 指定待搜尋資料夾，`--outdir` 指定輸出的資料夾 
 
 ```bash
-multiqc . --outdir multiqc
+multiqc ../../ --outdir ../../results
 ```
 
 ```

@@ -1,7 +1,0 @@
-dependencies:
-  - conda-forge
-  - bioconda
-  - conda-forge::ipykernel=7.1.0
-  - conda-forge::jupyter=1.1.1
-  - conda-forge::python=3.10.19
-  - conda-forge::pyyaml=6.0.3
