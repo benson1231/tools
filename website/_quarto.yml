@@ -26,6 +26,10 @@ website:
             text: conda
           - href: env-tools/mamba.qmd
             text: mamba
+      - text: Examples
+        menu:
+          - href: examples/multiqc_report.html
+            text: multiqc demo report
 
     tools:
       - icon: book
