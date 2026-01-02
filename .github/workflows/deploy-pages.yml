@@ -27,18 +27,6 @@ jobs:
           environment-name: bio-tools
           cache-environment: true
 
-      - name: Show micromamba environment
-        run: |
-          echo "=== Micromamba ==="
-          which micromamba
-          echo "=== Micromamba Version ==="
-          micromamba --version
-          echo "=== Micromamba Environments ==="
-          micromamba env list
-          echo "=== Packages inside bio-tools ==="
-          micromamba run -n bio-tools micromamba list
-          echo "================================="
-
       - name: Render Quarto website
         run: >
           micromamba run -n bio-tools
