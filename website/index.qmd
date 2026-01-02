@@ -1,7 +1,23 @@
 ---
-title: "website"
+title: "Tools 文件中心"
+format: html
+number-sections: false
 ---
 
-This is a Quarto website.
+# 👋 歡迎來到 Tools 文件中心
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+這裡整理了常用的生物資訊與環境管理工具教學，內容包含：
+
+- **環境工具（Environment Tools）**  
+  Conda、Mamba、Micromamba 基本操作與環境管理示例。
+
+- **NGS CLI 工具（NGS CLI Tools）**  
+  fastp、fastqc、samtools、bcftools、vcftools、multiqc 等實務工作流程。
+
+- **額外資源與筆記**  
+  GEO 資料下載範例、maftools 使用筆記、流程撰寫參考等。
+
+本站採用 [**Quarto**](https://quarto.org/) 建置，並透過 [**GitHub Actions**](https://github.com/features/actions) 自動化渲染與部署。  
+使用左側導覽列即可快速找到你需要的工具文件。
+
+祝您使用順利，也歡迎持續擴充內容！
