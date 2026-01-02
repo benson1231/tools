@@ -17,7 +17,7 @@ number-sections: false
 - **額外資源與筆記**  
   GEO 資料下載範例、maftools 使用筆記、流程撰寫參考等。
 
-本站採用 [**Quarto**](https://quarto.org/) 建置，並透過 [**GitHub Actions**](https://github.com/features/actions) 自動化渲染與部署。  
+本站採用 [Quarto](https://quarto.org/) 建置，並透過 [GitHub Actions](https://github.com/features/actions) 自動化渲染與部署。  
 使用左側導覽列即可快速找到你需要的工具文件。
 
 祝您使用順利，也歡迎持續擴充內容！
