@@ -55,7 +55,7 @@ format:
     toc-title: Contents
     toc-location: left
     toc-depth: 4
-    toc-expand: true
+    toc-expand: 1
 
     other-links:
       - text: Home
