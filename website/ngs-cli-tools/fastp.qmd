@@ -78,24 +78,3 @@ fastp \
 ```{bash}
 fastp --help
 ```
-
----
-
-# 環境紀錄
-
-完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
-
-```{bash}
-# Detect if running in GitHub Actions
-if [ "$GITHUB_ACTIONS" = "true" ]; then
-    MAMBA_BIN=$(which micromamba)
-else
-    MAMBA_BIN=$(which mamba 2>/dev/null || echo "mamba")
-fi
-
-echo "======================================="
-echo "Environment binary: $MAMBA_BIN"
-echo "======================================="
-$MAMBA_BIN env list
-$MAMBA_BIN list
-```

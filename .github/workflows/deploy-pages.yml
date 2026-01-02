@@ -27,12 +27,20 @@ jobs:
           environment-name: bio-tools
           cache-environment: true
 
-      - name: Render Quarto site
+      - name: Show micromamba environment
+        run: |
+          echo "=== Micromamba Environment ==="
+          which micromamba
+          micromamba --version
+          micromamba env list
+          echo "================================"
+
+      - name: Render Quarto website
         run: >
           micromamba run -n bio-tools
           quarto render website/
 
-      - name: Upload site artifact
+      - name: Upload website artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: website/_site
