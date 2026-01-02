@@ -7,8 +7,10 @@ engine: knitr
 
 # FastQC 介紹
 
-> 目前主流 **前處理 trimming** 通常由 **fastp/Cutadapt** 完成
-> 而**品質報告整合** 通常由 **FastQC + MultiQC** 完成
+::: {.callout-note}
+目前主流 **前處理 trimming** 通常由 **fastp/Cutadapt** 完成
+而**品質報告整合** 通常由 **FastQC + MultiQC** 完成
+:::
 
 [FastQC](https://github.com/s-andrews/FastQC) 是 Illumina 及其他高通量定序（Next-Generation Sequencing, NGS）資料中最常用的品質控制（Quality Control, QC）工具之一，由 [Babraham Bioinformatics](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) 開發。它提供快速、直觀的方式，評估原始 FASTQ 讀序的品質狀況，協助使用者判斷資料是否適合進行後續分析（如比對、定量、變異偵測等）。
 

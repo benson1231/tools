@@ -7,12 +7,18 @@ engine: knitr
 
 # fastp 介紹
 
-> fastp 是目前業界（以及 nf-core、GATK Best Practices）中最常見的測序前處理工具之一。
-> fastp 主要針對 Illumina / MGI `short reads`，若是 Nanopore/PacBio `long reads` 請使用 [fastplong](https://github.com/OpenGene/fastplong)
+::: {.callout-note}
+fastp 是目前業界（以及 nf-core、GATK Best Practices）中最常見的測序前處理工具之一。
+fastp 主要針對 Illumina / MGI `short reads`，若是 Nanopore/PacBio `long reads` 請使用 [fastplong](https://github.com/OpenGene/fastplong)
+:::
 
 [fastp](https://github.com/OpenGene/fastp) 是一款快速、全方位的序列品質控制（Quality Control, QC）與前處理（preprocessing）工具，由 [Chen, Shifu et al. (2018)](https://academic.oup.com/bioinformatics/article/34/17/i884/5093234?login=false) 開發。它整合了傳統流程中常見的 FastQC、Trimmomatic 與 Cutadapt 等功能，提供速度快、功能完整、易於使用的測序資料預處理解決方案。
 
->  Shifu Chen. fastp 1.0: An ultra-fast all-round tool for FASTQ data quality control and preprocessing. iMeta 4.5 (2025): e70078
+::: {.callout-tip}
+## Reference 
+
+[Shifu Chen. fastp 1.0: An ultra-fast all-round tool for FASTQ data quality control and preprocessing. iMeta 4.5 (2025): e70078](https://pmc.ncbi.nlm.nih.gov/articles/PMC12527978/)
+:::
 
 fastp 以 **C++ 實作並支援多線程運算**，能在極短時間內完成 Illumina 測序資料的多項處理，包含：
 

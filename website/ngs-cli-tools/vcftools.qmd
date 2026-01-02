@@ -9,14 +9,20 @@ engine: knitr
 
 [VCFtools](https://github.com/vcftools/vcftools) 是一套專門用於處理與分析 VCF（Variant Call Format） 的指令列工具集 [(見詳細官方文檔)](https://vcftools.github.io/man_latest.html)，由 Adam Auton, Anthony Marcketta 與 Petr Danecek 於 2009 年開發。VCF 是目前基因體變異資料的主要交換格式，而 VCFtools 提供一系列常用功能，可用於檢查、篩選、轉換與統計變異資料，是變異分析流程中最經典、最常見的工具之一。
 
-> vcftools = QC + population statistics 工具，但本身速度較慢、未支援多執行緒，適合**遺傳學分析**
-> bcftools = VCF 編輯 + 過濾 + 合併 + 查詢的強大工具，支援多執行緒，適合**編輯、處理與過濾VCF**
+::: {.callout-note}
+vcftools = QC + population statistics 工具，但本身速度較慢、未支援多執行緒，適合**遺傳學分析**
+bcftools = VCF 編輯 + 過濾 + 合併 + 查詢的強大工具，支援多執行緒，適合**編輯、處理與過濾VCF**
+:::
 
 VCFtools 的核心概念非常簡單：
 讀入一個 VCF → 依選項進行篩選或統計 → 輸出結果。
 它不會重新呼叫 variants，而是協助使用者快速檢查變異品質、過濾特定條件的變異，或輸出 QC 所需的統計指標。
 
->The Variant Call Format and VCFtools, Petr Danecek, Adam Auton, Goncalo Abecasis, Cornelis A. Albers, Eric Banks, Mark A. DePristo, Robert Handsaker, Gerton Lunter, Gabor Marth, Stephen T. Sherry, Gilean McVean, Richard Durbin and 1000 Genomes Project Analysis Group, Bioinformatics, 2011 http://dx.doi.org/10.1093/bioinformatics/btr330
+::: {.callout-tip}
+## Reference
+
+The Variant Call Format and VCFtools, Petr Danecek, Adam Auton, Goncalo Abecasis, Cornelis A. Albers, Eric Banks, Mark A. DePristo, Robert Handsaker, Gerton Lunter, Gabor Marth, Stephen T. Sherry, Gilean McVean, Richard Durbin and 1000 Genomes Project Analysis Group, Bioinformatics, 2011 http://dx.doi.org/10.1093/bioinformatics/btr330
+:::
 
 ---
 
