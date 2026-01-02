@@ -6,7 +6,7 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - text: NGS CLI Tools
+      - text: NGS Tools
         menu:
           - href: ngs-cli-tools/fastp.qmd
             text: fastp
@@ -26,8 +26,12 @@ website:
             text: conda
           - href: env-tools/mamba.qmd
             text: mamba
-      - text: Examples
+      - text: Reports demo
         menu:
+          - href: examples/fastp_report.html
+            text: fastp demo report
+          - href: examples/a.chr21_R1_fastqc.html
+            text: fastqc demo report
           - href: examples/multiqc_report.html
             text: multiqc demo report
 
