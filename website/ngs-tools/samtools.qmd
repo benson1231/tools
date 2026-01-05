@@ -331,7 +331,7 @@ samtools view -H ../../.test/ex1.bam
 samtools view ../../.test/ex1.sorted.bam seq2:450-550 | head
 ```
 
-<details>
+```
 EAS1_108:1:33:779:821   163     seq2    416     99      35M     =       579     198     TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<<;<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
 EAS112_34:6:75:615:555  147     seq2    416     99      35M     =       255     -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     ;<<<;<<<<<<<<<:;<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
 EAS188_7:6:11:994:584   147     seq2    417     97      35M     =       226     -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG     <<<<;<<<<<<<;<:<<<<<<<<<;<<<<<<<<<<     MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
@@ -342,7 +342,7 @@ EAS56_53:4:45:707:147   83      seq2    424     99      35M     =       216     
 EAS219_1:7:16:1343:1621 147     seq2    426     99      35M     =       248     -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC     ;<<9;7=====;;==<==================<     MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
 B7_595:5:184:912:258    99      seq2    428     99      35M     =       582     189     ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<     MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
 EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     =;;8=====:========<================     MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0  
-</details>
+```
 
 ```{bash}
 # 根據 BED 檔指定區域提取比對
