@@ -28,7 +28,7 @@ fastp 以 **C++ 實作並支援多線程運算**，能在極短時間內完成 I
 * **滑動窗口（sliding window）修剪與序列截斷**：依平均品質移除尾端低品質區段。
 * **讀長過濾（length filtering）**：移除過短的 reads 或指定長度閾值。
 
-此外，fastp 會輸出 [HTML](http://opengene.org/fastp/fastp.html) 與 [JSON](http://opengene.org/fastp/fastp.json) 格式的 QC 報告，內容包含：
+此外，fastp 會輸出 [HTML(官方範例)](http://opengene.org/fastp/fastp.html) 與 [JSON(官方範例)](http://opengene.org/fastp/fastp.json) 格式的 QC 報告，內容包含：
 
 * 讀序品質分佈（Q20 / Q30）
 * GC 分佈與序列組成
@@ -65,16 +65,16 @@ fastp 1.0.1
 
 執行前請確認：
 
-* 測試 FASTQ 位於 `../.test/`
+* 測試 FASTQ 位於 `.test`
 
 ```bash
 fastp \
--i ../../.test/a.chr21_R1.fastq.gz \
--I ../../.test/a.chr21_R2.fastq.gz \
--o ../../results/a.chr21_R1.trimmed.fastq.gz \
--O ../../results/a.chr21_R2.trimmed.fastq.gz \
---html ../../results/fastp_report.html \
---json ../../results/fastp_report.json \
+-i .test/a.chr21_R1.fastq.gz \
+-I .test/a.chr21_R2.fastq.gz \
+-o results/a.chr21_R1.trimmed.fastq.gz \
+-O results/a.chr21_R2.trimmed.fastq.gz \
+--html results/fastp_report.html \
+--json results/fastp_report.json \
 --thread 4
 ```
 
