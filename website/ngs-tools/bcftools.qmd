@@ -10,7 +10,7 @@ date-format: "YYYY-MM-DD"
 
 # bcftools --version
 
-```{bash}
+```bash
 bcftools --version
 ```
 
@@ -36,10 +36,11 @@ There is NO WARRANTY, to the extent permitted by law.
 
 # bcftools --help
 
-```{bash}
+```bash
 bcftools --help
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 bcftools 1.23
 Using htslib 1.23
@@ -94,3 +95,4 @@ Commands:
  in all situations. Un-indexed VCF and BCF and streams will work in most but
  not all situations.
 ```
+</details>

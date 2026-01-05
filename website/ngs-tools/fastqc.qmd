@@ -125,7 +125,7 @@ FastQC 並不進行 trimming，也不修改讀序，因此通常搭配 fastp 或
 
 使用 `-v` 參數確認 fastqc 是否成功安裝，並顯示版本號。
 
-```{bash}
+```bash
 fastqc -v
 ```
 
@@ -150,13 +150,14 @@ FastQC v0.12.1
 
 ## pair-end FASTQ 檔案
 
-```{bash}
+```bash
 fastqc \
 ../../.test/a.chr21_R1.fastq.gz \
 ../../.test/a.chr21_R2.fastq.gz \
 --outdir ../../results
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 application/gzip
 Started analysis of a.chr21_R1.fastq.gz
@@ -173,6 +174,7 @@ Approx 60% complete for a.chr21_R2.fastq.gz
 Approx 80% complete for a.chr21_R2.fastq.gz
 Analysis complete for a.chr21_R2.fastq.gz
 ```
+</details>
 
 ---
 
@@ -180,10 +182,11 @@ Analysis complete for a.chr21_R2.fastq.gz
 
 顯示 fastqc 提供的主要參數與使用說明，適合作為快速查詢指令用途。
 
-```{bash}
+```bash
 fastqc --help
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
             FastQC - A high throughput sequence QC analysis tool
 
@@ -319,3 +322,4 @@ BUGS
     Any bugs in fastqc should be reported either to simon.andrews@babraham.ac.uk
     or in www.bioinformatics.babraham.ac.uk/bugzilla/
 ```
+</details>

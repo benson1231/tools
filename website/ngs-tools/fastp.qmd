@@ -45,7 +45,7 @@ fastp 以 **C++ 實作並支援多線程運算**，能在極短時間內完成 I
 
 使用 `-v` 參數確認是否成功安裝，並顯示版本號。
 
-```{bash}
+```bash
 fastp -v
 ```
 
@@ -67,7 +67,7 @@ fastp 1.0.1
 
 * 測試 FASTQ 位於 `../.test/`
 
-```{bash}
+```bash
 fastp \
 -i ../../.test/a.chr21_R1.fastq.gz \
 -I ../../.test/a.chr21_R2.fastq.gz \
@@ -84,10 +84,11 @@ fastp \
 
 顯示 fastp 提供的主要參數與使用說明，適合作為快速查詢指令用途。
 
-```{bash}
+```bash
 fastp --help
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 usage: fastp [options] ... 
 options:
@@ -180,3 +181,4 @@ options:
       --discard_unmerged               DEPRECATED, no effect now, see the introduction for merging.
   -?, --help                           print this message
 ```
+</details>

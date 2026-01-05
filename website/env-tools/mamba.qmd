@@ -41,7 +41,7 @@ mamba 使用 **C++ 實作的高速依賴求解器（libsolv）**，大幅提升�
 
 使用 `--version` 參數確認 conda 是否成功安裝，並顯示版本號。
 
-```{bash}
+```bash
 mamba --version
 ```
 
@@ -85,10 +85,11 @@ mamba deactivate
 
 查看環境相關指令
 
-```{bash}
+```bash
 mamba env --help
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 See `mamba/micromamba env --help` 
 
@@ -135,6 +136,7 @@ SUBCOMMANDS:
   remove                      Remove an environment
   update                      Update an environment
 ```
+</details>
 
 ## mamba env export (匯出環境YAML)
 
@@ -160,7 +162,7 @@ mamba env remove -n myenv -y
 
 `*` 為目前環境
 
-```{bash}
+```bash
 mamba env list
 ```
 
@@ -177,7 +179,7 @@ mamba env list
 
 ## mamba list (查看套件來源)
 
-```{bash}
+```bash
 mamba list
 ```
 
@@ -200,7 +202,7 @@ List of packages in environment: "/home/benson/miniforge3/envs/bio-tools"
 
 列出詳細 url
 
-```{bash}
+```bash
 mamba list --explicit
 ```
 
@@ -225,7 +227,7 @@ https://conda.anaconda.org/conda-forge/noarch/async-lru-2.0.5-pyh29332c3_0.conda
 
 完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
 
-```{bash}
+```bash
 echo "======================================="
 echo "Mamba Environment: $(mamba env list | grep '*' | awk '{print $1}')"
 echo "======================================="
@@ -255,10 +257,11 @@ List of packages in environment: "/home/benson/miniforge3/envs/bio-tools"
 
 顯示 mamba 的主要參數與使用說明，適合作為快速查詢用途。
 
-```{bash}
+```bash
 mamba --help
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 Version: 2.4.0 
 
@@ -320,3 +323,4 @@ SUBCOMMANDS:
   search                      Find packages in active environment or channels
                               This is equivalent to `repoquery search` command
 ```
+</details>

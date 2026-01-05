@@ -52,18 +52,21 @@ Conda 透過 channel（套件來源庫） 取得各種可安裝的工具與套�
 
 使用 `--version` 或 `-V` 參數確認是否成功安裝，並顯示版本號。
 
-```{bash}
+```bash
 conda --version
 conda -V
 ```
+
+```
 conda 25.11.0
 conda 25.11.0
+```
 
 # conda create (建立新環境)
 
 `-n` 代表創建環境名稱， `-y` 代表直接確認下載 (yes)， `-f` 是透過指定 YAML file 建立環境
 
-```{bash}
+```bash
 conda create -n myenv python=3.10 -y
 ```
 
@@ -71,7 +74,7 @@ conda create -n myenv python=3.10 -y
 
 需先進入環境才能使用該環境安裝之套件
 
-```{bash}
+```bash
 conda activate myenv
 ```
 
@@ -79,7 +82,7 @@ conda activate myenv
 
 於該環境內安裝套件會獨立於其他環境
 
-```{bash}
+```bash
 conda install numpy -y
 ```
 
@@ -87,7 +90,7 @@ conda install numpy -y
 
 移除該環境的套件，`-y` 表示直接確認，就不用再終端確認並輸入 `yes`
 
-```{bash}
+```bash
 conda remove numpy -y
 ```
 
@@ -95,7 +98,7 @@ conda remove numpy -y
 
 回到 base 環境
 
-```{bash}
+```bash
 conda deactivate
 ```
 
@@ -103,7 +106,7 @@ conda deactivate
 
 與 conda 環境相關的指令，`-h` 有詳細解釋相關用法
 
-```{bash}
+```bash
 conda env -h
 ```
 
@@ -111,14 +114,14 @@ conda env -h
 
 將環境 YAML 匯出可以進入版本控制，也能夠後續透過該 YAML 重建一樣的環境
 
-```{bash}
+```bash
 conda env export > output.yaml
 ```
 
 ## conda env create (透過YAML建立環境)
 
 環境名稱會是 YAML 的 name 參數
-```{bash}
+```bash
 conda env create -f ./conda/envs.yaml
 ```
 
@@ -126,7 +129,7 @@ conda env create -f ./conda/envs.yaml
 
 `-n` 指定待刪除環境名稱
 
-```{bash}
+```bash
 conda env remove -n myenv -y
 ```
 
@@ -134,7 +137,7 @@ conda env remove -n myenv -y
 
 `*` 表示當前環境
 
-```{bash}
+```bash
 conda env list
 ```
 
@@ -155,10 +158,11 @@ quarto-test-env      *   /home/benson/miniforge3/envs/quarto-test-env
 會匯出該環境套件之**版本號、build string 與 Channel來源**。
 `build string` 表示該套件是用什麼編譯器、什麼設定、在什麼平台下編譯出來的版本。
 
-```{bash}
+```bash
 conda list --show-channel-urls
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 # packages in environment at /home/benson/miniforge3/envs/quarto-test-env:
 #
@@ -174,15 +178,17 @@ arrow                            1.4.0            pyhcf101f3_0          conda-fo
 asttokens                        3.0.1            pyhd8ed1ab_0          conda-forge
 async-lru                        2.0.5            pyh29332c3_0          conda-forge
 ```
+</details>
 
 ## conda list --explicit (查看套件的詳細url)
 
 詳細來源也可以使用 `--explicit` 輸出 `url`，基本上能 100% 重建環境
 
-```{bash}
+```bash
 conda list --explicit
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
@@ -200,12 +206,13 @@ https://conda.anaconda.org/conda-forge/noarch/font-ttf-source-code-pro-2.038-h77
 https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-h77eed37_3.conda
 https://conda.anaconda.org/conda-forge/noarch/kernel-headers_linux-64-5.14.0-he073ed8_3.conda
 ```
+</details>
 
 ## Tips: 輸出當前環境
 
 完整記錄當前執行的 Conda 環境，有助於分析重現、版本追蹤與錯誤排查。
 
-```{bash}
+```bash
 echo "======================================="
 echo "Conda Environment: $(conda env list | grep '*' | awk '{print $1}')"
 echo "======================================="
@@ -231,10 +238,11 @@ anyio                            4.12.0           pyhcf101f3_0          conda-fo
 
 顯示 conda 的主要參數與使用說明，適合作為快速查詢用途。
 
-```{bash}
+```bash
 conda --help
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 usage: conda [-h] [-v] [--no-plugins] [-V] COMMAND ...
 
@@ -274,3 +282,4 @@ commands:
     search              Search for packages and display associated information using the MatchSpec format.
     update (upgrade)    Update conda packages to the latest compatible version.
 ```
+</details>

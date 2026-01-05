@@ -92,7 +92,7 @@ HTSlib URL scheme handlers present:
 建立 FASTA index
 
 ```bash
-samtools faidx ../../.test/ex1.fa
+samtools faidx .test/ex1.fa
 ```
 
 ---
@@ -102,7 +102,7 @@ samtools faidx ../../.test/ex1.fa
 對 BAM 檔排序，以利後續建立索引或快速查詢。
 
 ```bash
-samtools sort -o ../../.test/ex1.sorted.bam ../../.test/ex1.bam
+samtools sort -o .test/ex1.sorted.bam .test/ex1.bam
 ```
 
 ---
@@ -112,7 +112,7 @@ samtools sort -o ../../.test/ex1.sorted.bam ../../.test/ex1.bam
 建立 bam 檔的 index file `bai`，供後續索引
 
 ```bash
-samtools index ../../.test/ex1.sorted.bam
+samtools index .test/ex1.sorted.bam
 ```
 
 ---
@@ -256,18 +256,20 @@ Notes:
 ```
 </details>
 
+---
+
 ## SAM 轉 BAM
 
 `-b` 輸出bam，`-t` 提供 FASTA index(.fai)供 SAM 轉換 BAM，`-o <output.bam>` 指定輸出 BAM 檔的名稱
 
 ```bash
-samtools view -b -t ../../.test/ex1.fa.fai -o ../../.test/ex1.bam ../../.test/ex1.sam.gz
+samtools view -b -t .test/ex1.fa.fai -o .test/ex1.bam .test/ex1.sam.gz
 ```
 
 ## BAM 轉 SAM
 
 ```bash
-samtools view -h -o ../../.test/ex1.sam.gz ../../.test/ex1.bam
+samtools view -h -o .test/ex1.sam.gz .test/ex1.bam
 ```
 
 ## 查看 bam 檔
@@ -276,9 +278,10 @@ default 不包含header，`-h` 含 header，`-H` 只看 header
 
 ```bash
 # 查看所有比對結果（不含 header）
-samtools view ../../.test/ex1.bam | head
+samtools view .test/ex1.bam | head
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 B7_591:4:96:693:509     73      seq1    1       99      36M     *       0       0       CACTAGTGGCTCATTGTAAATGTGTGGTTTAACTCG    <<<<<<<<<<<<<<<;<<<<<<<<<5<<<<<;:<;7    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
 EAS54_65:7:152:368:113  73      seq1    3       99      35M     *       0       0       CTAGTGGCTCATTGTAAATGTGTGGTTTAACTCGT     <<<<<<<<<<0<<<<655<<7<<<:9<<3/:<6):     MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
@@ -291,10 +294,11 @@ B7_597:6:194:894:408    73      seq1    15      99      35M     *       0       
 EAS188_4:8:12:628:973   89      seq1    18      75      35M     *       0       0       AAATGTGTGGTTTAACTCGTCCATGGCCCAGCATT     ==;=:;:;;:====;=;===:=======;==;===     MF:i:64 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
 EAS51_66:7:68:402:50    137     seq1    22      99      35M     *       0       0       GTGTGGTTTAACTCGTCCATGGCCCAGCATTTGGG     <<<<<<<<<<<<<<:<<<9<6;9;;&697;7&<55     MF:i:18 Aq:i:66 NM:i:1  UQ:i:5  H0:i:1  H1:i:0 
 ```
+</details>
 
 ```bash
 # 查看所有比對結果（含 header）
-samtools view -h ../../.test/ex1.bam | head
+samtools view -h .test/ex1.bam | head
 ```
 
 ```
@@ -307,12 +311,12 @@ samtools view -h ../../.test/ex1.bam | head
 @PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
 @PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
 @PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -h ../../.test/ex1.bam
+@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -h .test/ex1.bam
 ```
 
 ```bash
 # 只輸出 BAM 的 header
-samtools view -H ../../.test/ex1.bam
+samtools view -H .test/ex1.bam
 ```
 
 ```
@@ -325,16 +329,17 @@ samtools view -H ../../.test/ex1.bam
 @PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
 @PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
 @PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -H ../../.test/ex1.bam
+@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -H .test/ex1.bam
 ```
 
 ## 搜尋特定區域
 
 ```bash
 # 提取 chr2 450-550 的比對結果
-samtools view ../../.test/ex1.sorted.bam seq2:450-550 | head
+samtools view .test/ex1.sorted.bam seq2:450-550 | head
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 EAS1_108:1:33:779:821   163     seq2    416     99      35M     =       579     198     TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<<;<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
 EAS112_34:6:75:615:555  147     seq2    416     99      35M     =       255     -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     ;<<<;<<<<<<<<<:;<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
@@ -347,12 +352,14 @@ EAS219_1:7:16:1343:1621 147     seq2    426     99      35M     =       248     
 B7_595:5:184:912:258    99      seq2    428     99      35M     =       582     189     ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<     MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
 EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     =;;8=====:========<================     MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0  
 ```
+</details>
 
 ```bash
 # 根據 BED 檔指定區域提取比對
-samtools view -L ../../.test/ex1.bed ../../.test/ex1.sorted.bam | head
+samtools view -L .test/ex1.bed .test/ex1.sorted.bam | head
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
 ```
 EAS1_108:1:33:779:821   163     seq2    416     99      35M     =       579     198     TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<<;<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
 EAS112_34:6:75:615:555  147     seq2    416     99      35M     =       255     -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     ;<<<;<<<<<<<<<:;<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
@@ -365,6 +372,7 @@ EAS219_1:7:16:1343:1621 147     seq2    426     99      35M     =       248     
 B7_595:5:184:912:258    99      seq2    428     99      35M     =       582     189     ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<     MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
 EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     =;;8=====:========<================     MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0 
 ```
+</details>
 
 ## samtools view 常用於進行篩選
 
@@ -390,11 +398,38 @@ EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     
 samtools flags
 ```
 
+<details><summary><strong>Click to expand</strong></summary>
+```
+About: Convert between textual and numeric flag representation
+Usage: samtools flags FLAGS...
+
+Each FLAGS argument is either an INT (in decimal/hexadecimal/octal) representing
+a combination of the following numeric flag values, or a comma-separated string
+NAME,...,NAME representing a combination of the following flag names:
+
+   0x1     1  PAIRED         paired-end / multiple-segment sequencing technology
+   0x2     2  PROPER_PAIR    each segment properly aligned according to aligner
+   0x4     4  UNMAP          segment unmapped
+   0x8     8  MUNMAP         next segment in the template unmapped
+  0x10    16  REVERSE        SEQ is reverse complemented
+  0x20    32  MREVERSE       SEQ of next segment in template is rev.complemented
+  0x40    64  READ1          the first segment in the template
+  0x80   128  READ2          the last segment in the template
+ 0x100   256  SECONDARY      secondary alignment
+ 0x200   512  QCFAIL         not passing quality controls or other filters
+ 0x400  1024  DUP            PCR or optical duplicate
+ 0x800  2048  SUPPLEMENTARY  supplementary alignment
+```
+</details>
+
 `samtools flags <INT>` 可以解析該 FLAG 整數所代表的 bit 與狀態
 
 ```bash
 samtools flags 2
-samtools flags 4
+```
+
+```
+0x2     2       PROPER_PAIR
 ```
 
 ---
@@ -404,7 +439,26 @@ samtools flags 4
 `samtools flagstat` 會讀取 BAM/SAM/CRAM，並輸出一段簡短但非常重要的 mapping 統計，包括： read 總數、mapped reads 比例、properly paired 比例、duplicates 數量、singletons 數量、mate mapping 狀況（同 chr / diff chr）、QC-failed reads
 
 ```bash
-samtools flagstat ../../.test/ex1.bam
+samtools flagstat .test/ex1.bam
+```
+
+```
+3307 + 0 in total (QC-passed reads + QC-failed reads)
+3307 + 0 primary
+0 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+0 + 0 primary duplicates
+3271 + 0 mapped (98.91% : N/A)
+3271 + 0 primary mapped (98.91% : N/A)
+3307 + 0 paired in sequencing
+1654 + 0 read1
+1653 + 0 read2
+3144 + 0 properly paired (95.07% : N/A)
+3144 + 0 with itself and mate mapped
+127 + 0 singletons (3.84% : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ>=5)
 ```
 
 
@@ -429,7 +483,7 @@ samtools flagstat ../../.test/ex1.bam
 用於合併多個 BAM 檔為單一檔案。
 
 ```bash
-samtools merge -o ../../.test/merge.bam ../../.test/ex1.bam ../../.test/ex1.sorted.bam
+samtools merge -o .test/merge.bam .test/ex1.bam .test/ex1.sorted.bam
 ```
 
 ---
@@ -439,7 +493,13 @@ samtools merge -o ../../.test/merge.bam ../../.test/ex1.bam ../../.test/ex1.sort
 `samtools coverage` 用於計算每條染色體的平均深度（mean depth）、覆蓋率（coverage%）與一些區域性統計資訊。
 
 ```bash
-samtools coverage ../../.test/ex1.sorted.bam
+samtools coverage .test/ex1.sorted.bam
+```
+
+```
+#rname  startpos        endpos  numreads        covbases        coverage        meandepth       meanbaseq       meanmapq
+seq1    1       1575    1482    1569    99.619  33.1213 25.5    96.1
+seq2    1       1584    1789    1567    98.9268 39.7822 26      90.8
 ```
 
 | 欄位名稱             | 說明                             | 代表意義                  | 常見 QC 解讀                                             |
@@ -461,8 +521,23 @@ samtools coverage ../../.test/ex1.sorted.bam
 `samtools depth` 用於輸出 BAM 中 每個位置（per-base） 的深度（depth）
 
 ```bash
-samtools depth ../../.test/ex1.sorted.bam | head
+samtools depth .test/ex1.sorted.bam | head
 ```
+
+<details><summary><strong>Click to expand</strong></summary>
+```
+seq1    1       1
+seq1    2       1
+seq1    3       2
+seq1    4       2
+seq1    5       3
+seq1    6       4
+seq1    7       4
+seq1    8       4
+seq1    9       5
+seq1    10      5
+```
+</details>
 
 | 欄位        | 名稱          | 說明              | QC 用途                        |
 | --------- | ----------- | --------------- | ---------------------------- |
@@ -474,7 +549,11 @@ samtools depth ../../.test/ex1.sorted.bam | head
 ## 計算平均深度
 
 ```bash
-samtools depth ../../.test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
+samtools depth .test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
+```
+
+```
+36.7286
 ```
 
 ---
@@ -484,7 +563,13 @@ samtools depth ../../.test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
 `samtools idxstats` 用於顯示 每條染色體的 read 數量與參考序列長度，依靠 BAM 的 index (.bai 或 .csi)
 
 ```bash
-samtools idxstats ../../.test/ex1.sorted.bam
+samtools idxstats .test/ex1.sorted.bam
+```
+
+```
+seq1    1575    1482    19
+seq2    1584    1789    17
+*       0       0       0
 ```
 
 | 欄位           | 名稱                  | 說明                     | 意義 / QC 用途              |
@@ -501,8 +586,23 @@ samtools idxstats ../../.test/ex1.sorted.bam
 samtools stats 是 最完整的 mapping 統計，提供： mapping 深度、read 長度分布、GC 分布、按距離區分的 insert size 分布、mismatch / error rate 與 per-chromosome 統計
 
 ```bash
-samtools stats ../../.test/ex1.sorted.bam | head
+samtools stats .test/ex1.sorted.bam | head
 ```
+
+<details><summary><strong>Click to expand</strong></summary>
+```
+# This file was produced by samtools stats (1.23+htslib-1.23) and can be plotted using plot-bamstats
+# This file contains statistics for all reads.
+# The command line was:  stats .test/ex1.sorted.bam
+# CHK, Checksum [2]Read Names   [3]Sequences    [4]Qualities
+# CHK, CRC32 of reads which passed filtering followed by addition (32bit overflow)
+CHK     1eb1426c        9b48daa9        abfd29ac
+# Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
+SN      raw total sequences:    3307    # excluding supplementary and secondary reads
+SN      filtered sequences:     0
+SN      sequences:      3307
+```
+</details>
 
 | 欄位                                 | 說明                 | 意義 / QC 用途                     |
 | ---------------------------------- | ------------------ | ------------------------------ |
@@ -526,3 +626,67 @@ samtools stats ../../.test/ex1.sorted.bam | head
 ```bash
 samtools --help
 ```
+
+<details><summary><strong>Click to expand</strong></summary>
+```
+Program: samtools (Tools for alignments in the SAM format)
+Version: 1.23 (using htslib 1.23)
+
+Usage:   samtools <command> [options]
+
+Commands:
+  -- Indexing
+     dict           create a sequence dictionary file
+     faidx          index/extract FASTA
+     fqidx          index/extract FASTQ
+     index          index alignment
+
+  -- Editing
+     calmd          recalculate MD/NM tags and '=' bases
+     fixmate        fix mate information
+     reheader       replace BAM header
+     targetcut      cut fosmid regions (for fosmid pool only)
+     addreplacerg   adds or replaces RG tags
+     markdup        mark duplicates
+     ampliconclip   clip oligos from the end of reads
+
+  -- File operations
+     collate        shuffle and group alignments by name
+     cat            concatenate BAMs
+     consensus      produce a consensus Pileup/FASTA/FASTQ
+     merge          merge sorted alignments
+     mpileup        multi-way pileup
+     sort           sort alignment file
+     split          splits a file by read group
+     quickcheck     quickly check if SAM/BAM/CRAM file appears intact
+     fastq          converts a BAM to a FASTQ
+     fasta          converts a BAM to a FASTA
+     import         Converts FASTA or FASTQ files to SAM/BAM/CRAM
+     reference      Generates a reference from aligned data
+     reset          Reverts aligner changes in reads
+
+  -- Statistics
+     bedcov         read depth per BED region
+     coverage       alignment depth and percent coverage
+     depth          compute the depth
+     flagstat       simple stats
+     idxstats       BAM index stats
+     cram-size      list CRAM Content-ID and Data-Series sizes
+     phase          phase heterozygotes
+     stats          generate stats (former bamcheck)
+     ampliconstats  generate amplicon specific stats
+     checksum       produce order-agnostic checksums of sequence content
+
+  -- Viewing
+     flags          explain BAM flags
+     head           header viewer
+     tview          text alignment viewer
+     view           SAM<->BAM<->CRAM conversion
+     depad          convert padded BAM to unpadded BAM
+     samples        list the samples in a set of SAM/BAM/CRAM files
+
+  -- Misc
+     help [cmd]     display this help message or help for [cmd]
+     version        detailed version information
+```
+</details>
