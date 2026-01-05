@@ -2,9 +2,6 @@
 title: "Conda 基本使用"
 date: today
 date-format: "YYYY-MM-DD"
-execute: 
-  enabled: false  
-engine: knitr
 ---
 
 # Conda 介紹

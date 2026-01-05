@@ -2,9 +2,6 @@
 title: "mamba 基本使用"
 date: today
 date-format: "YYYY-MM-DD"
-execute: 
-  enabled: false  
-engine: knitr
 ---
 
 # mamba 介紹

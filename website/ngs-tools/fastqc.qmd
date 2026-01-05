@@ -2,7 +2,6 @@
 title: "FastQC 基本使用"
 date: today
 date-format: "YYYY-MM-DD"
-engine: knitr
 ---
 
 # FastQC 介紹
