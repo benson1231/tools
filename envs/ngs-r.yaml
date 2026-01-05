@@ -1,0 +1,14 @@
+name: ngs-r
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - conda-forge::r-base
+  - conda-forge::r-knitr
+  - conda-forge::r-rmarkdown
+  - conda-forge::r-dt
+  - conda-forge::r-NMF
+  - conda-forge::r-pheatmap
+  - bioconda::bioconductor-mclust
+  - bioconda::bioconductor-BSgenome.Hsapiens.UCSC.hg19
+  - bioconda::bioconductor-maftools

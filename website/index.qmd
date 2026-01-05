@@ -1,11 +1,11 @@
 ---
-title: "benson1231 的學習筆記(工具篇)"
+title: "benson1231的工具筆記"
 date: today
 date-format: "YYYY-MM-DD"
 number-sections: false
 ---
 
-# 📝 我的學習筆記本
+# 📝 我的工具學習筆記本
 
 本網站整理了常用的生物資訊與環境管理工具教學，內容包含：
 
@@ -25,4 +25,4 @@ number-sections: false
 
 [什麼是 Quarto](https://quarto.org/)  
 [什麼是 GitHub Actions](https://github.com/features/actions)  
-[benson1231 的學習筆記(理論篇)](https://benson1231.gitbook.io/benson1231-docs/)  
+[benson1231的學習筆記(理論篇)](https://benson1231.gitbook.io/benson1231-docs/)  
