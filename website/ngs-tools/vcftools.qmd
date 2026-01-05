@@ -27,7 +27,7 @@ The Variant Call Format and VCFtools, Petr Danecek, Adam Auton, Goncalo Abecasis
 
 # vcftools --version (版本)
 
-```{bash}
+```bash
 vcftools --version
 ```
 
@@ -313,12 +313,12 @@ vcftools 可以透過各種 `--過濾指令` 過濾特定資訊
 
 可以輸入 `man vcftools` 詳細查看指令資訊
 
-```{bash}
-man vcftools | head -n 30
+```bash
+man vcftools
 ```
 
-<details>
-<summary>點我展開詳細指令</summary>
+<details><summary><strong>Click to expand</strong></summary>
+```
 vcftools(1)                                                                                       vcftools man page                                                                                       vcftools(1)
 
 NAME
@@ -797,4 +797,5 @@ AUTHORS
        Anthony Marcketta
 
 0.1.16                                                                                              2 August 2018                                                                                         vcftools(1)
+```
 </details>

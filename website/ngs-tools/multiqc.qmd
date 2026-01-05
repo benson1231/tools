@@ -57,15 +57,7 @@ multiqc ../../ --outdir ../../results
 multiqc --help
 ```
 
-<details><summary><strong>Example output (click to expand)</strong></summary>
-```
-EAS1_108:1:33:779:821   163     seq2    416     99      35M     =       579     198     TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<<;<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
-EAS112_34:6:75:615:555  147     seq2    416     99      35M     =       255     -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     ;<<<;<<<<<<<<<:;<<<<<<<<<<<<<<<<<<<
-EAS188_7:6:11:994:584   147     seq2    417     97      35M     =       226     -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG
-```
-</details>
-
-
+<details><summary><strong>Click to expand</strong></summary>
 ```
  /// MultiQC 🍾 v1.33
 
@@ -148,3 +140,4 @@ EAS188_7:6:11:994:584   147     seq2    417     97      35M     =       226     
 
  See http://multiqc.info for more details.
 ```
+</details>
