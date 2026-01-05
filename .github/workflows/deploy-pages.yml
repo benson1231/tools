@@ -23,8 +23,8 @@ jobs:
       - name: Setup micromamba
         uses: mamba-org/setup-micromamba@v2
         with:
-          environment-file: envs/envs.yaml
-          environment-name: bio-tools
+          environment-file: envs/ci-quarto.yaml
+          environment-name: ci-quarto
           cache-environment: true
 
       - name: Render Quarto website

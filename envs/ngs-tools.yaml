@@ -1,0 +1,13 @@
+name: ngs-tools
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bioconda::fastp
+  - bioconda::fastqc
+  - bioconda::multiqc
+  - bioconda::samtools
+  - bioconda::bcftools
+  - bioconda::vcftools
+  - bioconda::bedtools
+  - bioconda::bioconductor-maftools

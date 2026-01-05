@@ -8,17 +8,17 @@ website:
         text: Home
       - text: NGS Tools
         menu:
-          - href: ngs-cli-tools/fastp.qmd
+          - href: ngs-tools/fastp.qmd
             text: fastp
-          - href: ngs-cli-tools/fastqc.qmd
+          - href: ngs-tools/fastqc.qmd
             text: fastqc
-          - href: ngs-cli-tools/multiqc.qmd
+          - href: ngs-tools/multiqc.qmd
             text: multiqc
-          - href: ngs-cli-tools/samtools.qmd
+          - href: ngs-tools/samtools.qmd
             text: samtools
-          - href: ngs-cli-tools/vcftools.qmd
+          - href: ngs-tools/vcftools.qmd
             text: vcftools
-          - href: ngs-cli-tools/bcftools.qmd
+          - href: ngs-tools/bcftools.qmd
             text: bcftools
       - text: Environment Tools
         menu:
@@ -67,4 +67,6 @@ format:
         icon: github
         href: https://github.com/benson1231/tools
 
+execute: 
+  enabled: false  
 number-sections: true

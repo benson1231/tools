@@ -1,0 +1,525 @@
+---
+title: "Samtools 基本使用"
+date: today
+date-format: "YYYY-MM-DD"
+engine: knitr
+---
+
+# Samtools 基本介紹
+
+[samtools](https://github.com/samtools/samtools) 是處理高通量定序（Next-Generation Sequencing, NGS）比對資料的核心工具套件，用於操作 SAM（Sequence Alignment/Map）與 BAM（Binary Alignment/Map）文件格式。SAM/BAM 是儲存序列與參考基因組比對結果的標準格式，而 samtools 提供快速、高效、彈性的指令協助使用者解析與管理這些資料。另外還有更高效能、高度平行的工具 [sambamba](https://github.com/biod/sambamba)。
+
+::: {.callout-tip}
+## Reference
+
+Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li
+GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008
+:::
+
+## Samtools 的主要功能
+
+samtools 涵蓋了 NGS 比對檔案處理的幾乎所有基礎步驟，包括：
+
+- 檔案格式轉換（SAM ↔ BAM）
+- 排序（Sorting）與索引（Indexing）
+- 區域擷取（Region Extraction）
+- 基礎統計（flagstat, idxstats, coverage, stats）
+- 檔案合併與拆分（merge, split）
+
+## Samtools 的特色
+
+* **高速、低記憶體需求**：建立在 htslib 之上，效能優異
+* **與主流工具鏈相容**：如 BWA、Bowtie2、GATK、DeepVariant、nf-core pipelines
+* **CLI 工作流程簡單、模組化**：各指令可自由組合
+* **支援 CRAM 格式（壓縮率更高）**：可在提供參考序列時大幅節省硬碟空間
+
+## Samtools 分析角色
+
+samtools 常用於以下生物資訊流程：
+
+* **比對後處理（post-alignment processing）**
+* **品質檢查（QC）**：檢查 mapping 成功率、深度是否正常
+* **擷取特定基因區域**：Sanger validation、視覺化前資料抽取
+* **變異分析前的必要步驟**：排序、索引、清理比對檔
+
+---
+
+# samtools --version
+
+使用 `--version` 參數確認 samtools 是否成功安裝，並顯示版本號。
+
+```{bash}
+samtools --version
+```
+
+```
+samtools 1.23
+Using htslib 1.23
+Copyright (C) 2025 Genome Research Ltd.
+
+Samtools compilation details:
+    Features:       build=configure curses=yes
+    CC:             /opt/conda/conda-bld/samtools_1765917324003/_build_env/bin/x86_64-conda-linux-gnu-cc
+    CPPFLAGS:       -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/benson/miniforge3/envs/ngs-tools/include
+    CFLAGS:         -Wall -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/benson/miniforge3/envs/ngs-tools/include -fdebug-prefix-map=/opt/conda/conda-bld/samtools_1765917324003/work=/usr/local/src/conda/samtools-1.23 -fdebug-prefix-map=/home/benson/miniforge3/envs/ngs-tools=/usr/local/src/conda-prefix
+    LDFLAGS:        -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,--allow-shlib-undefined -Wl,-rpath,/home/benson/miniforge3/envs/ngs-tools/lib -Wl,-rpath-link,/home/benson/miniforge3/envs/ngs-tools/lib -L/home/benson/miniforge3/envs/ngs-tools/lib
+    HTSDIR:
+    LIBS:
+    CURSES_LIB:     -ltinfow -lncursesw
+
+HTSlib compilation details:
+    Features:       build=configure libcurl=yes S3=yes GCS=yes libdeflate=yes lzma=yes bzip2=yes plugins=yes plugin-path=/home/benson/miniforge3/envs/ngs-tools/libexec/htslib htscodecs=1.6.5
+    CC:             /opt/conda/conda-bld/htslib_1765902480168/_build_env/bin/x86_64-conda-linux-gnu-cc
+    CPPFLAGS:       -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/benson/miniforge3/envs/ngs-tools/include
+    CFLAGS:         -Wall -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/benson/miniforge3/envs/ngs-tools/include -fdebug-prefix-map=/opt/conda/conda-bld/htslib_1765902480168/work=/usr/local/src/conda/htslib-1.23 -fdebug-prefix-map=/home/benson/miniforge3/envs/ngs-tools=/usr/local/src/conda-prefix -fvisibility=hidden
+    LDFLAGS:        -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,--allow-shlib-undefined -Wl,-rpath,/home/benson/miniforge3/envs/ngs-tools/lib -Wl,-rpath-link,/home/benson/miniforge3/envs/ngs-tools/lib -L/home/benson/miniforge3/envs/ngs-tools/lib -fvisibility=hidden -rdynamic
+
+HTSlib URL scheme handlers present:
+    built-in:    file, preload, data
+    Amazon S3:   s3+https, s3, s3+http
+    libcurl:     gophers, smtp, wss, smb, rtsp, tftp, pop3, smbs, imaps, pop3s, ws, ftps, https, ftp, gopher, sftp, imap, http, smtps, scp, dict, mqtt, telnet
+    Google Cloud Storage:        gs+http, gs+https, gs
+    crypt4gh-needed:     crypt4gh
+    mem:         mem
+```
+
+---
+
+# samtools faidx (建FASTA索引)
+## index FASTA
+
+建立 FASTA index
+
+```bash
+samtools faidx ../../.test/ex1.fa
+```
+
+---
+
+# samtools sort (排序)
+
+對 BAM 檔排序，以利後續建立索引或快速查詢。
+
+```bash
+samtools sort -o ../../.test/ex1.sorted.bam ../../.test/ex1.bam
+```
+
+---
+
+# samtools index (建BAM索引)
+
+建立 bam 檔的 index file `bai`，供後續索引
+
+```bash
+samtools index ../../.test/ex1.sorted.bam
+```
+
+---
+
+# samtools view (轉檔、篩選與過濾等)
+
+`samtools view` 是 samtools 套件中最常使用的指令之一，負責從 SAM/BAM/CRAM 中擷取資料、轉換格式、過濾 reads、以及抽取區域。透過不同參數組合，可快速針對 mapping 品質、FLAG 標記、比對狀態等條件進行篩選，是 NGS 分析中不可或缺的核心指令。
+
+```{bash}
+samtools view --help
+```
+
+```
+Usage: samtools view [options] <in.bam>|<in.sam>|<in.cram> [region ...]
+
+Output options:
+  -b, --bam                  Output BAM
+  -C, --cram                 Output CRAM (requires -T)
+  -1, --fast                 Use fast BAM compression (and default to --bam)
+  -u, --uncompressed         Uncompressed BAM output (and default to --bam)
+  -h, --with-header          Include header in SAM output
+  -H, --header-only          Print SAM header only (no alignments)
+      --no-header            Print SAM alignment records only [default]
+  -c, --count                Print only the count of matching records
+      --save-counts FILE     Write counts of passed/failed records to FILE
+  -o, --output FILE          Write output to FILE [standard output]
+  -U, --unoutput FILE, --output-unselected FILE
+                             Output reads not selected by filters to FILE
+  -p, --unmap                Set flag to UNMAP on reads not selected
+                             then write to output file.
+  -P, --fetch-pairs          Retrieve complete pairs even when outside of region
+
+Input options:
+  -t, --fai-reference FILE   FILE listing reference names and lengths
+  -M, --use-index            Use index and multi-region iterator for regions
+      --region[s]-file FILE  Use index to include only reads overlapping FILE
+  -X, --customized-index     Expect extra index file argument after <in.bam>
+
+Filtering options (Only include in output reads that...):
+  -L, --target[s]-file FILE  ...overlap (BED) regions in FILE
+  -N, --qname-file [^]FILE   ...whose read name is listed in FILE ("^" negates)
+  -r, --read-group STR       ...are in read group STR or in no read group
+  -R, --read-group-file [^]FILE
+                             ...are in a read group listed in FILE or in none
+  -n, --exclude-no-read_group
+                             ...have a read group, exclude those that have not
+  -d, --tag STR1[:STR2]      ...have a tag STR1 (with associated value STR2)
+  -D, --tag-file STR:FILE    ...have a tag STR whose value is listed in FILE
+  -q, --min-MQ INT           ...have mapping quality >= INT
+  -l, --library STR          ...are in library STR
+  -m, --min-qlen INT         ...cover >= INT query bases (as measured via CIGAR)
+  -e, --expr STR             ...match the filter expression STR
+  -f, --require-flags FLAG   ...have all of the FLAGs present
+  -F, --excl[ude]-flags FLAG ...have none of the FLAGs present
+      --rf, --incl-flags, --include-flags FLAG
+                             ...have some of the FLAGs present
+  -G FLAG                    EXCLUDE reads with all of the FLAGs present
+      --subsample FLOAT      Keep only FLOAT fraction of templates/read pairs
+      --subsample-seed INT   Influence WHICH reads are kept in subsampling [0]
+  -s INT.FRAC                Same as --subsample 0.FRAC --subsample-seed INT
+
+Processing options:
+      --add-flags FLAG       Add FLAGs to reads
+      --remove-flags FLAG    Remove FLAGs from reads
+  -x, --remove-tag STR
+               Comma-separated read tags to strip (repeatable) [null]
+      --keep-tag STR
+               Comma-separated read tags to preserve (repeatable) [null].
+               Equivalent to "-x ^STR"
+  -B, --remove-B             Collapse the backward CIGAR operation
+  -z, --sanitize FLAGS       Perform sanitity checking and fixing on records.
+                             FLAGS is comma separated (see manual). [off]
+
+General options:
+  -?, --help   Print long help, including note about region specification
+  -S           Ignored (input format is auto-detected)
+      --no-PG  Do not add a PG line
+      --input-fmt-option OPT[=VAL]
+               Specify a single input file format option in the form
+               of OPTION or OPTION=VALUE
+  -O, --output-fmt FORMAT[,OPT[=VAL]]...
+               Specify output format (SAM, BAM, CRAM)
+      --output-fmt-option OPT[=VAL]
+               Specify a single output file format option in the form
+               of OPTION or OPTION=VALUE
+  -T, --reference FILE
+               Reference sequence FASTA FILE [null]
+  -@, --threads INT
+               Number of additional threads to use [0]
+      --write-index
+               Automatically index the output files [off]
+      --verbosity INT
+               Set level of verbosity
+
+See https://www.htslib.org/doc/samtools.html#GLOBAL_COMMAND_OPTIONS
+for more details.
+
+Notes:
+
+1. This command now auto-detects the input format (BAM/CRAM/SAM).
+   Further control over the CRAM format can be specified by using the
+   --output-fmt-option, e.g. to specify the number of sequences per slice
+   and to use avoid reference based compression:
+
+        samtools view -C --output-fmt-option seqs_per_slice=5000 \
+           --output-fmt-option no_ref -o out.cram in.bam
+
+   Options can also be specified as a comma separated list within the
+   --output-fmt value too.  For example this is equivalent to the above
+
+        samtools view --output-fmt cram,seqs_per_slice=5000,no_ref \
+           -o out.cram in.bam
+
+2. The file supplied with `-t' is SPACE/TAB delimited with the first
+   two fields of each line consisting of the reference name and the
+   corresponding sequence length. The `.fai' file generated by
+   `samtools faidx' is suitable for use as this file. This may be an
+   empty file if reads are unaligned.
+
+3. SAM->BAM conversion:  samtools view -bT ref.fa in.sam.gz
+
+4. BAM->SAM conversion:  samtools view -h in.bam
+
+5. A region should be presented in one of the following formats:
+   `chr1', `chr2:1,000' and `chr3:1000-2,000'. When a region is
+   specified, the input alignment file must be a sorted and indexed
+   alignment (BAM/CRAM) file.
+
+6. Option `-u' is preferred over `-b' when the output is piped to
+   another samtools command.
+
+7. Option `-M`/`--use-index` causes overlaps with `-L` BED file regions and
+   command-line region arguments to be computed using the multi-region iterator
+   and an index. This increases speed, omits duplicates, and outputs the reads
+   as they are ordered in the input SAM/BAM/CRAM file.
+
+8. Options `-L`/`--target[s]-file` and `--region[s]-file` may not be used
+   together. `--region[s]-file FILE` is simply equivalent to `-M -L FILE`,
+   so using both causes one of the specified BED files to be ignored.
+```
+
+## SAM 轉 BAM
+
+`-b` 輸出bam，`-t` 提供 FASTA index(.fai)供 SAM 轉換 BAM，`-o <output.bam>` 指定輸出 BAM 檔的名稱
+
+```bash
+samtools view -b -t ../../.test/ex1.fa.fai -o ../../.test/ex1.bam ../../.test/ex1.sam.gz
+```
+
+## BAM 轉 SAM
+
+```bash
+samtools view -h -o ../../.test/ex1.sam.gz ../../.test/ex1.bam
+```
+
+## 查看 bam 檔
+
+default 不包含header，`-h` 含 header，`-H` 只看 header
+
+```{bash}
+# 查看所有比對結果（不含 header）
+samtools view ../../.test/ex1.bam | head
+```
+
+```
+B7_591:4:96:693:509     73      seq1    1       99      36M     *       0       0       CACTAGTGGCTCATTGTAAATGTGTGGTTTAACTCG    <<<<<<<<<<<<<<<;<<<<<<<<<5<<<<<;:<;7    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0
+EAS54_65:7:152:368:113  73      seq1    3       99      35M     *       0       0       CTAGTGGCTCATTGTAAATGTGTGGTTTAACTCGT     <<<<<<<<<<0<<<<655<<7<<<:9<<3/:<6):     MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS51_64:8:5:734:57     137     seq1    5       99      35M     *       0       0       AGTGGCTCATTGTAAATGTGTGGTTTAACTCGTCC     <<<<<<<<<<<7;71<<;<;;<7;<<3;);3*8/5     MF:i:18 Aq:i:66 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+B7_591:1:289:587:906    137     seq1    6       63      36M     *       0       0       GTGGCTCATTGTAATTTTTTGTTTTAACTCTTCTCT    (-&----,----)-)-),'--)---',+-,),''*,    MF:i:130        Aq:i:63 NM:i:5  UQ:i:38 H0:i:0  H1:i:0
+EAS56_59:8:38:671:758   137     seq1    9       99      35M     *       0       0       GCTCATTGTAAATGTGTGGTTTAACTCGTCCATGG     <<<<<<<<<<<<<<<;<;7<<<<<<<<7<<;:<5%     MF:i:18 Aq:i:72 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS56_61:6:18:467:281   73      seq1    13      99      35M     *       0       0       ATTGTAAATGTGTGGTTTAACTCGTCCCTGGCCCA     <<<<<<<<;<<<8<<<<<;8:;6/686&;(16666     MF:i:18 Aq:i:39 NM:i:1  UQ:i:5  H0:i:0  H1:i:1     
+EAS114_28:5:296:340:699 137     seq1    13      99      36M     *       0       0       ATTGTAAATGTGTGGTTTAACTCGTCCATGGCCCAG    <<<<<;<<<;<;<<<<<<<<<<<8<8<3<8;<;<0;    MF:i:18 Aq:i:73 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+B7_597:6:194:894:408    73      seq1    15      99      35M     *       0       0       TGTAAATGTGTGGTTTAACTCGTCCATTGCCCAGC     <<<<<<<<<7<<;<<<<;<<<7;;<<<*,;;572<     MF:i:18 Aq:i:43 NM:i:1  UQ:i:9  H0:i:0  H1:i:1     
+EAS188_4:8:12:628:973   89      seq1    18      75      35M     *       0       0       AAATGTGTGGTTTAACTCGTCCATGGCCCAGCATT     ==;=:;:;;:====;=;===:=======;==;===     MF:i:64 Aq:i:0  NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS51_66:7:68:402:50    137     seq1    22      99      35M     *       0       0       GTGTGGTTTAACTCGTCCATGGCCCAGCATTTGGG     <<<<<<<<<<<<<<:<<<9<6;9;;&697;7&<55     MF:i:18 Aq:i:66 NM:i:1  UQ:i:5  H0:i:1  H1:i:0 
+```
+
+```{bash}
+# 查看所有比對結果（含 header）
+samtools view -h ../../.test/ex1.bam | head
+```
+
+```
+@SQ     SN:seq1 LN:1575
+@SQ     SN:seq2 LN:1584
+@PG     ID:samtools     PN:samtools     VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.1   PN:samtools     PP:samtools     VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG     ID:samtools.2   PN:samtools     PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.3   PN:samtools     PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -h ../../.test/ex1.bam
+```
+
+```{bash}
+# 只輸出 BAM 的 header
+samtools view -H ../../.test/ex1.bam
+```
+
+```
+@SQ     SN:seq1 LN:1575
+@SQ     SN:seq2 LN:1584
+@PG     ID:samtools     PN:samtools     VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.1   PN:samtools     PP:samtools     VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG     ID:samtools.2   PN:samtools     PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.3   PN:samtools     PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
+@PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
+@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -H ../../.test/ex1.bam
+```
+
+## 搜尋特定區域
+
+```{bash}
+# 提取 chr2 450-550 的比對結果
+samtools view ../../.test/ex1.sorted.bam seq2:450-550 | head
+```
+
+<details>
+EAS1_108:1:33:779:821   163     seq2    416     99      35M     =       579     198     TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<<;<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
+EAS112_34:6:75:615:555  147     seq2    416     99      35M     =       255     -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     ;<<<;<<<<<<<<<:;<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
+EAS188_7:6:11:994:584   147     seq2    417     97      35M     =       226     -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG     <<<<;<<<<<<<;<:<<<<<<<<<;<<<<<<<<<<     MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
+EAS114_26:7:218:858:445 147     seq2    421     99      35M     =       239     -217    GAAAAAAATTCTAAAATCAGCAAGAGAAAAGCATA     ;<<<<<<<8;:<<<<<<;<<:<<<<<<<<<<<<;<     MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:1     
+EAS220_1:4:70:766:2016  163     seq2    422     99      35M     =       607     220     AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
+EAS54_81:2:317:72:221   83      seq2    422     99      35M     =       270     -187    AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC     =========:======;==;===============     MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS56_53:4:45:707:147   83      seq2    424     99      35M     =       216     -243    AAAAATTCTAAAATCAGCAAGAGAAAAGCATACAG     <<<<<<;3<<<<<4;<<;<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:51 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS219_1:7:16:1343:1621 147     seq2    426     99      35M     =       248     -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC     ;<<9;7=====;;==<==================<     MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+B7_595:5:184:912:258    99      seq2    428     99      35M     =       582     189     ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<     MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     =;;8=====:========<================     MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0  
+</details>
+
+```{bash}
+# 根據 BED 檔指定區域提取比對
+samtools view -L ../../.test/ex1.bed ../../.test/ex1.sorted.bam | head
+```
+
+```
+EAS1_108:1:33:779:821   163     seq2    416     99      35M     =       579     198     TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<<;<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:1  H1:i:3
+EAS112_34:6:75:615:555  147     seq2    416     99      35M     =       255     -196    TGAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAA     ;<<<;<<<<<<<<<:;<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
+EAS188_7:6:11:994:584   147     seq2    417     97      35M     =       226     -226    GAAGGAAAAAAATTCTAAAATCAGCAAGAGAAAAG     <<<<;<<<<<<<;<:<<<<<<<<<;<<<<<<<<<<     MF:i:18 Aq:i:24 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
+EAS114_26:7:218:858:445 147     seq2    421     99      35M     =       239     -217    GAAAAAAATTCTAAAATCAGCAAGAGAAAAGCATA     ;<<<<<<<8;:<<<<<<;<<:<<<<<<<<<<<<;<     MF:i:18 Aq:i:27 NM:i:0  UQ:i:0  H0:i:1  H1:i:1     
+EAS220_1:4:70:766:2016  163     seq2    422     99      35M     =       607     220     AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:30 NM:i:0  UQ:i:0  H0:i:2  H1:i:0     
+EAS54_81:2:317:72:221   83      seq2    422     99      35M     =       270     -187    AAAAAAATTCTAAAATCAGCAAGAGAAAAGCATAC     =========:======;==;===============     MF:i:18 Aq:i:53 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS56_53:4:45:707:147   83      seq2    424     99      35M     =       216     -243    AAAAATTCTAAAATCAGCAAGAGAAAAGCATACAG     <<<<<<;3<<<<<4;<<;<<<<<<<<<<<<<<<<<     MF:i:18 Aq:i:51 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS219_1:7:16:1343:1621 147     seq2    426     99      35M     =       248     -213    AAATTCTAAAATCAGCAAGAGAAAAGCATACAGTC     ;<<9;7=====;;==<==================<     MF:i:18 Aq:i:71 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+B7_595:5:184:912:258    99      seq2    428     99      35M     =       582     189     ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<;<     MF:i:18 Aq:i:76 NM:i:0  UQ:i:0  H0:i:1  H1:i:0     
+EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     -242    ATTCTAAAATCAGCAAGAGAAAAGCATACAGTCAT     =;;8=====:========<================     MF:i:18 Aq:i:74 NM:i:0  UQ:i:0  H0:i:1  H1:i:0 
+```
+
+## samtools view 常用於進行篩選
+
+| 選項                           | 說明                             | 常見用途                            | 範例                                          |
+| ---------------------------- | ------------------------------ | ------------------------------- | ------------------------------------------- |
+| `-q INT`                     | 依 **mapping quality** 過濾 reads | 去除低品質比對                         | `samtools view -q 20 sample.bam`            |
+| `-f FLAG`                    | 只保留符合 FLAG 的 reads             | 保留 properly paired、first/second | `samtools view -f 2 sample.bam`             |
+| `-F FLAG`                    | 排除符合 FLAG 的 reads              | 排除 unmapped、secondary、duplicate | `samtools view -F 4 sample.bam`             |
+| `-h`                         | 輸出 header + reads              | 保留 header 的 SAM 格式輸出            | `samtools view -h sample.bam`               |
+| `-H`                         | 只輸出 header                     | 查看 BAM header                   | `samtools view -H sample.bam`               |
+| `-L bed-file`                | 依 BED 區域擷取 reads               | 多區域抽取                           | `samtools view -L targets.bed sample.bam`   |
+| `-@ INT`                     | 使用多核心運算                        | 加速大 BAM 解析                      | `samtools view -@ 8 sample.bam`             |
+| `--bam` /  `--cram`          | 指定輸出格式                         | 強制轉換格式                          | `samtools view --cram input.bam`            |
+| `region`（如 chr:start-end） | 擷取特定座標區段                       | 基因區域分析                          | `samtools view sample.bam chr1:10000-20000` |
+
+---
+
+# samtools flags (flag 解讀)
+
+`samtools flags` 用於查詢 SAM/BAM FLAG 的 bit 組合與含義，可協助判讀 `samtools view -f` 與 `-F` 的篩選條件。
+
+```{bash}
+samtools flags
+```
+
+`samtools flags <INT>` 可以解析該 FLAG 整數所代表的 bit 與狀態
+
+```{bash}
+samtools flags 2
+samtools flags 4
+```
+
+---
+
+# samtools flagstat
+
+`samtools flagstat` 會讀取 BAM/SAM/CRAM，並輸出一段簡短但非常重要的 mapping 統計，包括： read 總數、mapped reads 比例、properly paired 比例、duplicates 數量、singletons 數量、mate mapping 狀況（同 chr / diff chr）、QC-failed reads
+
+```{bash}
+samtools flagstat ../../.test/ex1.bam
+```
+
+
+| 欄位名稱                               | 說明                                              | 代表意義                                        | 常見 QC 解讀                                       |
+| ---------------------------------- | ----------------------------------------------- | ------------------------------------------- | ---------------------------------------------- |
+| **in total**                       | 總 reads 數（QC-passed + QC-failed）                | 原始讀序的整體數量                                   | 數量是否符合預期？太低可能是 library 問題                      |
+| **primary**                        | primary alignment 數（排除 secondary/supplementary） | 用於主要分析的 reads                               | primary 過低 → mapping 混亂或多重比對過多                 |
+| **secondary**                      | secondary alignment（多重比對）                       | aligner 找到多個 mapping 位置                     | 過高 → 重複序列或 mapping 參數寬鬆                        |
+| **supplementary**                  | supplementary alignment（如 chimeric read）        | split-read mapping                          | 過高可能代表結構變異或 chimera                            |
+| **mapped**                         | 成功比對到參考序列的 reads（%）                             | mapping rate（最重要 QC 指標之一）                   | WGS/WES 通常 >90%；太低可能是污染或物種不符                   |
+| **paired in sequencing**           | paired-end 資料中成對的 reads                         | 應等於總 PE reads                               | 若意外偏低 → 資料不完整或文件損壞                             |
+| **read1 / read2**                  | read1 及 read2 的數量                               | 正常應接近相等                                     | 不平衡 → sample degrade 或跑 Lane 不均                |
+| **properly paired**                | 合理方向 + 合理距離的 read pairs                         | alignment 品質是否正常                            | WGS 通常 >90%；太低 → insert size 問題或 contamination |
+| **with itself and mate mapped**    | read 與其 mate 都成功比對                              | paired-end mapping 完整性                      | 若低 → read2 不齊全（如跑丟一端）                          |
+| **singletons**                     | 只有一端比對成功                                        | library degrade、read 质量差或 RNA fragmentation | WGS 通常 <3%；高可能代表 sample degrade                |
+| **mate mapped to a different chr** | mate pair 在不同染色體                                | 可能是真實結構變異、錯配、或 mapping 錯誤                   | 過高可能是污染或 aligner 參數過寬                          |
+
+---
+
+# samtools merge
+
+用於合併多個 BAM 檔為單一檔案。
+
+```bash
+samtools merge -o ../../.test/merge.bam ../../.test/ex1.bam ../../.test/ex1.sorted.bam
+```
+
+---
+
+# samtools coverage
+
+`samtools coverage` 用於計算每條染色體的平均深度（mean depth）、覆蓋率（coverage%）與一些區域性統計資訊。
+
+```{bash}
+samtools coverage ../../.test/ex1.sorted.bam
+```
+
+| 欄位名稱             | 說明                             | 代表意義                  | 常見 QC 解讀                                             |
+| ---------------- | ------------------------------ | --------------------- | ---------------------------------------------------- |
+| **rname**        | 參考序列名稱（染色體/contig）             | 統計對應到哪條染色體            | 用於檢查 coverage 是否在不同染色體間均勻                            |
+| **startpos**     | 區域起始位置                         | 一般為 1                 | 無特別 QC 使用，作為範圍參考                                     |
+| **endpos**       | 區域終止位置                         | 等於染色體長度               | 無特別 QC 使用，作為範圍參考                                     |
+| **numreads**     | 覆蓋該染色體的 reads 數量               | 用來判斷 reads 在各染色體的分布狀況 | 若某染色體過低 → 可能 mapping 偏差或樣本問題                         |
+| **covbases**     | 被 ≥1 read 覆蓋的碱基數量              | 計算 coverage% 的分子      | 若明顯偏低 → dropout、capture 不良、mapping 問題                |
+| **coverage (%)** | covbases / endpos × 100        | 染色體實際覆蓋率              | WGS/WES 需接近 100%；panel 低 coverage 會造成 false negative |
+| **meandepth**    | 平均深度（mean depth）               | 最重要深度 QC 指標           | WGS 30X/60X；WES/panel 依設計不同，過低會影響 variant calling    |
+| **meanbaseq**    | 覆蓋到之碱基的平均 base quality         | Reads 序列品質代表          | 若偏低 → read 品質差或 instrument 問題                        |
+| **meanmapq**     | 覆蓋到之 reads 的平均 mapping quality | 對齊品質指標                | <30 代表 mapping 可能不可靠、參考序列不符或比對參數錯誤                   |
+
+---
+
+# samtools depth
+
+`samtools depth` 用於輸出 BAM 中 每個位置（per-base） 的深度（depth）
+
+```{bash}
+samtools depth ../../.test/ex1.sorted.bam | head
+```
+
+| 欄位        | 名稱          | 說明              | QC 用途                        |
+| --------- | ----------- | --------------- | ---------------------------- |
+| **chrom** | 染色體名稱       | 比對到的參考序列名稱      | 用於識別區域 depth 分布              |
+| **pos**   | 位置（1-based） | 該位置在參考基因組的座標    | 用來定位 low-depth 或 dropout 位置  |
+| **depth** | read 深度     | 覆蓋該位置的 reads 數目 | panel/WES 最主要 coverage QC 資料 |
+
+
+## 計算平均深度
+
+```{bash}
+samtools depth ../../.test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
+```
+
+---
+
+# samtools idxstats
+
+`samtools idxstats` 用於顯示 每條染色體的 read 數量與參考序列長度，依靠 BAM 的 index (.bai 或 .csi)
+
+```{bash}
+samtools idxstats ../../.test/ex1.sorted.bam
+```
+
+| 欄位           | 名稱                  | 說明                     | 意義 / QC 用途              |
+| ------------ | ------------------- | ---------------------- | ----------------------- |
+| **chrom**    | 染色體 / contig 名稱     | 參考序列名稱                 | 用來檢查 contig 是否異常或有污染    |
+| **length**   | 序列長度                | 該 chromosome 在參考序列中的大小 | 檢查 reference build 是否一致 |
+| **mapped**   | 成功比對到該染色體的 reads 數量 | 染色體層級 mapping 數        | mapping 是否均勻；chrM 是否過高  |
+| **unmapped** | 比對失敗但位於此條目的 reads   | 代表某些 read 無法比對         | unmapped 太多可能是污染或品質差    |
+
+---
+
+# samtools stats
+
+samtools stats 是 最完整的 mapping 統計，提供： mapping 深度、read 長度分布、GC 分布、按距離區分的 insert size 分布、mismatch / error rate 與 per-chromosome 統計
+
+```{bash}
+samtools stats ../../.test/ex1.sorted.bam | head
+```
+
+| 欄位                                 | 說明                 | 意義 / QC 用途                     |
+| ---------------------------------- | ------------------ | ------------------------------ |
+| **raw total sequences**            | 原始讀序數量             | 檢查整體資料量是否足夠                    |
+| **filtered sequences**             | 被 filter 掉的 reads  | 若 >0 → 上游 pipeline 有過濾步驟       |
+| **sequences**                      | 參與比對的 reads        | 通常 = raw total - filtered      |
+| **is sorted**                      | BAM 是否已排序          | GATK / bcftools pipeline 必須為 1 |
+| **average length**                 | read 平均長度          | 檢查是否符合平台（Illumina 150bp）       |
+| **average quality**                | base quality 平均值   | <30 可能是低品質序列                   |
+| **insert size average**            | 插入片段長度             | WES/WGS 中非常關鍵                  |
+| **insert size standard deviation** | 插入長度變異             | 變異大 → library 不均勻              |
+| **average depth**                  | 整體平均深度             | 判斷是否達到 WGS 30X / WES 100X      |
+| **error rate**                     | mismatches / bases | 高 error rate → 可能污染            |
+
+---
+
+# samtools --help
+
+顯示 samtools 提供的主要參數與使用說明，適合作為快速查詢指令用途。
+
+```{bash}
+samtools --help
+```
