@@ -9,7 +9,9 @@ website:
     left:
       - href: index.qmd
         text: Home
+        icon: house
       - text: NGS Tools
+        icon: tools
         menu:
           - href: ngs-tools/fastp.qmd
             text: fastp
@@ -23,17 +25,20 @@ website:
             text: vcftools
           - href: ngs-tools/bcftools.qmd
             text: bcftools
-      - text: Environment Tools
+      - text: Environment
+        icon: boxes
         menu:
           - href: env-tools/conda.qmd
             text: conda
           - href: env-tools/mamba.qmd
             text: mamba
-      - text: R Packages
+      - text: R
+        icon: braces
         menu:
           - href: ngs-r/maftools.qmd
             text: maftools
-      - text: Reports demo
+      - text: Reports
+        icon: file-earmark-bar-graph
         menu:
           - href: report/fastp_report.qmd
             text: fastp demo report
