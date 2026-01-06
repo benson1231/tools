@@ -75,6 +75,7 @@ bcftools view .test/Strelka_1234N_variants.vcf.gz
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
+```
 ##fileformat=VCFv4.1
 ##FILTER=<ID=PASS,Description="All filters passed">
 ##fileDate=20180129
@@ -179,6 +180,7 @@ bcftools view .test/Strelka_1234N_variants.vcf.gz
 1       141399  .       C       T       0       LowGQX  SNVHPOL=2;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:11:0:6:0:5,1:1,0:4,1:0:LowGQX:13,0,85
 1       141463  .       T       G       0       LowGQX  SNVHPOL=2;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:19:1:3:0:2,1:0,0:2,1:0:LowGQX:22,0,43
 1       141559  .       A       C       0       LowGQX  SNVHPOL=4;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:19:1:3:0:2,1:0,0:2,1:0:LowGQX:22,0,42
+```
 </details>
 
 ## 變異不含header
@@ -190,6 +192,7 @@ bcftools view -H .test/Strelka_1234N_variants.vcf.gz
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
+```
 1       131731  .       C       T       0       LowGQX  SNVHPOL=7;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:7:0:14:2:12,2:12,2:0,0:0:LowGQX:8,0,113
 1       131957  .       C       A       6       PASS    SNVHPOL=2;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:37:5:27:2:21,6:5,2:16,4:-2.7:PASS:39,0,191
 1       131965  .       G       A       1       LowGQX  SNVHPOL=3;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:26:0:27:4:22,5:5,2:17,3:0:LowGQX:28,0,196
@@ -200,6 +203,7 @@ bcftools view -H .test/Strelka_1234N_variants.vcf.gz
 1       132838  .       G       T       21      PASS    SNVHPOL=3;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:54:12:22:1:16,6:8,4:8,2:-4.9:PASS:56,0,163
 1       133129  .       G       A       154     PASS    SNVHPOL=3;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:162:30:57:3:27,30:15,18:12,12:-18:PASS:189,0,159
 1       133483  .       G       T       85      PASS    SNVHPOL=2;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:118:30:4
+```
 </details>
 
 ## 只保留 PASS 變異
