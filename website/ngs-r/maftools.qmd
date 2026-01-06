@@ -1,0 +1,16 @@
+---
+title: "maftools"
+format: html
+---
+
+<style>
+.quarto-title-block {
+  text-align: center;
+}
+</style>
+
+::: {.column-screen-inset}
+<iframe src="../assets/maftools.html"
+        style="width:100%; height:90vh; border:none;">
+</iframe>
+:::

@@ -31,15 +31,15 @@ website:
             text: mamba
       - text: R Packages
         menu:
-          - href: ngs-r/maftools/maftools.html
+          - href: ngs-r/maftools.qmd
             text: maftools
       - text: Reports demo
         menu:
-          - href: examples/fastp_report.html
+          - href: report/fastp_report.qmd
             text: fastp demo report
-          - href: examples/a.chr21_R1_fastqc.html
+          - href: report/fastqc_report.qmd
             text: fastqc demo report
-          - href: examples/multiqc_report.html
+          - href: report/multiqc_report.qmd
             text: multiqc demo report
 
     tools:

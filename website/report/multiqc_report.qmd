@@ -1,0 +1,16 @@
+---
+title: "fastp Report (Demo)"
+format: html
+---
+
+<style>
+.quarto-title-block {
+  text-align: center;
+}
+</style>
+
+::: {.column-screen-inset}
+<iframe src="../assets/multiqc_report.html"
+        style="width:100%; height:90vh; border:none;">
+</iframe>
+:::
