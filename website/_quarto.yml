@@ -5,6 +5,8 @@ project:
     - "!**/*.Rmd"
 
 website:
+  back-to-top-navigation: true
+  page-footer: "Copyright 2026, benson1231"
   navbar:
     pinned: true
     left:
