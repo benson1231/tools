@@ -26,6 +26,10 @@ website:
             text: conda
           - href: env-tools/mamba.qmd
             text: mamba
+      - text: R Packages
+        menu:
+          - href: ngs-r/maftools/maftools.html
+            text: maftools
       - text: Reports demo
         menu:
           - href: examples/fastp_report.html
