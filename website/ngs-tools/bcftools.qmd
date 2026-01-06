@@ -6,9 +6,25 @@ date-format: "YYYY-MM-DD"
 
 # bcftools 介紹
 
+BCFtools 專為處理 VCF 和 BCF 資料而設計。它將輸入檔案「-」視為標準輸入 (stdin)，並將輸出傳送到標準輸出 (stdout)，方便 Unix pipes 使用。
+
+::: {.callout-note}
+# 基本指令
+
+bcftools [--version|--version-only] [--help] [COMMAND] [OPTIONS]
+:::
+
+::: {.callout-tip}
+# Refernece
+
+Twelve years of SAMtools and BCFtools
+Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li
+GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093/gigascience/giab008
+:::
+
 ---
 
-# bcftools --version
+# bcftools --version (版本)
 
 ```bash
 bcftools --version
@@ -25,10 +41,37 @@ There is NO WARRANTY, to the extent permitted by law.
 
 ---
 
+# bcftools view ()
 
 
+---
+
+# bcftools filter ()
 
 
+---
+
+# bcftools merge ()
+
+---
+
+# bcftools concat ()
+
+---
+
+# bcftools sort ()
+
+---
+
+# bcftools index ()
+
+---
+
+# bcftools stats ()
+
+---
+
+# bcftools annotate ()
 
 
 
