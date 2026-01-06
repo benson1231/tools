@@ -6,6 +6,7 @@ project:
 
 website:
   navbar:
+    pinned: true
     left:
       - href: index.qmd
         text: Home
@@ -60,8 +61,11 @@ website:
 
 format:
   html:
-    theme: cosmo
-    css: styles/quarto.css
+    theme: 
+      light: flatly
+      dark: darkly
+    respect-user-color-scheme: true
+    css: styles.css
 
     toc: true
     toc-title: Contents
