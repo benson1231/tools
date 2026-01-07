@@ -7,7 +7,7 @@ date-format: "YYYY-MM-DD"
 # mamba 介紹
 
 ::: {.callout-note}
-現代生物資訊工作流程（特別是 nf-core）已全面建議使用 mamba 取代 conda 進行求解，沒接觸過 conda 的人可參閱 [conda教學](../conda/conda.html)。
+現代生物資訊工作流程（特別是 nf-core）已全面建議使用 mamba 取代 conda 進行求解，沒接觸過 conda 的人可參閱 [conda教學](./conda.html)。
 :::
 
 mamba 是一個高效、與 conda 完全相容的套件與環境管理工具，由 QuantStack 開發。它的目標是提供比 conda **更快、更穩定、更具可預測性**的套件求解（dependency solving）能力，同時保留所有 conda 的使用方式與指令格式。

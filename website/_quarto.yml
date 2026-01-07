@@ -13,6 +13,7 @@ website:
       - href: index.qmd
         text: Home
         icon: house
+
       - text: NGS Tools
         icon: tools
         menu:
@@ -28,18 +29,30 @@ website:
             text: vcftools
           - href: ngs-tools/bcftools.qmd
             text: bcftools
-      - text: Environment
-        icon: boxes
+          - href: ngs-tools/bedtools.qmd
+            text: bedtools
+
+      - text: CI/CD
+        icon: diagram-3
         menu:
-          - href: env-tools/conda.qmd
+          - href: cicd/conda.qmd
             text: conda
-          - href: env-tools/mamba.qmd
+          - href: cicd/mamba.qmd
             text: mamba
+          - href: cicd/docker.qmd
+            text: docker
+          - href: cicd/github-actions.qmd
+            text: github actions
+          - href: cicd/kubernetes.qmd
+            text: kubernetes
+
+
       - text: R
         icon: braces
         menu:
           - href: ngs-r/maftools.qmd
             text: maftools
+
       - text: Reports
         icon: file-earmark-bar-graph
         menu:
