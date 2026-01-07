@@ -14,6 +14,20 @@ website:
         text: Home
         icon: house
 
+      - text: CI/CD
+        icon: boxes
+        menu:
+          - href: cicd/conda.qmd
+            text: conda
+          - href: cicd/mamba.qmd
+            text: mamba
+          - href: cicd/docker.qmd
+            text: docker
+          - href: cicd/github-actions.qmd
+            text: github actions
+          - href: cicd/kubernetes.qmd
+            text: kubernetes
+
       - text: NGS Tools
         icon: tools
         menu:
@@ -32,22 +46,7 @@ website:
           - href: ngs-tools/bedtools.qmd
             text: bedtools
 
-      - text: CI/CD
-        icon: diagram-3
-        menu:
-          - href: cicd/conda.qmd
-            text: conda
-          - href: cicd/mamba.qmd
-            text: mamba
-          - href: cicd/docker.qmd
-            text: docker
-          - href: cicd/github-actions.qmd
-            text: github actions
-          - href: cicd/kubernetes.qmd
-            text: kubernetes
-
-
-      - text: R
+      - text: R Tools
         icon: braces
         menu:
           - href: ngs-r/maftools.qmd
@@ -62,6 +61,12 @@ website:
             text: fastqc demo report
           - href: report/multiqc_report.qmd
             text: multiqc demo report
+
+      - text: Workflow
+        icon: diagram-3
+        menu:
+          - href: workflow/survival.qmd
+            text: survival analysis
 
     tools:
       - icon: book
