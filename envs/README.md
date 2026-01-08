@@ -7,8 +7,8 @@
 ## 創建 local 端 quarto 環境
 
 ```bash
-mamba env create -f envs/local-quarto.yaml -y
-mamba activate local-quarto
+mamba env create -f envs/quarto.yaml -y
+mamba activate quarto
 ```
 
 ---

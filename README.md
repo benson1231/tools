@@ -42,7 +42,7 @@ Please refer to the environment documentation in [`envs/README.md`](./envs/READM
 
 ## Render the Website
 
-To build the website locally, install [Quarto](https://quarto.org/docs/get-started/) or create a ready-to-use environment using [`envs/local-quarto.yaml`](./envs/local-quarto.yaml).
+To build the website locally, install [Quarto](https://quarto.org/docs/get-started/) or create a ready-to-use environment using [`envs/quarto.yaml`](./envs/quarto.yaml).
 
 ```bash
 quarto render ./website

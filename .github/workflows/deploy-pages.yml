@@ -23,13 +23,13 @@ jobs:
       - name: Setup micromamba
         uses: mamba-org/setup-micromamba@v2
         with:
-          environment-file: envs/ci-quarto.yaml
-          environment-name: ci-quarto
+          environment-file: envs/quarto.yaml
+          environment-name: quarto
           cache-environment: true
 
       - name: Render Quarto website
         run: >
-          micromamba run -n ci-quarto
+          micromamba run -n quarto
           quarto render website/
 
       - name: Upload website artifact
