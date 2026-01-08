@@ -12,7 +12,7 @@ date-format: "YYYY-MM-DD"
 [Conda](https://github.com/conda/conda) 本身是一個 CLI 工具（Command-Line Interface tool），可透過指令執行套件安裝、環境建立、版本管理與環境切換。本篇文章將整理常用的 Conda 指令與實務操作，詳細指令請見 [官方文檔](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html)。
 
 此外，Conda 也有一個速度更快、完全相容的替代指令工具 —— mamba。
-mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但**實務上強烈建議在生物資訊流程中使用 mamba** 執行環境建立與套件安裝，詳細介紹請見 [mamba 教學](../mamba/mamba.html) 。
+mamba 使用 C++ 撰寫的求解器（solver），在處理大型生物資訊工具依賴時速度可達到 Conda 的 10–100 倍。本篇內容主要以 Conda 命令為基礎，但**實務上強烈建議在生物資訊流程中使用 mamba** 執行環境建立與套件安裝，詳細介紹請見 [mamba 教學](./mamba.html) 。
 
 ---
 

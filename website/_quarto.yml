@@ -31,25 +31,25 @@ website:
       - text: NGS Tools
         icon: tools
         menu:
-          - href: ngs-tools/fastp.qmd
+          - href: tools/fastp.qmd
             text: fastp
-          - href: ngs-tools/fastqc.qmd
+          - href: tools/fastqc.qmd
             text: fastqc
-          - href: ngs-tools/multiqc.qmd
+          - href: tools/multiqc.qmd
             text: multiqc
-          - href: ngs-tools/samtools.qmd
+          - href: tools/samtools.qmd
             text: samtools
-          - href: ngs-tools/vcftools.qmd
+          - href: tools/vcftools.qmd
             text: vcftools
-          - href: ngs-tools/bcftools.qmd
+          - href: tools/bcftools.qmd
             text: bcftools
-          - href: ngs-tools/bedtools.qmd
+          - href: tools/bedtools.qmd
             text: bedtools
 
       - text: R Tools
         icon: braces
         menu:
-          - href: ngs-r/maftools.qmd
+          - href: r/maftools.qmd
             text: maftools
 
       - text: Reports
