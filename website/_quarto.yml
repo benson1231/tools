@@ -17,6 +17,8 @@ website:
       - text: CI/CD
         icon: boxes
         menu:
+          - href: docs/cicd/linux.qmd
+            text: linux
           - href: docs/cicd/conda.qmd
             text: conda
           - href: docs/cicd/mamba.qmd

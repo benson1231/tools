@@ -1,0 +1,182 @@
+---
+title: "linux 基本指令"
+date: today
+date-format: "YYYY-MM-DD"
+---
+
+# Linux 介紹
+
+Linux 是一種開放原始碼（open-source）作業系統核心（kernel），最早由 Linus Torvalds 於 1991 年釋出，廣泛應用於伺服器、雲端平台、嵌入式系統以及高效能運算（HPC）環境。現今多數的雲端服務、超級電腦與生物資訊分析流程，皆以 Linux 作為核心作業環境。
+
+::: {.callout-tip}
+實務上，我們常說的「Linux」通常指的是Linux kernel + GNU 工具鏈 + 使用者空間工具所組成的完整作業系統，並以不同的 Linux 發行版（distribution, distro） 形式提供。
+:::
+
+---
+
+# 檔案與目錄操作
+
+## 顯示目錄內容
+
+```bash
+ls            # 列出目前目錄
+ls -l         # 詳細資訊
+ls -a         # 顯示隱藏檔
+ls -lh        # 人類可讀格式
+```
+
+## 切換與查看路徑
+
+```bash
+pwd           # 顯示目前所在路徑
+cd /path/to   # 切換目錄
+cd ..         # 回上一層
+cd ~          # 回到家目錄
+```
+
+## 建立與刪除
+
+```bash
+mkdir test            # 建立目錄
+mkdir -p a/b/c        # 建立巢狀目錄
+rm file.txt           # 刪除檔案
+rm -r dir/            # 刪除目錄
+rm -rf dir/           # 強制刪除（小心使用）
+```
+
+## 複製、移動、重新命名
+
+```bash
+cp a.txt b.txt        # 複製檔案
+cp -r src/ dst/       # 複製目錄
+mv old new            # 重新命名或移動
+```
+
+---
+
+# 檔案內容檢視與編輯
+
+## 檢視檔案內容
+
+```bash
+cat file.txt          # 顯示全部內容
+less file.txt         # 分頁顯示（可搜尋）
+head -n 10 file.txt   # 顯示前 10 行
+tail -n 10 file.txt   # 顯示後 10 行
+tail -f log.txt       # 即時追蹤檔案
+```
+
+## 基本文字編輯器
+
+```bash
+nano file.txt         # 新手友善
+vi file.txt           # 常見編輯器
+```
+
+---
+
+# 搜尋與比對
+
+## 搜尋檔案
+
+```bash
+find . -name "*.txt"          # 依名稱搜尋
+find . -type f -size +10M      # 搜尋大檔案
+```
+
+## 文字比對（grep）
+
+```bash
+grep "error" file.log         # 搜尋字串
+grep -i "error" file.log      # 忽略大小寫
+grep -r "gene" ./data/        # 遞迴搜尋
+```
+
+---
+
+# 權限與擁有者
+
+## 查看權限
+
+```bash
+ls -l
+```
+
+## 修改權限（chmod）
+
+```bash
+chmod 755 script.sh            # rwxr-xr-x
+chmod +x run.sh                # 加上執行權限
+```
+
+## 修改擁有者
+
+```bash
+chown user:group file.txt
+```
+
+---
+
+# 壓縮與解壓縮
+
+```bash
+tar -czvf file.tar.gz dir/     # 壓縮
+tar -xzvf file.tar.gz          # 解壓縮
+zip -r file.zip dir/
+unzip file.zip
+```
+
+---
+
+# 系統與程序管理
+
+## 查看系統狀態
+
+```bash
+uname -a        # 系統資訊
+uptime          # 系統運行時間
+free -h         # 記憶體使用情況
+df -h           # 磁碟空間
+```
+
+## 程序管理
+
+```bash
+ps aux | less   # 查看所有程序
+top             # 即時監控
+htop            # 進階監控（需安裝）
+kill PID        # 終止程序
+```
+
+---
+
+# 重新導向與管線（Pipe）
+
+```bash
+command > out.txt        # 輸出導向
+command >> out.txt       # 追加輸出
+command < in.txt         # 輸入導向
+
+ps aux | grep root       # 管線操作
+```
+
+---
+
+# 網路與下載
+
+```bash
+ping google.com          # 測試連線
+curl https://example.com # 取得網頁內容
+wget url                 # 下載檔案
+```
+
+---
+
+# 常見實務技巧
+
+```bash
+history                  # 查看歷史指令
+!!                       # 重跑上一個指令
+!123                     # 重跑第 123 個指令
+alias ll='ls -lh'        # 建立別名
+```
