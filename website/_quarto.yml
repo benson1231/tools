@@ -67,7 +67,7 @@ website:
       - text: Workflow
         icon: diagram-3
         menu:
-          - href: docs/workflow/survival.qmd
+          - href: docs/workflow/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
 
     tools:
