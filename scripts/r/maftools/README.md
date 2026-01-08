@@ -3,7 +3,7 @@ Original `maftools` components are licensed under the MIT License by Anand Mayak
 See `LICENSE.maftools` for details.
 
 ```bash
-mamba env create -f envs/ngs-r/maftools.yaml -y
+mamba env create -f scripts/r/maftools/envs/maftools.yaml -y
 
 mamba activate maftools
 

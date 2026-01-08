@@ -1,0 +1,118 @@
+---
+title: ""
+author: "benson1231"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    self_contained: yes
+    css: ../styles/rmarkdown.css
+    highlight: pygments
+---
+
+# 使用 R 做存活分析
+
+本文章參考以下 workshop 內容: https://bioconnector.github.io/workshops/r-survival.html
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(survival)
+library(survminer)
+```
+
+# 讀取資料
+
+讀取 `survival` 套件內建資料集 lung
+
+```{r}
+lung_df <- as_tibble(lung)
+head(lung_df)
+```
+
+# 擬合生存曲線
+
+以性別來擬合生存曲線
+
+```{r}
+sfit <- survfit(Surv(time, status)~sex, data=lung)
+sfit
+summary(sfit)
+```
+
+可以對 `summary()函數` 指定結果中顯示的時間範圍
+
+```{r}
+summary(sfit, times=seq(0, 1000, 100))
+```
+
+# 繪製Kaplan-Meier plot
+
+```{r}
+sfit <- survfit(Surv(time, status)~sex, data=lung)
+plot(sfit)
+```
+
+可以用 `survminer` 繪製精美圖表
+
+```{r}
+survminer::ggsurvplot(sfit)
+```
+
+```{r}
+ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
+           legend.labs=c("Male", "Female"), legend.title="Sex",  
+           palette=c("dodgerblue2", "orchid2"), 
+           title="Kaplan-Meier Curve for Lung Cancer Survival", 
+           risk.table.height=.15)
+```
+
+# Cox回歸
+
+```{r}
+fit <- coxph(Surv(time, status)~sex, data=lung)
+fit
+```
+
+
+```{r}
+summary(fit)
+survdiff(Surv(time, status)~sex, data=lung)
+```
+
+
+```{r}
+fit <- coxph(Surv(time, status)~sex+age+ph.ecog+ph.karno+pat.karno+meal.cal+wt.loss, data=lung)
+fit
+```
+
+# KM plot分組
+
+先查看適合切點
+
+```{r}
+mean(lung$age)
+ggplot(lung, aes(age)) + geom_histogram(bins=20)
+```
+
+
+```{r}
+lung <- lung %>% 
+  dplyr::mutate(agecat=cut(age, breaks=c(0, 62, Inf), labels=c("young", "old")))
+
+head(lung)
+
+ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
+```
+
+不同切點
+
+```{r}
+lung <- lung %>% 
+  dplyr::mutate(agecat=cut(age, breaks=c(0, 70, Inf), labels=c("young", "old")))
+
+ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
+```
+
