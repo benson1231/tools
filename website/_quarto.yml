@@ -17,55 +17,55 @@ website:
       - text: CI/CD
         icon: boxes
         menu:
-          - href: cicd/conda.qmd
+          - href: docs/cicd/conda.qmd
             text: conda
-          - href: cicd/mamba.qmd
+          - href: docs/cicd/mamba.qmd
             text: mamba
-          - href: cicd/docker.qmd
+          - href: docs/cicd/docker.qmd
             text: docker
-          - href: cicd/github-actions.qmd
+          - href: docs/cicd/github-actions.qmd
             text: github actions
-          - href: cicd/kubernetes.qmd
+          - href: docs/cicd/kubernetes.qmd
             text: kubernetes
 
       - text: NGS Tools
         icon: tools
         menu:
-          - href: tools/fastp.qmd
+          - href: docs/tools/fastp.qmd
             text: fastp
-          - href: tools/fastqc.qmd
+          - href: docs/tools/fastqc.qmd
             text: fastqc
-          - href: tools/multiqc.qmd
+          - href: docs/tools/multiqc.qmd
             text: multiqc
-          - href: tools/samtools.qmd
+          - href: docs/tools/samtools.qmd
             text: samtools
-          - href: tools/vcftools.qmd
+          - href: docs/tools/vcftools.qmd
             text: vcftools
-          - href: tools/bcftools.qmd
+          - href: docs/tools/bcftools.qmd
             text: bcftools
-          - href: tools/bedtools.qmd
+          - href: docs/tools/bedtools.qmd
             text: bedtools
 
       - text: R Tools
         icon: braces
         menu:
-          - href: r/maftools.qmd
+          - href: docs/r/maftools.qmd
             text: maftools
 
       - text: Reports
         icon: file-earmark-bar-graph
         menu:
-          - href: report/fastp_report.qmd
+          - href: docs/report/fastp_report.qmd
             text: fastp demo report
-          - href: report/fastqc_report.qmd
+          - href: docs/report/fastqc_report.qmd
             text: fastqc demo report
-          - href: report/multiqc_report.qmd
+          - href: docs/report/multiqc_report.qmd
             text: multiqc demo report
 
       - text: Workflow
         icon: diagram-3
         menu:
-          - href: workflow/survival.qmd
+          - href: docs/workflow/survival.qmd
             text: survival analysis
 
     tools:

@@ -8,7 +8,7 @@ mamba env create -f envs/ngs-r/maftools.yaml -y
 mamba activate maftools
 
 Rscript -e "rmarkdown::render(
-  'r/maftools/maftools.Rmd',
-  output_dir = 'website/assets'
+  'scripts/r/maftools/maftools.Rmd',
+  output_dir = 'website/assets/maftools'
 )"
 ```
