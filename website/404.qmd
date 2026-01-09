@@ -4,3 +4,12 @@ toc: false
 sidebar: false
 navbar: false
 ---
+
+## 🚫 Page not found
+
+Sorry, the page you are looking for does not exist.
+
+- Check the URL
+- Or return to the homepage
+
+👉 [Back to Home](./index.qmd)
