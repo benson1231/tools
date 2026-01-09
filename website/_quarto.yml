@@ -5,7 +5,6 @@ project:
     - "!**/*.Rmd"
 
 website:
-  title: "benson1231/tools"
   site-url: "https://benson1231.github.io/tools/"
   back-to-top-navigation: true
   page-footer: "Copyright 2026, benson1231"
