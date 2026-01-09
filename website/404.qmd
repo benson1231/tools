@@ -5,6 +5,7 @@ toc: false
 sidebar: false
 navbar: false
 number-sections: false
+title-block-style: none
 
 format:
   html:
