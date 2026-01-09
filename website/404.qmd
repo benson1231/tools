@@ -1,15 +1,23 @@
 ---
-title: Page Not Found
+title: "🚫 Page Not Found"
 toc: false
 sidebar: false
 navbar: false
+number-sections: false
+page-layout: full
 ---
 
-## 🚫 Page not found
+<div style="text-align: center; margin-top: 20vh;">
+
+::: {.callout-warning}
+## Page not found
 
 Sorry, the page you are looking for does not exist.
 
-- Check the URL
-- Or return to the homepage
+- Check the URL  
+- Or return to the homepage  
 
-👉 [Back to Home](./index.qmd)
+👉 [Back to Home](index.qmd)
+:::
+
+</div>
