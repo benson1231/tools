@@ -1,23 +1,32 @@
 ---
 title: "🚫 Page Not Found"
+page-layout: full
 toc: false
 sidebar: false
 navbar: false
 number-sections: false
-page-layout: full
+
+format:
+  html:
+    margin: false
 ---
 
-<div style="text-align: center; margin-top: 20vh;">
+<div style="
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  text-align: center;
+">
 
-::: {.callout-warning}
-## Page not found
+## 🚫 Page not found
 
 Sorry, the page you are looking for does not exist.
 
-- Check the URL  
-- Or return to the homepage  
+- 🔍 Check the URL  
+- 🏠 Or return to the homepage  
 
-👉 [Back to Home](index.qmd)
-:::
+👉 **[Back to Home](index.qmd)**
 
 </div>
