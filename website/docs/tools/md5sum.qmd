@@ -1,0 +1,14 @@
+---
+title: "md5sum 基本使用"
+date: today
+date-format: "YYYY-MM-DD"
+---
+
+# md5 / md5sum
+
+`md5`（Message-Digest Algorithm 5）是一種常用的雜湊演算法，  
+在生物資訊分析中，最常用於 **檔案完整性驗證（file integrity check）**。
+
+```bash
+md5sum ../sample.fastq.gz
+```

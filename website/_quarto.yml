@@ -48,6 +48,8 @@ website:
             text: bcftools
           - href: docs/tools/bedtools.qmd
             text: bedtools
+          - href: docs/tools/md5sum.qmd
+            text: md5sum
 
       - text: R Tools
         icon: braces
