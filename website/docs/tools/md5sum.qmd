@@ -129,11 +129,3 @@ sha256sum file.fastq.gz
 * pipeline 輸出結果（如 variant / count matrix）可一併提供 checksum
 * 投稿、資料交付或長期保存前，重新驗證一次 md5
 
----
-
-## 相關指令
-
-* `md5sum`
-* `sha1sum`
-* `sha256sum`
-* `openssl md5`
