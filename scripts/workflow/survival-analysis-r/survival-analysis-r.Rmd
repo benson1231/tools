@@ -19,8 +19,11 @@ output:
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr)
+library(tidyr)
+library(purrr)
 library(survival)
 library(survminer)
+library(timeROC)
 ```
 
 # 讀取資料
@@ -115,4 +118,112 @@ lung <- lung %>%
 
 ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
 ```
+
+# ROC
+
+- status:  
+1 = censored
+2 = dead
+- event
+1 = event(事件發生)
+0 = without event
+
+```{r}
+analysis_df <- lung_df %>%
+  dplyr::mutate(event = as.integer(status == 2)) %>%
+  dplyr::select(time, event, age, sex, ph.ecog) %>% 
+  tidyr::drop_na()
+
+cox_fit <- analysis_df %>%
+  survival::coxph(Surv(time, event) ~ age + sex + ph.ecog, data = .)
+
+summary(cox_fit)
+```
+
+
+
+```{r}
+risk_score <- predict(cox_fit, type = "lp")
+head(risk_score)
+```
+
+```{r}
+times_years <- c(0.5, 1, 2)
+times_days  <- times_years * 365
+
+time_roc_res <- timeROC(
+  T     = analysis_df$time,
+  delta = analysis_df$event,
+  marker = risk_score,
+  cause  = 1,
+  times  = times_days,
+  iid    = TRUE
+)
+
+time_roc_res$AUC
+```
+
+
+```{r}
+roc_df <- map_dfr(
+  seq_along(times_years),
+  function(i) {
+    tibble(
+      FPR  = time_roc_res$FP[, i],
+      TPR  = time_roc_res$TP[, i],
+      time = paste0(times_years[i], " year")
+    )
+  }
+)
+```
+
+```{r}
+plot_time_roc <- function(roc_df, auc, times_years,
+                          colors = c("#BC3C29FF", "#0072B5FF", "#E18727FF")) {
+
+  auc_labels <- paste0(
+    "AUC at ", times_years, " years = ",
+    sprintf("%.3f", auc)
+  )
+
+  ggplot(roc_df, aes(x = FPR, y = TPR, color = time)) +
+    geom_line(size = 1) +
+    geom_abline(
+      slope = 1, intercept = 0,
+      color = "grey", linetype = "dashed", size = 1
+    ) +
+    scale_color_manual(values = colors) +
+    theme_bw() +
+    labs(
+      x = "False positive rate",
+      y = "True positive rate",
+      color = "Time"
+    ) +
+    annotate(
+      "text",
+      x = 0.75,
+      y = seq(0.25, 0.25 - 0.1 * (length(auc_labels) - 1), by = -0.1),
+      label = auc_labels,
+      color = colors,
+      size = 4.5,
+      hjust = 0
+    )
+}
+```
+
+
+```{r}
+plot_time_roc(
+  roc_df        = roc_df,
+  auc           = time_roc_res$AUC,
+  times_years   = times_years
+)
+```
+
+
+
+
+
+
+
 
