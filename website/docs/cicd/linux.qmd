@@ -202,10 +202,11 @@ echo -e "\e[33mWarning\e[0m"          # 黃色 `Warning`
 
 且可以與已下效果搭配使用:
 | 效果 | 代碼 |
-| -- | -- |
-| 加粗 | 1  |
-| 底線 | 4  |
-| 反白 | 7  |
+|:----|:----:|
+| 加粗 | `1` |
+| 底線 | `4` |
+| 反白 | `7` |
+
 
 ```bash
 echo -e "\e[1;31mBold Red Error\e[0m"          # 紅色粗體
@@ -214,7 +215,7 @@ echo -e "\e[4;34mUnderlined Blue Text\e[0m"    # 藍色加底線
 
 ## 定義顏色變數
 
-可以直接在bash開頭加入以下:
+可以直接在bash script開頭命令以下變數:
 
 ```bash
 RED="\e[31m"
@@ -223,7 +224,7 @@ YELLOW="\e[33m"
 NC="\e[0m"   # No Color
 ```
 
-後續就可以直接索引變數~
+之後就可以直接索引變數，更好理解啦~
 
 ```bash
 echo -e "${GREEN}Pipeline finished successfully${NC}"
