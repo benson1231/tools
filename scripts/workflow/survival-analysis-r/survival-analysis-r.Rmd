@@ -207,7 +207,7 @@ plot_time_roc <- function(roc_df, auc, times_years,
       y = seq(0.25, 0.25 - 0.1 * (length(auc_labels) - 1), by = -0.1),
       label = auc_labels,
       color = colors,
-      size = 4.0,
+      size = 3.5,
       hjust = 0
     )
 }
