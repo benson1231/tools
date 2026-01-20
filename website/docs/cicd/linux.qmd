@@ -189,11 +189,13 @@ alias ll='ls -lh'        # 建立別名
 ```bash
 echo -e "\e[顏色碼m文字\e[0m"
 ```
+
 - `\e[`：顏色控制開始
 - `m`：樣式結束
 - `\e[0m`：重置為預設顏色（一定要加）
 
 例如:
+
 ```bash
 echo -e "\e[31mError occurred\e[0m"   # 紅色 `Error occurred`
 echo -e "\e[32mSuccess\e[0m"          # 綠色 `Success`
@@ -201,6 +203,7 @@ echo -e "\e[33mWarning\e[0m"          # 黃色 `Warning`
 ```
 
 且可以與已下效果搭配使用:
+
 - 加粗: `1`
 - 底線: `4`
 - 反白: `7`
