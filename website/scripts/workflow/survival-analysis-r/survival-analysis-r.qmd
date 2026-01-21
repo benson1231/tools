@@ -1,0 +1,253 @@
+---
+title: ""
+author: "benson1231"
+date: "`r Sys.Date()`"
+---
+
+# 使用 R 做存活分析
+
+本文章參考以下 workshop 內容: https://bioconnector.github.io/workshops/r-survival.html
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(survival)
+library(survminer)
+library(timeROC)
+```
+
+# 讀取資料
+
+讀取 `survival` 套件內建資料集 lung
+
+```{r}
+lung_df <- as_tibble(lung)
+head(lung_df)
+```
+
+
+
+# 擬合生存曲線
+
+以性別來擬合生存曲線
+
+```{r}
+sfit <- survfit(Surv(time, status)~sex, data=lung)
+sfit
+summary(sfit)
+```
+
+```
+Call: survfit(formula = Surv(time, status) ~ sex, data = lung)
+
+        n events median 0.95LCL 0.95UCL
+sex=1 138    112    270     212     310
+sex=2  90     53    426     348     550
+Call: survfit(formula = Surv(time, status) ~ sex, data = lung)
+
+                sex=1 
+ time n.risk n.event survival std.err lower 95% CI upper 95% CI
+   11    138       3   0.9783  0.0124       0.9542        1.000
+   12    135       1   0.9710  0.0143       0.9434        0.999
+   13    134       2   0.9565  0.0174       0.9231        0.991
+   15    132       1   0.9493  0.0187       0.9134        0.987
+   26    131       1   0.9420  0.0199       0.9038        0.982
+   30    130       1   0.9348  0.0210       0.8945        0.977
+   31    129       1   0.9275  0.0221       0.8853        0.972
+   53    128       2   0.9130  0.0240       0.8672        0.961
+   54    126       1   0.9058  0.0249       0.8583        0.956
+   59    125       1   0.8986  0.0257       0.8496        0.950
+   60    124       1   0.8913  0.0265       0.8409        0.945
+```
+
+
+可以對 `summary()函數` 指定結果中顯示的時間範圍
+
+```{r}
+summary(sfit, times=seq(0, 1000, 100))
+```
+
+# 繪製Kaplan-Meier plot
+
+```{r}
+sfit <- survfit(Surv(time, status)~sex, data=lung)
+plot(sfit)
+```
+
+可以用 `survminer` 繪製精美圖表
+
+```{r}
+survminer::ggsurvplot(sfit)
+ggsave("./images/survival_plot.png")
+```
+
+![](./images/survival_plot.png)
+
+```{r}
+ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
+           legend.labs=c("Male", "Female"), legend.title="Sex",  
+           palette=c("dodgerblue2", "orchid2"), 
+           title="Kaplan-Meier Curve for Lung Cancer Survival", 
+           risk.table.height=.15)
+```
+
+# Cox回歸
+
+```{r}
+fit <- coxph(Surv(time, status)~sex, data=lung)
+fit
+```
+
+
+```{r}
+summary(fit)
+survdiff(Surv(time, status)~sex, data=lung)
+```
+
+
+```{r}
+fit <- coxph(Surv(time, status)~sex+age+ph.ecog+ph.karno+pat.karno+meal.cal+wt.loss, data=lung)
+fit
+```
+
+# KM plot分組
+
+先查看適合切點
+
+```{r}
+mean(lung$age)
+ggplot(lung, aes(age)) + geom_histogram(bins=20)
+```
+
+
+```{r}
+lung <- lung %>% 
+  dplyr::mutate(agecat=cut(age, breaks=c(0, 62, Inf), labels=c("young", "old")))
+
+head(lung)
+
+ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
+```
+
+不同切點
+
+```{r}
+lung <- lung %>% 
+  dplyr::mutate(agecat=cut(age, breaks=c(0, 70, Inf), labels=c("young", "old")))
+
+ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
+```
+
+# ROC
+
+- status:  
+1 = censored
+2 = dead
+- event:
+1 = event(事件發生)
+0 = without event
+
+```{r}
+analysis_df <- lung_df %>%
+  dplyr::mutate(event = as.integer(status == 2)) %>%
+  dplyr::select(time, event, age, sex, ph.ecog) %>% 
+  tidyr::drop_na()
+
+cox_fit <- analysis_df %>%
+  survival::coxph(Surv(time, event) ~ age + sex + ph.ecog, data = .)
+
+summary(cox_fit)
+```
+
+
+
+```{r}
+risk_score <- predict(cox_fit, type = "lp")
+head(risk_score)
+```
+
+```{r}
+times_years <- c(0.5, 1, 2)
+times_days  <- times_years * 365
+
+time_roc_res <- timeROC(
+  T     = analysis_df$time,
+  delta = analysis_df$event,
+  marker = risk_score,
+  cause  = 1,
+  times  = times_days,
+  iid    = TRUE
+)
+
+time_roc_res$AUC
+```
+
+
+```{r}
+roc_df <- map_dfr(
+  seq_along(times_years),
+  function(i) {
+    tibble(
+      FPR  = time_roc_res$FP[, i],
+      TPR  = time_roc_res$TP[, i],
+      time = paste0(times_years[i], " year")
+    )
+  }
+)
+
+head(roc_df)
+```
+
+```{r}
+plot_time_roc <- function(roc_df, auc, times_years,
+                          colors = c("#BC3C29FF", "#0072B5FF", "#E18727FF")) {
+
+  auc_labels <- paste0(
+    "AUC at ", times_years, " years = ",
+    sprintf("%.3f", auc)
+  )
+
+  ggplot(roc_df, aes(x = FPR, y = TPR, color = time)) +
+    geom_line(size = 1) +
+    geom_abline(
+      slope = 1, intercept = 0,
+      color = "grey", linetype = "dashed", size = 1
+    ) +
+    scale_color_manual(values = colors) +
+    theme_bw() +
+    labs(
+      x = "False positive rate",
+      y = "True positive rate",
+      color = "Time"
+    ) +
+    annotate(
+      "text",
+      x = 0.65,
+      y = seq(0.25, 0.25 - 0.1 * (length(auc_labels) - 1), by = -0.1),
+      label = auc_labels,
+      color = colors,
+      size = 3.5,
+      hjust = 0
+    )
+}
+```
+
+
+```{r}
+plot_time_roc(
+  roc_df        = roc_df,
+  auc           = time_roc_res$AUC,
+  times_years   = times_years
+)
+ggsave("./images/ROC_curve.png")
+```
+![](./images/ROC_curve.png)
+
+
+
+
+
+
+
+

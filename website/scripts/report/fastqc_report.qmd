@@ -1,0 +1,16 @@
+---
+title: "fastqc Report (Demo)"
+format: html
+---
+
+<style>
+.quarto-title-block {
+  text-align: center;
+}
+</style>
+
+::: {.column-screen-inset}
+<iframe src="../../assets/fastqc/a.chr21_R1_fastqc.html"
+        style="width:100%; height:90vh; border:none;">
+</iframe>
+:::
