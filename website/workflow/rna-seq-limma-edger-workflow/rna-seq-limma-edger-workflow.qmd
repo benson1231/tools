@@ -1,5 +1,5 @@
 ---
-title: "github-actions 基本使用"
+title: "RNA-seq limma edger workflow"
 date: "2026-01-22"
 ---
 

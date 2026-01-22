@@ -1,7 +1,6 @@
 ---
 title: "Conda 基本使用"
-date: today
-date-format: "YYYY-MM-DD"
+date: "2026-01-22"
 ---
 
 # Conda 介紹
