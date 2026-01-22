@@ -9,13 +9,32 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navbar dropdown section header */
 .dropdown-header {
-  font-size: 0.6rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
-  color: #6c757d;
-  padding: 0.4rem 1rem 0.25rem;
-  margin-top: 0.4rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  text-transform: uppercase;
+
+  padding: 0.45rem 1rem 0.4rem;
+  margin: 0.35rem 0 0.2rem;
+
+  border-left: 4px solid var(--dropdown-header-accent);
+  background: var(--dropdown-header-bg);
+  color: var(--dropdown-header-text);
+
+  pointer-events: none;
   cursor: default;
-  pointer-events: none;        
+}
+
+/* ---------- Light mode ---------- */
+[data-bs-theme="light"] {
+  --dropdown-header-accent: #0d6efd;        /* Bootstrap primary */
+  --dropdown-header-bg: rgba(8, 64, 148, 0.08);
+  --dropdown-header-text: #021324;
+}
+
+/* ---------- Dark mode ----------- */
+[data-bs-theme="dark"] {
+  --dropdown-header-accent: #66b2ff;
+  --dropdown-header-bg: rgb(252, 253, 255);
+  --dropdown-header-text: #5863a0;
 }
