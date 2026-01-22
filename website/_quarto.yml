@@ -93,7 +93,7 @@ format:
       light: flatly
       dark: darkly
     respect-user-color-scheme: true
-    css: styles.css
+    css: styles/styles.css
 
     toc: true
     toc-title: Contents
