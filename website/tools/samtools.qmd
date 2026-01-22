@@ -1,7 +1,6 @@
 ---
 title: "Samtools 基本使用"
-date: today
-date-format: "YYYY-MM-DD"
+date: "2026-01-22"
 ---
 
 # Samtools 基本介紹
@@ -92,7 +91,7 @@ HTSlib URL scheme handlers present:
 建立 FASTA index
 
 ```bash
-samtools faidx .test/ex1.fa
+samtools faidx data/fasta/ex1.fa
 ```
 
 ---
@@ -102,7 +101,7 @@ samtools faidx .test/ex1.fa
 對 BAM 檔排序，以利後續建立索引或快速查詢。
 
 ```bash
-samtools sort -o .test/ex1.sorted.bam .test/ex1.bam
+samtools sort -o data/bam/ex1.sorted.bam data/bam/ex1.bam
 ```
 
 ---
@@ -112,7 +111,7 @@ samtools sort -o .test/ex1.sorted.bam .test/ex1.bam
 建立 bam 檔的 index file `bai`，供後續索引
 
 ```bash
-samtools index .test/ex1.sorted.bam
+samtools index data/bam/ex1.sorted.bam
 ```
 
 ---
@@ -263,13 +262,13 @@ Notes:
 `-b` 輸出bam，`-t` 提供 FASTA index(.fai)供 SAM 轉換 BAM，`-o <output.bam>` 指定輸出 BAM 檔的名稱
 
 ```bash
-samtools view -b -t .test/ex1.fa.fai -o .test/ex1.bam .test/ex1.sam.gz
+samtools view -b -t data/fasta/ex1.fa.fai -o data/bam/ex1.bam data/sam/ex1.sam.gz
 ```
 
 ## BAM 轉 SAM
 
 ```bash
-samtools view -h -o .test/ex1.sam.gz .test/ex1.bam
+samtools view -h -o data/sam/ex1.sam.gz data/bam/ex1.bam
 ```
 
 ## 查看 bam 檔
@@ -278,7 +277,7 @@ default 不包含header，`-h` 含 header，`-H` 只看 header
 
 ```bash
 # 查看所有比對結果（不含 header）
-samtools view .test/ex1.bam | head
+samtools view data/bam/ex1.bam | head
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
@@ -298,45 +297,45 @@ EAS51_66:7:68:402:50    137     seq1    22      99      35M     *       0       
 
 ```bash
 # 查看所有比對結果（含 header）
-samtools view -h .test/ex1.bam | head
+samtools view -h data/bam/ex1.bam | head
 ```
 
 ```
 @SQ     SN:seq1 LN:1575
 @SQ     SN:seq2 LN:1584
-@PG     ID:samtools     PN:samtools     VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.1   PN:samtools     PP:samtools     VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
-@PG     ID:samtools.2   PN:samtools     PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.3   PN:samtools     PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
-@PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
-@PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -h .test/ex1.bam
+@PG     ID:samtools     PN:samtools     VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.1   PN:samtools     PP:samtools     VN:1.23 CL:samtools view -h -o ../data/bam/ex1.sam.gz ../data/bam/ex1.bam
+@PG     ID:samtools.2   PN:samtools     PP:samtools.1   VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.3   PN:samtools     PP:samtools.2   VN:1.23 CL:samtools view -h -o ../data/bam/ex1.sam.gz ../data/bam/ex1.bam
+@PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../data/bam/ex1.sam.gz ../data/bam/ex1.bam
+@PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -h data/bam/ex1.bam
 ```
 
 ```bash
 # 只輸出 BAM 的 header
-samtools view -H .test/ex1.bam
+samtools view -H data/bam/ex1.bam
 ```
 
 ```
 @SQ     SN:seq1 LN:1575
 @SQ     SN:seq2 LN:1584
-@PG     ID:samtools     PN:samtools     VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.1   PN:samtools     PP:samtools     VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
-@PG     ID:samtools.2   PN:samtools     PP:samtools.1   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.3   PN:samtools     PP:samtools.2   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
-@PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../.test/ex1.sam.gz ../.test/ex1.bam
-@PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../.test/ex1.fa.fai -o ../.test/ex1.bam ../.test/ex1.sam.gz
-@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -H .test/ex1.bam
+@PG     ID:samtools     PN:samtools     VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.1   PN:samtools     PP:samtools     VN:1.23 CL:samtools view -h -o ../data/bam/ex1.sam.gz ../data/bam/ex1.bam
+@PG     ID:samtools.2   PN:samtools     PP:samtools.1   VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.3   PN:samtools     PP:samtools.2   VN:1.23 CL:samtools view -h -o ../data/bam/ex1.sam.gz ../data/bam/ex1.bam
+@PG     ID:samtools.4   PN:samtools     PP:samtools.3   VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.5   PN:samtools     PP:samtools.4   VN:1.23 CL:samtools view -h -o ../data/bam/ex1.sam.gz ../data/bam/ex1.bam
+@PG     ID:samtools.6   PN:samtools     PP:samtools.5   VN:1.23 CL:samtools view -b -t ../data/bam/ex1.fa.fai -o ../data/bam/ex1.bam ../data/bam/ex1.sam.gz
+@PG     ID:samtools.7   PN:samtools     PP:samtools.6   VN:1.23 CL:samtools view -H data/bam/ex1.bam
 ```
 
 ## 搜尋特定區域
 
 ```bash
 # 提取 chr2 450-550 的比對結果
-samtools view .test/ex1.sorted.bam seq2:450-550 | head
+samtools view data/bam/ex1.sorted.bam seq2:450-550 | head
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
@@ -356,7 +355,7 @@ EAS51_62:5:119:38:945   147     seq2    428     99      35M     =       221     
 
 ```bash
 # 根據 BED 檔指定區域提取比對
-samtools view -L .test/ex1.bed .test/ex1.sorted.bam | head
+samtools view -L data/bed/ex1.bed data/bam/ex1.sorted.bam | head
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
@@ -439,7 +438,7 @@ samtools flags 2
 `samtools flagstat` 會讀取 BAM/SAM/CRAM，並輸出一段簡短但非常重要的 mapping 統計，包括： read 總數、mapped reads 比例、properly paired 比例、duplicates 數量、singletons 數量、mate mapping 狀況（同 chr / diff chr）、QC-failed reads
 
 ```bash
-samtools flagstat .test/ex1.bam
+samtools flagstat data/bam/ex1.bam
 ```
 
 ```
@@ -483,7 +482,7 @@ samtools flagstat .test/ex1.bam
 用於合併多個 BAM 檔為單一檔案。
 
 ```bash
-samtools merge -o .test/merge.bam .test/ex1.bam .test/ex1.sorted.bam
+samtools merge -o data/bam/merge.bam data/bam/ex1.bam data/bam/ex1.sorted.bam
 ```
 
 ---
@@ -493,7 +492,7 @@ samtools merge -o .test/merge.bam .test/ex1.bam .test/ex1.sorted.bam
 `samtools coverage` 用於計算每條染色體的平均深度（mean depth）、覆蓋率（coverage%）與一些區域性統計資訊。
 
 ```bash
-samtools coverage .test/ex1.sorted.bam
+samtools coverage data/bam/ex1.sorted.bam
 ```
 
 ```
@@ -521,7 +520,7 @@ seq2    1       1584    1789    1567    98.9268 39.7822 26      90.8
 `samtools depth` 用於輸出 BAM 中 每個位置（per-base） 的深度（depth）
 
 ```bash
-samtools depth .test/ex1.sorted.bam | head
+samtools depth data/bam/ex1.sorted.bam | head
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
@@ -549,7 +548,7 @@ seq1    10      5
 ## 計算平均深度
 
 ```bash
-samtools depth .test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
+samtools depth data/bam/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
 ```
 
 ```
@@ -563,7 +562,7 @@ samtools depth .test/ex1.sorted.bam | awk '{sum += $3} END {print sum/NR}'
 `samtools idxstats` 用於顯示 每條染色體的 read 數量與參考序列長度，依靠 BAM 的 index (.bai 或 .csi)
 
 ```bash
-samtools idxstats .test/ex1.sorted.bam
+samtools idxstats data/bam/ex1.sorted.bam
 ```
 
 ```
@@ -586,14 +585,14 @@ seq2    1584    1789    17
 samtools stats 是 最完整的 mapping 統計，提供： mapping 深度、read 長度分布、GC 分布、按距離區分的 insert size 分布、mismatch / error rate 與 per-chromosome 統計
 
 ```bash
-samtools stats .test/ex1.sorted.bam | head
+samtools stats data/bam/ex1.sorted.bam | head
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
 ```
 # This file was produced by samtools stats (1.23+htslib-1.23) and can be plotted using plot-bamstats
 # This file contains statistics for all reads.
-# The command line was:  stats .test/ex1.sorted.bam
+# The command line was:  stats data/bam/ex1.sorted.bam
 # CHK, Checksum [2]Read Names   [3]Sequences    [4]Qualities
 # CHK, CRC32 of reads which passed filtering followed by addition (32bit overflow)
 CHK     1eb1426c        9b48daa9        abfd29ac

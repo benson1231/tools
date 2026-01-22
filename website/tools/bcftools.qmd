@@ -1,7 +1,6 @@
 ---
 title: "bcftools 基本使用"
-date: today
-date-format: "YYYY-MM-DD"
+date: "2026-01-22"
 ---
 
 # bcftools 介紹
@@ -47,7 +46,7 @@ There is NO WARRANTY, to the extent permitted by law.
 
 ```bash
 # 使用以下指令建立index，產生 `Strelka_1234N_variants.vcf.gz.csi` 檔案
-bcftools index .test/Strelka_1234N_variants.vcf.gz
+bcftools index data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 ---
@@ -71,7 +70,7 @@ bcftools view 是 VCF / BCF 檔案最核心的檢視與篩選指令，常用於�
 ## 查看全部
 
 ```bash
-bcftools view .test/Strelka_1234N_variants.vcf.gz
+bcftools view data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
@@ -128,7 +127,7 @@ bcftools view .test/Strelka_1234N_variants.vcf.gz
 ##FILTER=<ID=LowDepth,Description="Locus depth is below 3">
 ##FILTER=<ID=PloidyConflict,Description="Genotype call from variant caller not consistent with chromosome ploidy">
 ##bcftools_viewVersion=1.19+htslib-1.19
-##bcftools_viewCommand=view .test/Strelka_1234N_variants.vcf.gz; Date=Tue Jan  6 16:26:17 2026
+##bcftools_viewCommand=view data/vcf/Strelka_1234N_variants.vcf.gz; Date=Tue Jan  6 16:26:17 2026
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  1234N
 1       131731  .       C       T       0       LowGQX  SNVHPOL=7;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:7:0:14:2:12,2:12,2:0,0:0:LowGQX:8,0,113
 1       131957  .       C       A       6       PASS    SNVHPOL=2;MQ=60 GT:GQ:GQX:DP:DPF:AD:ADF:ADR:SB:FT:PL    0/1:37:5:27:2:21,6:5,2:16,4:-2.7:PASS:39,0,191
@@ -188,7 +187,7 @@ bcftools view .test/Strelka_1234N_variants.vcf.gz
 `-H` 表示 `隱藏 VCF header`
 
 ```bash
-bcftools view -H .test/Strelka_1234N_variants.vcf.gz
+bcftools view -H data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 <details><summary><strong>Click to expand</strong></summary>
@@ -211,7 +210,7 @@ bcftools view -H .test/Strelka_1234N_variants.vcf.gz
 `-f PASS` 即只保留 `FILTER=PASS`
 
 ```bash
-bcftools view -f PASS .test/Strelka_1234N_variants.vcf.gz | wc -l
+bcftools view -f PASS data/vcf/Strelka_1234N_variants.vcf.gz | wc -l
 ```
 
 ## 篩選 SNP 或 INDEL
@@ -220,9 +219,9 @@ bcftools view -f PASS .test/Strelka_1234N_variants.vcf.gz | wc -l
 
 ```bash
 # 只保留 SNP
-bcftools view -v snps .test/Strelka_1234N_variants.vcf.gz
+bcftools view -v snps data/vcf/Strelka_1234N_variants.vcf.gz
 # 只保留 INDEL
-bcftools view -v indels .test/Strelka_1234N_variants.vcf.gz
+bcftools view -v indels data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 ## 區域篩選
@@ -231,9 +230,9 @@ bcftools view -v indels .test/Strelka_1234N_variants.vcf.gz
 
 ```bash
 # 只看 chr1
-bcftools view -r 1 .test/Strelka_1234N_variants.vcf.gz
+bcftools view -r 1 data/vcf/Strelka_1234N_variants.vcf.gz
 # 只看 chr1 的特定區段
-bcftools view -r 1:131731-133483 .test/Strelka_1234N_variants.vcf.gz
+bcftools view -r 1:131731-133483 data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 ## 品質篩選
@@ -241,7 +240,7 @@ bcftools view -r 1:131731-133483 .test/Strelka_1234N_variants.vcf.gz
 `-i` 表示 `include`（符合條件才保留）
 
 ```bash
-bcftools view -i 'QUAL>=30' .test/Strelka_1234N_variants.vcf.gz
+bcftools view -i 'QUAL>=30' data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 ## 輸出成壓縮 VCF
@@ -250,8 +249,8 @@ bcftools view -i 'QUAL>=30' .test/Strelka_1234N_variants.vcf.gz
 
 ```bash
 bcftools view -f PASS -Oz \
-  -o .test/Strelka_1234N_PASS.vcf.gz \
-  .test/Strelka_1234N_variants.vcf.gz
+  -o data/vcf/Strelka_1234N_PASS.vcf.gz \
+  data/vcf/Strelka_1234N_variants.vcf.gz
 ```
 
 ---

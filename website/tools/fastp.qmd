@@ -1,7 +1,6 @@
 ---
 title: "fastp 基本使用"
-date: today
-date-format: "YYYY-MM-DD"
+date: "2026-01-22"
 ---
 
 # fastp 介紹
@@ -65,12 +64,12 @@ fastp 1.0.1
 
 執行前請確認：
 
-* 測試 FASTQ 位於 `.test`
+* 測試 FASTQ 位於 `data`
 
 ```bash
 fastp \
--i .test/a.chr21_R1.fastq.gz \
--I .test/a.chr21_R2.fastq.gz \
+-i data/fastq/a.chr21_R1.fastq.gz \
+-I data/fastq/a.chr21_R2.fastq.gz \
 -o results/a.chr21_R1.trimmed.fastq.gz \
 -O results/a.chr21_R2.trimmed.fastq.gz \
 --html results/fastp_report.html \

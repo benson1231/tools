@@ -3,6 +3,31 @@ project:
   render:
     - "*.qmd"
     - "!**/*.Rmd"
+execute: 
+  enabled: false  
+number-sections: true
+date-format: "YYYY-MM-DD"
+
+format:
+  html:
+    css: styles/styles.css
+    theme: 
+      light: flatly
+      dark: darkly
+    respect-user-color-scheme: true
+    toc: true
+    toc-title: Contents
+    toc-location: left
+    toc-depth: 4
+    toc-expand: 1
+    other-links:
+      - text: Home
+        icon: house
+        href: https://benson1231.github.io/tools/
+    code-links:
+      - text: GitHub Repo
+        icon: github
+        href: https://github.com/benson1231/tools
 
 website:
   site-url: "https://benson1231.github.io/tools/"
@@ -30,7 +55,6 @@ website:
             text: github actions
           - href: cicd/kubernetes.qmd
             text: kubernetes
-
       - text: NGS Tools
         icon: tools
         menu:
@@ -49,7 +73,7 @@ website:
             text: bcftools
           - href: tools/bedtools.qmd
             text: bedtools
-      
+            
           - text: others
           - href: tools/md5sum.qmd
             text: md5sum
@@ -86,31 +110,3 @@ website:
             href: https://github.com/benson1231/tools
           - text: Report a Bug
             href: https://github.com/benson1231/tools/issues
-
-format:
-  html:
-    theme: 
-      light: flatly
-      dark: darkly
-    respect-user-color-scheme: true
-    css: styles/styles.css
-
-    toc: true
-    toc-title: Contents
-    toc-location: left
-    toc-depth: 4
-    toc-expand: 1
-
-    other-links:
-      - text: Home
-        icon: house
-        href: https://benson1231.github.io/tools/
-
-    code-links:
-      - text: GitHub Repo
-        icon: github
-        href: https://github.com/benson1231/tools
-
-execute: 
-  enabled: false  
-number-sections: true

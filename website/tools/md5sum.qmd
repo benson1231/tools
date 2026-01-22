@@ -1,7 +1,6 @@
 ---
 title: "md5sum 基本使用"
-date: today
-date-format: "YYYY-MM-DD"
+date: "2026-01-22"
 ---
 
 # md5 / md5sum
@@ -15,13 +14,13 @@ date-format: "YYYY-MM-DD"
 ### 計算單一檔案的 md5
 
 ```bash
-md5sum ../../../.test/a.chr21_R1.fastq.gz
+md5sum data/fastq/a.chr21_R1.fastq.gz
 ```
 
 輸出格式如下，前半段為 md5 checksum，後半段為檔名：
 
 ```
-d72fda8017c8eb035df69e3f5a3602bf  ../../../.test/a.chr21_R1.fastq.gz
+d72fda8017c8eb035df69e3f5a3602bf  data/fastq/a.chr21_R1.fastq.gz
 ```
 
 ---
@@ -31,13 +30,13 @@ d72fda8017c8eb035df69e3f5a3602bf  ../../../.test/a.chr21_R1.fastq.gz
 在實務中，通常會將 checksum 存成 `.md5` 檔，方便日後驗證：
 
 ```bash
-md5sum ../../../.test/a.chr21_R1.fastq.gz > ../../../.test/sample.md5
+md5sum data/fastq/a.chr21_R1.fastq.gz > data/sample.md5
 ```
 
 `sample.md5` 內容格式如下：
 
 ```
-d72fda8017c8eb035df69e3f5a3602bf  ../../../.test/a.chr21_R1.fastq.gz
+d72fda8017c8eb035df69e3f5a3602bf  data/fastq/a.chr21_R1.fastq.gz
 ```
 
 ---
@@ -47,13 +46,13 @@ d72fda8017c8eb035df69e3f5a3602bf  ../../../.test/a.chr21_R1.fastq.gz
 使用 `-c` 參數可以檢查檔案是否與 md5 紀錄一致：
 
 ```bash
-md5sum -c ../../../.test/sample.md5
+md5sum -c data/sample.md5
 ```
 
 若檔案未被修改或損壞，會顯示：
 
 ```
-../../../.test/a.chr21_R1.fastq.gz: OK
+data/fastq/a.chr21_R1.fastq.gz: OK
 ```
 
 若檔案內容有變動，則會顯示 `FAILED`。

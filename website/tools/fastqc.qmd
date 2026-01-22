@@ -1,7 +1,6 @@
 ---
 title: "FastQC 基本使用"
-date: today
-date-format: "YYYY-MM-DD"
+date: "2026-01-22"
 ---
 
 # FastQC 介紹
@@ -141,7 +140,7 @@ FastQC v0.12.1
 
 請確認：
 
-* 測試 FASTQ 位於 `.test/`
+* 測試 FASTQ 位於 `data/`
 
 輸出內容包含：
 
@@ -152,8 +151,8 @@ FastQC v0.12.1
 
 ```bash
 fastqc \
-.test/a.chr21_R1.fastq.gz \
-.test/a.chr21_R2.fastq.gz \
+data/fastq/a.chr21_R1.fastq.gz \
+data/fastq/a.chr21_R2.fastq.gz \
 --outdir results
 ```
 
