@@ -1,12 +1,12 @@
 ---
-title: ""
+title: "maftools"
 author: "benson1231"
 date: "`r Sys.Date()`"
 ---
 
 # 基本介紹
 
-## 什麼是 `maf` 格式 (Mutation Annotation Format)?
+## 什麼是 maf 格式 (Mutation Annotation Format)?
 
 [MAF](https://docs.gdc.cancer.gov/Data/File_Formats/MAF_Format/)（Mutation Annotation Format）是一種廣泛使用的突變註解檔格式，常見於 TCGA、ICGC 與各大癌症基因體研究專案。  
 每一列代表一個 somatic variant，並包含以下主要欄位：
@@ -21,47 +21,14 @@ date: "`r Sys.Date()`"
 - **Protein_Change**：蛋白層級變異（如 p.R1517H）  
 - **i_TumorVAF_WU**：突變的 variant allele frequency  
 
-```{r echo=FALSE}
-suppressWarnings(library(DT))
 
-maf_demo <- data.frame(
-  Hugo_Symbol = c("ABCA10", "ABCA4", "ABCB11", "ABCC3"),
-  Entrez_Gene_Id = c(10349, 24, 8647, 8714),
-  Center = rep("genome.wustl.edu", 4),
-  NCBI_Build = rep(37, 4),
-  Chromosome = c("17", "1", "2", "17"),
-  Start_Position = c(67170917, 94490594, 169780250, 48760974),
-  End_Position = c(67170917, 94490594, 169780250, 48760974),
-  Strand = "+",
-  Variant_Classification = c("Splice_Site","Missense_Mutation","Missense_Mutation","Missense_Mutation"),
-  Variant_Type = "SNP",
-  Reference_Allele = c("T","C","G","C"),
-  Tumor_Seq_Allele1 = c("T","C","G","C"),
-  Tumor_Seq_Allele2 = c("C","T","A","T"),
-  Tumor_Sample_Barcode = c("TCGA-AB-2988","TCGA-AB-2869","TCGA-AB-3009","TCGA-AB-2887"),
-  Protein_Change = c("p.K960R","p.R1517H","p.A1283V","p.P1271S"),
-  i_TumorVAF_WU = c(45.66, 38.12, 46.97, 56.41),
-  i_transcript_name = c("NM_080282.3","NM_000350.2","NM_003742.2","NM_003786.1")
-)
-
-datatable(
-  maf_demo,
-  caption = "MAF File Example Rows",
-  options = list(
-    scrollX = TRUE,        # 允許左右滑動
-    pageLength = 5,        # 每頁顯示 5 列
-    autoWidth = TRUE       # 自動調整欄寬
-  )
-)
-```
-
-## 如何產生 `maf`
+## 如何產生 maf
 
 - 原檔為 `VCF` 可以使用 [vcf2maf](https://github.com/mskcc/vcf2maf) 將 vcf 轉 maf
 - GATK的 [funcotator](https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Information-and-Tutorial)
 - ANNOVAR 註釋後，可使用 `maftools ` 中的 `annovarToMaf` 函數，將表格形式的 ANNOVAR 輸出轉換為 MAF。
 
-## 什麼是 `maftools`?
+## 什麼是 maftools?
 
 `maftools` 是一個用於分析並視覺化 MAF 檔案的套件。
 
@@ -69,11 +36,12 @@ datatable(
 
 以下指令是根據[官方文檔](https://bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html)範例撰寫，並新增個人的筆記內容，所有相關著作權屬於原作者(如下):
 
-------------------------------------------------------------------------
+::: {.callout-tip}
+## Reference
 
 ***Mayakonda A, Lin DC, Assenov Y, Plass C, Koeffler HP. 2018. Maftools: efficient and comprehensive analysis of somatic variants in cancer. [Genome Research. PMID: 30341162](https://doi.org/10.1101/gr.239244.118)***
+:::
 
-------------------------------------------------------------------------
 
 # 下載 maftools 套件
 
