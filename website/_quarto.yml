@@ -34,6 +34,7 @@ website:
       - text: NGS Tools
         icon: tools
         menu:
+          - text: preprocessing
           - href: tools/fastp.qmd
             text: fastp
           - href: tools/fastqc.qmd
@@ -48,6 +49,8 @@ website:
             text: bcftools
           - href: tools/bedtools.qmd
             text: bedtools
+      
+          - text: others
           - href: tools/md5sum.qmd
             text: md5sum
 

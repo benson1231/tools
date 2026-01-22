@@ -6,3 +6,16 @@ html {
 h1, h2, h3, h4, h5, h6 {
   scroll-margin-top: 55px;
 }
+
+/* Navbar dropdown section header */
+.dropdown-header {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #6c757d;
+  padding: 0.4rem 1rem 0.25rem;
+  margin-top: 0.4rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: default;
+  pointer-events: none;        
+}
