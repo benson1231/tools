@@ -18,65 +18,65 @@ website:
       - text: CI/CD
         icon: boxes
         menu:
-          - href: scripts/cicd/linux.qmd
+          - href: cicd/linux.qmd
             text: linux
-          - href: scripts/cicd/conda.qmd
+          - href: cicd/conda.qmd
             text: conda
-          - href: scripts/cicd/mamba.qmd
+          - href: cicd/mamba.qmd
             text: mamba
-          - href: scripts/cicd/docker.qmd
+          - href: cicd/docker.qmd
             text: docker
-          - href: scripts/cicd/github-actions.qmd
+          - href: cicd/github-actions.qmd
             text: github actions
-          - href: scripts/cicd/kubernetes.qmd
+          - href: cicd/kubernetes.qmd
             text: kubernetes
 
       - text: NGS Tools
         icon: tools
         menu:
-          - href: scripts/tools/fastp.qmd
+          - href: tools/fastp.qmd
             text: fastp
-          - href: scripts/tools/fastqc.qmd
+          - href: tools/fastqc.qmd
             text: fastqc
-          - href: scripts/tools/multiqc.qmd
+          - href: tools/multiqc.qmd
             text: multiqc
-          - href: scripts/tools/samtools.qmd
+          - href: tools/samtools.qmd
             text: samtools
-          - href: scripts/tools/vcftools.qmd
+          - href: tools/vcftools.qmd
             text: vcftools
-          - href: scripts/tools/bcftools.qmd
+          - href: tools/bcftools.qmd
             text: bcftools
-          - href: scripts/tools/bedtools.qmd
+          - href: tools/bedtools.qmd
             text: bedtools
-          - href: scripts/tools/md5sum.qmd
+          - href: tools/md5sum.qmd
             text: md5sum
 
       - text: R Tools
         icon: braces
         menu:
-          - href: scripts/r/maftools/maftools.qmd
+          - href: r/maftools/maftools.qmd
             text: maftools
 
       - text: Reports
         icon: file-earmark-bar-graph
         menu:
-          - href: scripts/report/fastp_report.qmd
+          - href: report/fastp_report.qmd
             text: fastp demo report
-          - href: scripts/report/fastqc_report.qmd
+          - href: report/fastqc_report.qmd
             text: fastqc demo report
-          - href: scripts/report/multiqc_report.qmd
+          - href: report/multiqc_report.qmd
             text: multiqc demo report
 
       - text: Workflow
         icon: diagram-3
         menu:
-          - href: scripts/workflow/survival-analysis-r/survival-analysis-r.qmd
+          - href: workflow/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
 
     tools:
       - icon: book
         text: GitBook
-        href: https://benson1231.gitbook.io/benson1231-scripts
+        href: https://benson1231.gitbook.io/
       - icon: github
         menu:
           - text: Source Code

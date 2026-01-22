@@ -10,7 +10,7 @@ format: html
 </style>
 
 ::: {.column-screen-inset}
-<iframe src="../../assets/fastqc/a.chr21_R1_fastqc.html"
+<iframe src="html/a.chr21_R1_fastqc.html"
         style="width:100%; height:90vh; border:none;">
 </iframe>
 :::
