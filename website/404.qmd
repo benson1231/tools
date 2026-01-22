@@ -12,6 +12,12 @@ format:
     margin: false
 ---
 
+<style>
+.quarto-title-block {
+  display: none;
+}
+</style>
+
 <div style="
   display: flex;
   flex-direction: column;
@@ -21,6 +27,7 @@ format:
   text-align: center;
 ">
 
+🚫 Page Not Found
 Sorry, the page you are looking for does not exist.
 
 🔍 Check the URL  
