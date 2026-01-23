@@ -3,4 +3,152 @@ title: "RNA-seq deseq2 workflow"
 date: "2026-01-22"
 ---
 
-🛠️ 修改中...
+::: callout-tip
+## Reference
+
+Love, M.I., Huber, W., Anders, S. (2014) Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15:550. 10.1186/s13059-014-0550-8
+
+本篇參考 [bioconductor's workflow](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) :::}
+:::
+
+::: {.callout-important}
+請使用 un-normalized counts 進行分析!
+DESeq2 模型內部會對 library size 進行校正，因此不應使用經過 transformed 或 normalized 的值作為輸入!
+:::
+
+# 前處理步驟
+## 匯入 sample sheet
+
+首先需要樣本的 metadata，紀錄樣本的資訊包含 `sample name`, `batch`, `condition` 以及其他重要資訊
+
+```{r}
+library("tximport")
+library("readr")
+library("tximportData")
+dir <- system.file("extdata", package="tximportData")
+samples <- read.table(file.path(dir,"samples.txt"), header=TRUE)
+samples$condition <- factor(rep(c("A","B"),each=3))
+rownames(samples) <- samples$run
+samples[,c("pop","center","run","condition")]
+```
+
+```
+          pop center       run condition
+ERR188297 TSI  UNIGE ERR188297         A
+ERR188088 TSI  UNIGE ERR188088         A
+ERR188329 TSI  UNIGE ERR188329         A
+ERR188288 TSI  UNIGE ERR188288         B
+ERR188021 TSI  UNIGE ERR188021         B
+ERR188356 TSI  UNIGE ERR188356         B
+```
+
+接著透過以下方式列出檔案位置，並創建 named-list，key 是樣本名稱，value 是檔案位置
+
+```{r}
+files <- file.path(dir,"salmon", samples$run, "quant.sf.gz")
+names(files) <- samples$run
+files
+```
+
+```
+                                                                                              ERR188297 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188297/quant.sf.gz" 
+                                                                                              ERR188088 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188088/quant.sf.gz" 
+                                                                                              ERR188329 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188329/quant.sf.gz" 
+                                                                                              ERR188288 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188288/quant.sf.gz" 
+                                                                                              ERR188021 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188021/quant.sf.gz" 
+                                                                                              ERR188356 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188356/quant.sf.gz" 
+```
+
+## 準備 tx2gene 對照表
+
+另外由於原始資訊是 `ENST` transcript 為編號，後續若要合併到基因層級需要對照表 `tx2gene`。
+
+```{r}
+tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
+head(tx2gene)
+```
+
+```
+  TXNAME            GENEID           
+  <chr>             <chr>            
+1 ENST00000456328.2 ENSG00000223972.5
+2 ENST00000450305.2 ENSG00000223972.5
+3 ENST00000473358.1 ENSG00000243485.5
+4 ENST00000469289.1 ENSG00000243485.5
+5 ENST00000607096.1 ENSG00000284332.1
+6 ENST00000606857.1 ENSG00000268020.3
+```
+
+## 匯入 count 資料
+
+將 `files` 的檔案匯入，給予 `tx2gene` 會將 `ENST` 的 script-id 轉成 gene level的 `ENSG`，後續用基因層級分析 
+
+```{r}
+txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+```
+
+```
+reading in files with read_tsv
+1 2 3 4 5 6 
+summarizing abundance
+summarizing counts
+summarizing length
+```
+
+## 建立 DESeq2 物件
+
+建立 `DESeqDataSet` 物件，
+
+```{r}
+library("DESeq2")
+ddsTxi <- DESeqDataSetFromTximport(txi,
+                                   colData = samples,
+                                   design = ~ condition)
+```
+
+```
+using counts and average transcript lengths from tximport
+```
+
+## 創建 coldata
+
+```{r}
+coldata <- samples
+coldata$files <- files
+coldata$names <- coldata$run
+
+head(coldata)
+```
+
+```
+          pop center                assay    sample experiment       run condition
+ERR188297 TSI  UNIGE NA20503.1.M_111124_5 ERS185497  ERX163094 ERR188297         A
+ERR188088 TSI  UNIGE NA20504.1.M_111124_7 ERS185242  ERX162972 ERR188088         A
+ERR188329 TSI  UNIGE NA20505.1.M_111124_6 ERS185048  ERX163009 ERR188329         A
+ERR188288 TSI  UNIGE NA20507.1.M_111124_7 ERS185412  ERX163158 ERR188288         B
+ERR188021 TSI  UNIGE NA20508.1.M_111124_2 ERS185362  ERX163159 ERR188021         B
+ERR188356 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356         B
+                                                                                                          files     names
+ERR188297 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188297/quant.sf.gz ERR188297
+ERR188088 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188088/quant.sf.gz ERR188088
+ERR188329 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188329/quant.sf.gz ERR188329
+ERR188288 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188288/quant.sf.gz ERR188288
+ERR188021 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188021/quant.sf.gz ERR188021
+ERR188356 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188356/quant.sf.gz ERR188356
+```
+
+`Tximeta` 是 `tximport` 的功能擴充版，可以自動添加 metadata
+
+```{r}
+library("tximeta")
+se <- tximeta(coldata)
+se
+
+ddsTxi <- DESeqDataSet(se, design = ~ condition)
+```
