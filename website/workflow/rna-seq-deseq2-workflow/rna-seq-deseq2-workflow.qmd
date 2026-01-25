@@ -345,9 +345,161 @@ SRR1039520 GSM1275874  N061011    untrt    untrt SRR1039520       101  SRX384357
 SRR1039521 GSM1275875  N061011    trt      untrt SRR1039521        98  SRX384358 SRS508580 SAMN02422677
 ```
 
+有兩種方法指定 Reference，一是直接對該欄設定 factor level，二是使用 relevel 設定
+
 ```{r}
+# 方法一
 dds$dex <- factor(dds$dex, levels = c("untrt","trt"))
 
-## also can use
-# dds$dex <- relevel(dds$dex, ref = "untrt")
+# 方法二
+dds$dex <- relevel(dds$dex, ref = "untrt")
 ```
+
+::: {.callout-tip}
+也可使用 droplevels 移除 level，但比較少用
+
+dds$condition <- droplevels(dds$condition)
+:::
+
+# 差異表達分析
+
+Differential expression analysis
+
+```{r}
+dds <- DESeq(dds)
+```
+
+```
+using pre-existing size factors
+estimating dispersions
+found already estimated dispersions, replacing these
+gene-wise dispersion estimates
+mean-dispersion relationship
+final dispersion estimates
+fitting model and testing
+```
+
+使用 `results` 提取結果
+
+```{r}
+res <- results(dds)
+res
+```
+
+```
+log2 fold change (MLE): dex trt vs untrt 
+Wald test p-value: dex trt vs untrt 
+DataFrame with 16596 rows and 6 columns
+                 baseMean log2FoldChange     lfcSE      stat      pvalue        padj
+                <numeric>      <numeric> <numeric> <numeric>   <numeric>   <numeric>
+ENSG00000000003   709.880     -0.3839261 0.1008515 -3.806846 1.40750e-04 1.09455e-03
+ENSG00000000419   521.156      0.2041705 0.1116546  1.828590 6.74611e-02 1.85852e-01
+ENSG00000000457   237.573      0.0352858 0.1412422  0.249825 8.02723e-01 9.04035e-01
+ENSG00000000460    58.035     -0.0923157 0.2792981 -0.330527 7.41002e-01 8.71680e-01
+ENSG00000000971  5826.538      0.4237405 0.0893546  4.742236 2.11372e-06 2.48262e-05
+...                   ...            ...       ...       ...         ...         ...
+ENSG00000273448  14.02944      0.0583225  0.483593  0.120603    0.904006    0.954503
+ENSG00000273472  11.08483     -0.4087635  0.558196 -0.732294    0.463989    0.675274
+ENSG00000273486  15.47814     -0.1516640  0.471121 -0.321922    0.747512    0.874323
+ENSG00000273487   8.17605      1.0408751  0.678127  1.534926    0.124802    0.292586
+ENSG00000273488   8.59778      0.1088526  0.618005  0.176136    0.860187    0.933030
+```
+
+可以透過 `resultsNames` 得到有哪些比較
+
+```{r}
+resultsNames(dds)
+```
+
+```
+[1] "Intercept"               "cell_N061011_vs_N052611" "cell_N080611_vs_N052611" "cell_N61311_vs_N052611"  "dex_trt_vs_untrt"  
+```
+
+針對不同條件比較，可以使用 `name` 或 `contrast` 指定要輸出哪個比較結果，以下兩個指令是等效的
+
+::: {.callout-important}
+contrast 為三個字串的 `list`，最前面是變項名稱，接著是實驗組名稱，最後是對照組(Reference)名稱
+:::
+
+```{r}
+res <- results(dds, name="dex_trt_vs_untrt")
+res <- results(dds, contrast=c("dex","trt","untrt"))
+```
+
+# Log fold change shrinkage(可選)
+
+```{r}
+resLFC <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm")
+resLFC
+```
+
+```
+using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    sequence count data: removing the noise and preserving large differences.
+    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+log2 fold change (MAP): dex trt vs untrt 
+Wald test p-value: dex trt vs untrt 
+DataFrame with 16596 rows and 5 columns
+                 baseMean log2FoldChange     lfcSE      pvalue        padj
+                <numeric>      <numeric> <numeric>   <numeric>   <numeric>
+ENSG00000000003   709.880     -0.3672194 0.1002141 1.40750e-04 1.09455e-03
+ENSG00000000419   521.156      0.1843404 0.1077340 6.74611e-02 1.85852e-01
+ENSG00000000457   237.573      0.0295551 0.1292181 8.02723e-01 9.04035e-01
+ENSG00000000460    58.035     -0.0507527 0.2117984 7.41002e-01 8.71680e-01
+ENSG00000000971  5826.538      0.4057596 0.0892318 2.11372e-06 2.48262e-05
+...                   ...            ...       ...         ...         ...
+ENSG00000273448  14.02944      0.0178477  0.265789    0.904006    0.954503
+ENSG00000273472  11.08483     -0.1020634  0.292642    0.463989    0.675274
+ENSG00000273486  15.47814     -0.0468762  0.266725    0.747512    0.874323
+ENSG00000273487   8.17605      0.2137027  0.373236    0.124802    0.292586
+ENSG00000273488   8.59778      0.0225865  0.283616    0.860187    0.933030
+```
+
+# p 值校正
+
+```{r}
+resOrdered <- res[order(res$pvalue),]
+summary(resOrdered)
+```
+
+```
+out of 16596 with nonzero total read count
+adjusted p-value < 0.1
+LFC > 0 (up)       : 2618, 16%
+LFC < 0 (down)     : 2298, 14%
+outliers [1]       : 0, 0%
+low counts [2]     : 0, 0%
+(mean count < 5)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
+```
+
+adjusted p value cutoff 原始設定為 `0.1`，若要修改則在 `results` 指定 `alpha` 參數
+
+```{r}
+res05 <- results(dds, alpha=0.05)
+summary(res05)
+```
+
+```
+out of 16596 with nonzero total read count
+adjusted p-value < 0.05
+LFC > 0 (up)       : 2201, 13%
+LFC < 0 (down)     : 1898, 11%
+outliers [1]       : 0, 0%
+low counts [2]     : 0, 0%
+(mean count < 5)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
+```
+
+# 繪圖
+
+```{r}
+png("./images/MA-plot.png", width = 800, height = 600, res = 120)
+plotMA(res, ylim=c(-2,2))
+dev.off()
+```
+
+![](./images/MA-plot.png)
