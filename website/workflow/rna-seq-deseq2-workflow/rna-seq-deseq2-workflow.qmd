@@ -1115,7 +1115,7 @@ metadata(dds)[["version"]]
 
 # 建議流程圖
 
-```mermaid
+```{mermaid}
 flowchart TD
     A[Raw counts] --> B[DESeqDataSet]
     B --> C[DESeq: size factor, dispersion, NB GLM]
