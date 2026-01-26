@@ -371,6 +371,16 @@ dds$condition <- droplevels(dds$condition)
 
 Differential expression analysis
 
+::: {.callout-note}
+DESeq() 函數會依序執行 DESeq2 的標準差異表達分析流程，整體建模基於 Negative Binomial（又稱 Gamma–Poisson）分佈，以處理 RNA-seq 計數資料的過度離散特性。此流程包含三個主要步驟：(1) 估計 size factors（estimateSizeFactors），用以校正不同樣本間的定序深度與 library size；(2) 估計基因層級的 dispersion（estimateDispersions），描述生物與技術變異；以及 (3) 擬合 Negative Binomial 廣義線性模型並進行 Wald 檢定（nbinomWaldTest），以評估指定設計公式中各變數對基因表達的影響。使用者僅需呼叫 DESeq()，即可自動完成上述所有步驟。
+:::
+
+::: {.callout-important}
+DESeq2 提供 `Wald test` 與 `Likelihood Ratio Test (LRT)` 兩種假設檢定方式。
+一般最常見的兩組比較（例如 treated vs control）使用 Wald test 即可；
+LRT 則適用於「同時檢驗多個參數是否整體有影響」的情境。
+:::
+
 ```{r}
 dds <- DESeq(dds)
 ```
@@ -627,18 +637,22 @@ ggsave("./images/normTransform.png")
 ![](./images/normTransform.png)
 
 ```{r}
+meanSdPlot(assay(rld))
+ggsave("./images/rld.png")
+```
+
+![](./images/rld.png)
+
+```{r}
 meanSdPlot(assay(vsd))
 ggsave("./images/vst.png")
 ```
 
 ![](./images/vst.png)
 
-```{r}
-meanSdPlot(assay(rld))
-ggsave("./images/rld.png")
-```
-
-![](./images/rld.png)
+::: {.callout-important}
+後續建議繪製 heatmap 與 PCA 使用 `vst` 的結果
+:::
 
 # heatmap
 
@@ -647,10 +661,11 @@ library("pheatmap")
 select <- order(rowMeans(counts(dds,normalized=TRUE)),
                 decreasing=TRUE)[1:20]
 df <- as.data.frame(colData(dds)[,c("dex","cell")])
-pheatmap(assay(ntd)[select,], cluster_rows=FALSE, show_rownames=FALSE,
-         cluster_cols=FALSE, annotation_col=df)
 
-ggsave("images/heatmap.png")
+png("./images/heatmap.png", width = 800, height = 600, res = 120)
+pheatmap(assay(vsd)[select,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df)
+dev.off()
 ```
 
 ![](images/heatmap.png)
@@ -665,12 +680,13 @@ sampleDistMatrix <- as.matrix(sampleDists)
 rownames(sampleDistMatrix) <- paste(vsd$dex, vsd$cell, sep="-")
 colnames(sampleDistMatrix) <- NULL
 colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+
+png("./images/distance.png", width = 800, height = 600, res = 120)
 pheatmap(sampleDistMatrix,
          clustering_distance_rows=sampleDists,
          clustering_distance_cols=sampleDists,
          col=colors)
-
-ggsave("images/distance.png")
+dev.off()
 ```
 
 ![](images/distance.png)
@@ -678,17 +694,25 @@ ggsave("images/distance.png")
 # PCA
 
 ```{r}
+png("./images/PCA.png", width = 800, height = 600, res = 120)
 plotPCA(vsd, intgroup=c("dex", "cell"))
-
-ggsave("images/PCA.png")
+dev.off()
 ```
 
 ![](images/PCA.png)
 
+```{r}
+pcaData <- plotPCA(vsd, intgroup=c("dex", "cell"), returnData=TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+ggplot(pcaData, aes(PC1, PC2, color=dex, shape=cell)) +
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  coord_fixed()
+ggsave("./images/customize-PCA.png")
+```
 
-
-
-
+![](./images/customize-PCA.png)
 
 
 
