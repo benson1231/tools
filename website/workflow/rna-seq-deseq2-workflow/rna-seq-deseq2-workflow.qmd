@@ -14,9 +14,11 @@ Love, M.I., Huber, W., Anders, S. (2014) Moderated estimation of fold change and
 ::: {.callout-important}
 請使用 un-normalized counts 進行分析!
 DESeq2 模型內部會對 library size 進行校正，因此不應使用經過 transformed 或 normalized 的值作為輸入!
+且 DESeq2 必須要有重複樣本才能分析!
 :::
 
-# 使用 tximport 匯入(方案一)
+# 資料匯入
+## (方案一) 使用 tximport
 
 首先需要樣本的 metadata，紀錄樣本的資訊包含 `sample name`, `batch`, `condition` 以及其他重要資訊
 
@@ -64,7 +66,7 @@ files
 "C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188356/quant.sf.gz" 
 ```
 
-## 準備 tx2gene 對照表
+準備 tx2gene 對照表
 
 另外由於原始資訊是 `ENST` transcript 為編號，後續若要合併到基因層級需要對照表 `tx2gene`。
 
@@ -84,8 +86,6 @@ head(tx2gene)
 6 ENST00000606857.1 ENSG00000268020.3
 ```
 
-## 匯入 count 資料
-
 將 `files` 的檔案匯入，給予 `tx2gene` 會將 `ENST` 的 script-id 轉成 gene level的 `ENSG`，後續用基因層級分析 
 
 ```{r}
@@ -100,9 +100,7 @@ summarizing counts
 summarizing length
 ```
 
-## 建立 DESeq2 物件
-
-建立 `DESeqDataSet` 物件，
+建立 `DESeqDataSet` 物件
 
 ```{r}
 library("DESeq2")
@@ -117,13 +115,13 @@ using counts and average transcript lengths from tximport
 
 ---
 
-# 使用 tximeta 匯入(方案二)
+## (方案二) 使用 tximeta
 
 ::: {.callout-note}
 `Tximeta` 是 `tximport` 的功能擴充版，可以自動添加 metadata
 :::
 
-## 創建 coldata
+創建 coldata
 
 ```{r}
 coldata <- samples
@@ -150,9 +148,7 @@ ERR188021 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extda
 ERR188356 C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/salmon/ERR188356/quant.sf.gz ERR188356
 ```
 
-## 讀檔匯入
-
-此步驟不需提供 `tx2gene`，因為 `tximeta` 本身會自動添加註釋
+讀檔匯入，此步驟不需提供 `tx2gene`，因為 `tximeta` 本身會自動添加註釋
 
 ```{r}
 library("tximeta")
@@ -184,7 +180,7 @@ colnames(6): ERR188297 ERR188088 ... ERR188021 ERR188356
 colData names(8): pop center ... condition names
 ```
 
-## 建立 DESeqDataSet 物件
+建立 DESeqDataSet 物件
 
 ```{r}
 dds_2 <- DESeqDataSet(se, design = ~ condition)
@@ -196,7 +192,7 @@ using counts and average transcript lengths from tximeta
 
 ---
 
-# 直接匯入count matrix(方案三)
+## (方案三) count matrix 匯入
 
 ```{r}
 library(DESeq2)
@@ -270,9 +266,9 @@ colData names(9): SampleName cell ... Sample BioSample
 
 ---
 
-# 直接使用 SummarizedExperiment 物件(方案四)
+## (方案四) SummarizedExperiment
 
-若已經有 RangedSummarizedExperiment 物件則可直接導入 DESeqDataSet 物件
+若已經有 `RangedSummarizedExperiment 物件` 則可直接導入 DESeqDataSet 物件
 
 ```{r}
 library("airway")
@@ -317,7 +313,8 @@ colData names(9): SampleName cell ... Sample BioSample
 
 ---
 
-# 預先過濾
+# 前處理
+## 預先過濾
 
 繼續以方案四的 `dds` 物件分析
 
@@ -329,7 +326,7 @@ dds <- dds[keep,]
 
 ---
 
-# 設定 level
+## 設定 level
 
 需指定以誰當基準，不然 R 預設是字母順序
 
@@ -366,6 +363,8 @@ dds$dex <- relevel(dds$dex, ref = "untrt")
 
 dds$condition <- droplevels(dds$condition)
 :::
+
+---
 
 # 差異表達分析
 
@@ -438,6 +437,7 @@ contrast 為三個字串的 `list`，最前面是變項名稱，接著是實驗�
 :::
 
 ```{r}
+# 以下兩個指令等效
 res <- results(dds, name="dex_trt_vs_untrt")
 res <- results(dds, contrast=c("dex","trt","untrt"))
 ```
@@ -453,7 +453,7 @@ mcols(res)$description
 [4] "Wald statistic: dex trt vs untrt"          "Wald test p-value: dex trt vs untrt"       "BH adjusted p-values"  
 ```
 
-# p 值校正
+查看結果
 
 ```{r}
 resOrdered <- res[order(res$pvalue),]
@@ -491,10 +491,10 @@ low counts [2]     : 0, 0%
 [2] see 'independentFiltering' argument of ?results
 ```
 
-# Log fold change shrinkage(可選)
+# (可選) lfc shrinkage
 
 ::: {.callout-note}
-有三種:  
+有三種 `Log fold change shrinkage` 方法:  
 
 - apeglm: apeglm套件的自適應 t 先驗收縮估計器(最推薦)  
 - ashr: ashr套件中的自適應收縮估計器  
@@ -528,8 +528,6 @@ resAsh <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="ashr")
 ```
 
 ::: {.callout-important}
-**Log fold change shrinkage 方法選擇（實務建議）**
-
 在 DESeq2 中，log2 fold change 的 shrinkage 僅用於穩定效應量估計與視覺化，不影響差異表達的顯著性判定（p value / adjusted p value 仍來自 `results()`）。
 
 在多因子設計、使用 `contrast`、或包含交互作用的分析中，**建議優先使用 `ashr`**，因其可同時支援 `coef` 與 `contrast`，且不需重新排列設計公式，分析流程更為穩定且不易出錯。
@@ -579,7 +577,8 @@ write.csv(as.data.frame(resSig),
           file="results/deseq2_sig_results.csv")
 ```
 
-# MA plot
+# 初步結果繪圖
+## MA plot
 
 ```{r}
 png("./images/MA-plot.png", width = 800, height = 600, res = 120)
@@ -589,7 +588,7 @@ dev.off()
 
 ![](./images/MA-plot.png)
 
-# normalized counts plot
+## normalized counts plot
 
 使用 `size factor 校正後` 的 count 繪製各組別的 count plot
 
@@ -621,9 +620,6 @@ dev.off()
 對於其他下游分析（例如視覺化或聚類），使用轉換後的計數資料可能更為有效。
 
 ::: {.callout-important}
-
-Count data transformation（VST / rlog 的使用時機）
-
 DESeq2 在進行差異表達分析時必須使用 raw counts 並透過負二項模型建模；然而在視覺化、分群（PCA、heatmap、clustering）等下游分析中，直接使用 raw counts 或單純取對數（例如 log2(count + pseudocount)）的 `shifted logarithm` 並不理想，因為低表達基因在對數轉換後會產生高度變異。
 
 為此，DESeq2 提供 `variance stabilizing transformation (VST)` 與 `regularized log (rlog)` 兩種方法，透過利用整體實驗中「平均表達量與變異數的關係」，將資料轉換為 log2 scale 且變異數較穩定的形式，同時校正 library size 與其他 normalization factors。這兩種轉換的目的不是讓所有基因具有相同變異，而是移除整體的 mean–variance 趨勢，使真正具有生物學差異的基因更容易在樣本分群中被辨識。
@@ -681,7 +677,46 @@ ggsave("./images/vst.png")
 後續建議繪製 heatmap 與 PCA 使用 `vst` 的結果
 :::
 
-# heatmap
+# 移除批次效應
+
+::: {.callout-important}
+本節示範的 batch effect 移除 **僅用於 PCA / heatmap 等視覺化用途**。  
+在 DESeq2 中，批次效應應透過設計公式（design，例如 `~ batch + condition`）  
+納入負二項模型中進行校正，而 **不應在差異表達分析前手動修改表達矩陣**。
+:::
+
+```{r}
+# ------------------------------------------------------------
+# （示範用）僅用於 PCA 視覺化的 batch effect 移除
+# 注意：此步驟不應用於差異表達分析
+# ------------------------------------------------------------
+
+# 假設前四個樣本屬於 batch A，後四個樣本屬於 batch B
+batch_tmp <- factor(rep(c("A", "B"), each = 4))
+
+# 取出 VST 轉換後的表達矩陣
+mat_vst <- assay(vsd)
+
+# 設計矩陣：保留感興趣的生物變數（dex）
+design_tmp <- model.matrix(~ dex, colData(vsd))
+
+# 使用 limma 移除 batch effect（僅用於視覺化）
+mat_vst_corrected <- limma::removeBatchEffect(
+  mat_vst,
+  batch  = batch_tmp,
+  design = design_tmp
+)
+
+# 建立「只用於視覺化」的 vsd 副本
+vsd_vis <- vsd
+assay(vsd_vis) <- mat_vst_corrected
+
+# PCA 繪圖
+plotPCA(vsd_vis, intgroup = c("dex", "cell"))
+```
+
+# 視覺化分析
+## heatmap
 
 ```{r}
 library("pheatmap")
@@ -697,7 +732,7 @@ dev.off()
 
 ![](images/heatmap.png)
 
-# distance
+## distance
 
 ```{r}
 sampleDists <- dist(t(assay(vsd)))
@@ -718,7 +753,7 @@ dev.off()
 
 ![](images/distance.png)
 
-# PCA
+## PCA
 
 ```{r}
 png("./images/PCA.png", width = 800, height = 600, res = 120)
@@ -741,7 +776,7 @@ ggsave("./images/customize-PCA.png")
 
 ![](./images/customize-PCA.png)
 
-# 檢視異常值
+## 檢視異常值
 
 ```{r}
 png("./images/cooks.png", width = 800, height = 600, res = 120)
@@ -753,7 +788,7 @@ par(mfrow = c(1,1))
 
 ![](./images/cooks.png)
 
-# 離散度估計圖
+## 離散度估計圖
 
 ```{r}
 png("./images/dispersions.png", width = 800, height = 600, res = 120)
@@ -763,7 +798,7 @@ dev.off()
 
 ![](./images/dispersions.png)
 
-# 獨立篩選結果
+## 獨立篩選結果
 
 ```{r}
 png("./images/independentFiltering.png", width = 800, height = 600, res = 120)
@@ -791,7 +826,7 @@ filtering FALSE  TRUE   Sum
     Sum   11680  4916 16596
 ```
 
-# 顯著的 MA plot
+## 顯著的 MA plot
 
 ```{r}
 png("./images/MA-sig-multi.png", width = 800, height = 600, res = 120)
@@ -812,7 +847,7 @@ par(mfrow = c(1,1))
 
 ![](./images/MA-sig-multi.png)
 
-# 索引結果
+# 索引結果方法
 
 ```{r}
 mcols(dds,use.names=TRUE)[1:4,1:4]
@@ -1059,6 +1094,16 @@ metadata(dds)[["version"]]
 ```
 [1] ‘1.46.0’
 ```
+
+# 備註
+
+::: {.callout-note}
+進階議題說明  
+在部分高度複雜的實驗設計（例如巢狀設計、重複量測或嚴重不平衡設計）中，
+可能會遇到模型矩陣未滿秩（non–full rank）的問題，
+此時需重新構建設計或手動指定模型矩陣。
+本教學聚焦於常見且可穩定擬合的設計情境，相關進階內容可參考 [DESeq2 官方文件](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)。
+:::
 
 # 其他視覺化軟體
 
