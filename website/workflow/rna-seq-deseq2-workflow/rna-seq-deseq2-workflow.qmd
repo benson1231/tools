@@ -292,6 +292,12 @@ colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 colData names(9): SampleName cell ... Sample BioSample
 ```
 
+::: {.callout-important}
+在 DESeq2 中，**設計公式中「最後一個變量」會被視為預設的主要比較對象**。  
+因此，**真正感興趣的生物變量應放在公式的最後面**。
+本範例中，我們關注的是藥物處理效應 `dex`
+:::
+
 ```{r}
 library("DESeq2")
 dds <- DESeqDataSet(se, design = ~ cell + dex)
@@ -426,34 +432,15 @@ res <- results(dds, name="dex_trt_vs_untrt")
 res <- results(dds, contrast=c("dex","trt","untrt"))
 ```
 
-# Log fold change shrinkage(可選)
+可以呼叫 `mcols` 函數來尋找有關使用了哪些變數和測試的資訊
 
 ```{r}
-resLFC <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm")
-resLFC
+mcols(res)$description
 ```
 
 ```
-using 'apeglm' for LFC shrinkage. If used in published research, please cite:
-    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
-    sequence count data: removing the noise and preserving large differences.
-    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
-log2 fold change (MAP): dex trt vs untrt 
-Wald test p-value: dex trt vs untrt 
-DataFrame with 16596 rows and 5 columns
-                 baseMean log2FoldChange     lfcSE      pvalue        padj
-                <numeric>      <numeric> <numeric>   <numeric>   <numeric>
-ENSG00000000003   709.880     -0.3672194 0.1002141 1.40750e-04 1.09455e-03
-ENSG00000000419   521.156      0.1843404 0.1077340 6.74611e-02 1.85852e-01
-ENSG00000000457   237.573      0.0295551 0.1292181 8.02723e-01 9.04035e-01
-ENSG00000000460    58.035     -0.0507527 0.2117984 7.41002e-01 8.71680e-01
-ENSG00000000971  5826.538      0.4057596 0.0892318 2.11372e-06 2.48262e-05
-...                   ...            ...       ...         ...         ...
-ENSG00000273448  14.02944      0.0178477  0.265789    0.904006    0.954503
-ENSG00000273472  11.08483     -0.1020634  0.292642    0.463989    0.675274
-ENSG00000273486  15.47814     -0.0468762  0.266725    0.747512    0.874323
-ENSG00000273487   8.17605      0.2137027  0.373236    0.124802    0.292586
-ENSG00000273488   8.59778      0.0225865  0.283616    0.860187    0.933030
+[1] "mean of normalized counts for all samples" "log2 fold change (MLE): dex trt vs untrt"  "standard error: dex trt vs untrt"         
+[4] "Wald statistic: dex trt vs untrt"          "Wald test p-value: dex trt vs untrt"       "BH adjusted p-values"  
 ```
 
 # p 值校正
@@ -494,7 +481,70 @@ low counts [2]     : 0, 0%
 [2] see 'independentFiltering' argument of ?results
 ```
 
-# 繪圖
+# Log fold change shrinkage(可選)
+
+::: {.callout-note}
+有三種:
+- apeglm: apeglm套件的自適應 t 先驗收縮估計器(最推薦)  
+- ashr: ashr套件中的自適應收縮估計器  
+- normal: 原始的 DESeq2 收縮估計器  
+:::
+
+::: {.callout-tip}
+## Reference
+
+- apeglm:  
+Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for sequence count data: removing the noise and preserving large differences. Bioinformatics. 10.1093/bioinformatics/bty895  
+
+- ashr:  
+Stephens, M. (2016) False discovery rates: a new deal. Biostatistics, 18:2. 10.1093/biostatistics/kxw041
+:::
+
+```{r}
+resultsNames(dds)
+```
+
+```
+[1] "Intercept"               "cell_N061011_vs_N052611" "cell_N080611_vs_N052611" "cell_N61311_vs_N052611"  "dex_trt_vs_untrt"    
+```
+
+```{r}
+# because we are interested in treated vs untreated, we set 'coef=dex_trt_vs_untrt' 
+resLFC <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm")
+resNorm <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="normal")
+resAsh <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="ashr")
+```
+
+```{r}
+png(filename = "./images/MAplot_LFCshrink_comparison.png", width = 2400, height = 800, res = 200)
+par(mfrow=c(1,3), mar=c(4,4,2,1))
+xlim <- c(1,1e5); ylim <- c(-3,3)
+plotMA(resLFC, xlim=xlim, ylim=ylim, main="apeglm")
+plotMA(resNorm, xlim=xlim, ylim=ylim, main="normal")
+plotMA(resAsh, xlim=xlim, ylim=ylim, main="ashr")
+dev.off()
+par(mfrow = c(1,1))
+```
+
+![](./images/MAplot_LFCshrink_comparison.png)
+
+# 匯出到 CSV
+
+```{r}
+write.csv(as.data.frame(resOrdered), 
+          file="results/deseq2_results.csv")
+```
+
+也可以透過 `subset`，只選擇輸出顯著結果
+
+```{r}
+resSig <- subset(resOrdered, padj < 0.1)
+
+write.csv(as.data.frame(resSig), 
+          file="results/deseq2_sig_results.csv")
+```
+
+# MA plot
 
 ```{r}
 png("./images/MA-plot.png", width = 800, height = 600, res = 120)
@@ -503,3 +553,167 @@ dev.off()
 ```
 
 ![](./images/MA-plot.png)
+
+# normalized counts plot
+
+使用 `size factor 校正後` 的 count 繪製各組別的 count plot
+
+```{r}
+png("./images/count-plot.png", width = 800, height = 600, res = 120)
+plotCounts(dds, gene=which.min(res$padj), intgroup="dex")
+dev.off()
+```
+
+![](./images/count-plot.png)
+
+自訂繪圖時，可以使用 `returnData=TRUE`，輸出可以用於
+
+```{r}
+d <- plotCounts(dds, gene=which.min(res$padj), intgroup="dex", 
+                returnData=TRUE)
+library("ggplot2")
+png("./images/count-plot-ggplot.png", width = 800, height = 600, res = 120)
+ggplot(d, aes(x=dex, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  scale_y_log10(breaks=c(25,100,400))
+dev.off()
+```
+
+![](./images/count-plot-ggplot.png)
+
+# 對數轉換
+
+對於其他下游分析（例如視覺化或聚類），使用轉換後的計數資料可能更為有效。
+
+::: {.callout-important}
+
+Count data transformation（VST / rlog 的使用時機）
+
+DESeq2 在進行差異表達分析時必須使用 raw counts 並透過負二項模型建模；然而在視覺化、分群（PCA、heatmap、clustering）等下游分析中，直接使用 raw counts 或單純取對數（例如 log2(count + pseudocount)）並不理想，因為低表達基因在對數轉換後會產生高度變異。
+
+為此，DESeq2 提供 variance stabilizing transformation (VST) 與 regularized log (rlog) 兩種方法，透過利用整體實驗中「平均表達量與變異數的關係」，將資料轉換為 log2 scale 且變異數較穩定的形式，同時校正 library size 與其他 normalization factors。這兩種轉換的目的不是讓所有基因具有相同變異，而是移除整體的 mean–variance 趨勢，使真正具有生物學差異的基因更容易在樣本分群中被辨識。
+
+vst() 與 rlog() 皆提供 blind 參數，用於控制是否忽略實驗設計資訊。當 blind = TRUE（預設）時，轉換過程不考慮分組資訊，適合用於樣本品質檢查（QC）或探索性分析；但若預期實驗條件會造成大量基因表達差異，建議設為 blind = FALSE，以避免將真實生物學差異誤認為雜訊而過度收縮。實務上，在差異表達分析後進行 PCA 或 heatmap 時，通常建議使用 blind = FALSE。
+
+在樣本數很多（例如數百個樣本）的情況下，rlog() 計算成本較高，vst() 是較有效率且性質相近的替代方案。
+:::
+
+```{r}
+vsd <- vst(dds, blind=FALSE)
+rld <- rlog(dds, blind=FALSE)
+head(assay(vsd), 3)
+```
+
+```
+                SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516 SRR1039517 SRR1039520 SRR1039521
+ENSG00000000003   9.692790   9.369292   9.825098   9.595346  10.146600   9.833076   9.972598   9.585929
+ENSG00000000419   9.269518   9.526153   9.430605   9.468205   9.366965   9.517636   9.264638   9.450769
+ENSG00000000457   8.674327   8.603169   8.556368   8.641297   8.492251   8.606475   8.673498   8.629979
+```
+
+::: {.callout-note}
+下圖比較了三種常見轉換方式（移位對數轉換、正規化對數轉換與變異數穩定變換）在不同表達量範圍內對資料變異的影響。結果顯示，`shifted logarithm transformation` 在低計數區間會產生較高的標準差，反映其對低表達基因的變異控制能力有限；正規化對數轉換 `rlog` 可部分緩解此問題，但在低計數區仍保留一定程度的變異放大。相較之下，變異數穩定變換（VST）能在整個動態範圍內有效平坦化平均值與變異數之間的關係，使不同表達量區間的基因具有更一致的變異結構，因此特別適合用於樣本間比較、分群分析與降維視覺化（如 PCA 與 heatmap）。
+:::
+
+```{r}
+# shifted logarithm
+# this gives log2(n + 1)
+ntd <- normTransform(dds)
+library("vsn")
+meanSdPlot(assay(ntd))
+ggsave("./images/normTransform.png")
+```
+
+![](./images/normTransform.png)
+
+```{r}
+meanSdPlot(assay(vsd))
+ggsave("./images/vst.png")
+```
+
+![](./images/vst.png)
+
+```{r}
+meanSdPlot(assay(rld))
+ggsave("./images/rld.png")
+```
+
+![](./images/rld.png)
+
+# heatmap
+
+```{r}
+library("pheatmap")
+select <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)[1:20]
+df <- as.data.frame(colData(dds)[,c("dex","cell")])
+pheatmap(assay(ntd)[select,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df)
+
+ggsave("images/heatmap.png")
+```
+
+![](images/heatmap.png)
+
+# distance
+
+```{r}
+sampleDists <- dist(t(assay(vsd)))
+
+library("RColorBrewer")
+sampleDistMatrix <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- paste(vsd$dex, vsd$cell, sep="-")
+colnames(sampleDistMatrix) <- NULL
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows=sampleDists,
+         clustering_distance_cols=sampleDists,
+         col=colors)
+
+ggsave("images/distance.png")
+```
+
+![](images/distance.png)
+
+# PCA
+
+```{r}
+plotPCA(vsd, intgroup=c("dex", "cell"))
+
+ggsave("images/PCA.png")
+```
+
+![](images/PCA.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 其他視覺化軟體
+
+- regionReport
+- Glimma
+- pcaExplorer
+- iSEE/iSEEde
+- DEvis
