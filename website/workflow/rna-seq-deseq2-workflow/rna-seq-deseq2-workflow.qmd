@@ -1112,3 +1112,22 @@ metadata(dds)[["version"]]
 - pcaExplorer
 - iSEE/iSEEde
 - DEvis
+
+# 建議流程圖
+
+```mermaid
+flowchart TD
+    A[Raw counts] --> B[DESeqDataSet]
+    B --> C[DESeq: size factor, dispersion, NB GLM]
+    C --> D[results: log2FC, pvalue, padj]
+
+    D --> E[GSEA using stat or log2FC]
+
+    C --> F[VST transformed counts]
+    F --> G[removeBatchEffect for visualization]
+    G --> H[PCA or MDS]
+    G --> I[Heatmap]
+
+    D --> J[lfcShrink for effect size]
+    J --> K[MA plot or report table]
+```
