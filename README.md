@@ -25,6 +25,7 @@ To run the tools locally, clone this repository:
 ```bash
 git clone https://github.com/benson1231/tools.git
 cd tools
+mkdir results/
 ```
 
 Please refer to the environment documentation in [`envs/README.md`](./envs/README.md) to set up a runnable environment.
