@@ -1121,7 +1121,7 @@ flowchart TD
     B --> C[DESeq: size factor, dispersion, NB GLM]
     C --> D[results: log2FC, pvalue, padj]
 
-    D --> E[GSEA using stat or log2FC]
+    D --> E[GSEA using Wald stat]
 
     C --> F[VST transformed counts]
     F --> G[removeBatchEffect for visualization]
