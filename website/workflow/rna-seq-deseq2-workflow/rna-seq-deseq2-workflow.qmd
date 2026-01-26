@@ -519,11 +519,24 @@ resultsNames(dds)
 ```
 
 ```{r}
-# because we are interested in treated vs untreated, we set 'coef=dex_trt_vs_untrt' 
+# because we are interested in treated vs untreated 
+# we set 'coef=dex_trt_vs_untrt' (equal to `contrast=c("dex","trt","untrt")`)
+# but contrast only for `normal` and `ashr`
 resLFC <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm")
 resNorm <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="normal")
 resAsh <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="ashr")
 ```
+
+::: {.callout-important}
+**Log fold change shrinkage 方法選擇（實務建議）**
+
+在 DESeq2 中，log2 fold change 的 shrinkage 僅用於穩定效應量估計與視覺化，不影響差異表達的顯著性判定（p value / adjusted p value 仍來自 `results()`）。
+
+在多因子設計、使用 `contrast`、或包含交互作用的分析中，**建議優先使用 `ashr`**，因其可同時支援 `coef` 與 `contrast`，且不需重新排列設計公式，分析流程更為穩定且不易出錯。
+
+`apeglm` 則較適合結構單純、僅比較單一係數（coef-based）的設計情境。
+:::
+
 
 ```{r}
 png(filename = "./images/MAplot_LFCshrink_comparison.png", width = 2400, height = 800, res = 200)
@@ -537,6 +550,18 @@ par(mfrow = c(1,1))
 ```
 
 ![](./images/MAplot_LFCshrink_comparison.png)
+
+可以使用 `lfcThreshold` 指定 log2FC 的 Threshold(只需要給正值)
+
+```{r}
+resApeT <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm", lfcThreshold=1)
+png(filename = "./images/MAplot_sig.png", width = 1200, height = 800, res = 200)
+plotMA(resApeT, ylim=c(-3,3), cex=.8)
+abline(h=c(-1,1), col="dodgerblue", lwd=2)
+dev.off()
+```
+
+![](./images/MAplot_sig.png)
 
 # 匯出到 CSV
 
@@ -599,9 +624,9 @@ dev.off()
 
 Count data transformation（VST / rlog 的使用時機）
 
-DESeq2 在進行差異表達分析時必須使用 raw counts 並透過負二項模型建模；然而在視覺化、分群（PCA、heatmap、clustering）等下游分析中，直接使用 raw counts 或單純取對數（例如 log2(count + pseudocount)）並不理想，因為低表達基因在對數轉換後會產生高度變異。
+DESeq2 在進行差異表達分析時必須使用 raw counts 並透過負二項模型建模；然而在視覺化、分群（PCA、heatmap、clustering）等下游分析中，直接使用 raw counts 或單純取對數（例如 log2(count + pseudocount)）的 `shifted logarithm` 並不理想，因為低表達基因在對數轉換後會產生高度變異。
 
-為此，DESeq2 提供 variance stabilizing transformation (VST) 與 regularized log (rlog) 兩種方法，透過利用整體實驗中「平均表達量與變異數的關係」，將資料轉換為 log2 scale 且變異數較穩定的形式，同時校正 library size 與其他 normalization factors。這兩種轉換的目的不是讓所有基因具有相同變異，而是移除整體的 mean–variance 趨勢，使真正具有生物學差異的基因更容易在樣本分群中被辨識。
+為此，DESeq2 提供 `variance stabilizing transformation (VST)` 與 `regularized log (rlog)` 兩種方法，透過利用整體實驗中「平均表達量與變異數的關係」，將資料轉換為 log2 scale 且變異數較穩定的形式，同時校正 library size 與其他 normalization factors。這兩種轉換的目的不是讓所有基因具有相同變異，而是移除整體的 mean–variance 趨勢，使真正具有生物學差異的基因更容易在樣本分群中被辨識。
 
 vst() 與 rlog() 皆提供 blind 參數，用於控制是否忽略實驗設計資訊。當 blind = TRUE（預設）時，轉換過程不考慮分組資訊，適合用於樣本品質檢查（QC）或探索性分析；但若預期實驗條件會造成大量基因表達差異，建議設為 blind = FALSE，以避免將真實生物學差異誤認為雜訊而過度收縮。實務上，在差異表達分析後進行 PCA 或 heatmap 時，通常建議使用 blind = FALSE。
 
@@ -609,8 +634,13 @@ vst() 與 rlog() 皆提供 blind 參數，用於控制是否忽略實驗設計�
 :::
 
 ```{r}
+# shifted logarithm，this gives log2(n + 1)
+ntd <- normTransform(dds)
+# variance stabilizing transformation(VST)
 vsd <- vst(dds, blind=FALSE)
+# regularized log(rlog)
 rld <- rlog(dds, blind=FALSE)
+
 head(assay(vsd), 3)
 ```
 
@@ -622,13 +652,10 @@ ENSG00000000457   8.674327   8.603169   8.556368   8.641297   8.492251   8.60647
 ```
 
 ::: {.callout-note}
-下圖比較了三種常見轉換方式（移位對數轉換、正規化對數轉換與變異數穩定變換）在不同表達量範圍內對資料變異的影響。結果顯示，`shifted logarithm transformation` 在低計數區間會產生較高的標準差，反映其對低表達基因的變異控制能力有限；正規化對數轉換 `rlog` 可部分緩解此問題，但在低計數區仍保留一定程度的變異放大。相較之下，變異數穩定變換（VST）能在整個動態範圍內有效平坦化平均值與變異數之間的關係，使不同表達量區間的基因具有更一致的變異結構，因此特別適合用於樣本間比較、分群分析與降維視覺化（如 PCA 與 heatmap）。
+下圖比較了三種常見轉換方式（移位對數轉換、正規化對數轉換與變異數穩定變換）在不同表達量範圍內對資料變異的影響。結果顯示，`shifted logarithm transformation` 在低計數區間會產生較高的標準差，反映其對低表達基因的變異控制能力有限；正規化對數轉換 `rlog` 可部分緩解此問題，但在低計數區仍保留一定程度的變異放大。相較之下，`變異數穩定變換（VST）` 能在整個動態範圍內有效平坦化平均值與變異數之間的關係，使不同表達量區間的基因具有更一致的變異結構，因此特別適合用於樣本間比較、分群分析與降維視覺化（如 PCA 與 heatmap）。
 :::
 
 ```{r}
-# shifted logarithm
-# this gives log2(n + 1)
-ntd <- normTransform(dds)
 library("vsn")
 meanSdPlot(assay(ntd))
 ggsave("./images/normTransform.png")
@@ -714,25 +741,324 @@ ggsave("./images/customize-PCA.png")
 
 ![](./images/customize-PCA.png)
 
+# 檢視異常值
 
+```{r}
+png("./images/cooks.png", width = 800, height = 600, res = 120)
+par(mar=c(8,5,2,2))
+boxplot(log10(assays(dds)[["cooks"]]), range=0, las=2)
+dev.off()
+par(mfrow = c(1,1))
+```
 
+![](./images/cooks.png)
 
+# 離散度估計圖
 
+```{r}
+png("./images/dispersions.png", width = 800, height = 600, res = 120)
+plotDispEsts(dds)
+dev.off()
+```
 
+![](./images/dispersions.png)
 
+# 獨立篩選結果
 
+```{r}
+png("./images/independentFiltering.png", width = 800, height = 600, res = 120)
+plot(metadata(res)$filterNumRej, 
+     type="b", ylab="number of rejections",
+     xlab="quantiles of filter")
+lines(metadata(res)$lo.fit, col="red")
+abline(v=metadata(res)$filterTheta)
+dev.off()
+```
 
+![](./images/independentFiltering.png)
 
+```{r}
+resNoFilt <- results(dds, independentFiltering=FALSE)
+addmargins(table(filtering=(res$padj < .1),
+                 noFiltering=(resNoFilt$padj < .1)))
+```
 
+```
+         noFiltering
+filtering FALSE  TRUE   Sum
+    FALSE 11680     0 11680
+    TRUE      0  4916  4916
+    Sum   11680  4916 16596
+```
 
+# 顯著的 MA plot
 
+```{r}
+png("./images/MA-sig-multi.png", width = 800, height = 600, res = 120)
+par(mfrow=c(2,2),mar=c(2,2,1,1))
+ylim <- c(-2.5,2.5)
+resGA <- results(dds, lfcThreshold=.5, altHypothesis="greaterAbs")
+resLA <- results(dds, lfcThreshold=.5, altHypothesis="lessAbs")
+resG <- results(dds, lfcThreshold=.5, altHypothesis="greater")
+resL <- results(dds, lfcThreshold=.5, altHypothesis="less")
+drawLines <- function() abline(h=c(-.5,.5),col="dodgerblue",lwd=2)
+plotMA(resGA, ylim=ylim); drawLines()
+plotMA(resLA, ylim=ylim); drawLines()
+plotMA(resG, ylim=ylim); drawLines()
+plotMA(resL, ylim=ylim); drawLines()
+dev.off()
+par(mfrow = c(1,1))
+```
 
+![](./images/MA-sig-multi.png)
 
+# 索引結果
 
+```{r}
+mcols(dds,use.names=TRUE)[1:4,1:4]
+```
 
+```
+DataFrame with 4 rows and 4 columns
+                        gene_id   gene_name  entrezid   gene_biotype
+                    <character> <character> <integer>    <character>
+ENSG00000000003 ENSG00000000003      TSPAN6        NA protein_coding
+ENSG00000000419 ENSG00000000419        DPM1        NA protein_coding
+ENSG00000000457 ENSG00000000457       SCYL3        NA protein_coding
+ENSG00000000460 ENSG00000000460    C1orf112        NA protein_coding
+```
 
+```{r}
+substr(names(mcols(dds)),1,10) 
+```
 
+```
+ [1] "gene_id"    "gene_name"  "entrezid"   "gene_bioty" "gene_seq_s" "gene_seq_e" "seq_name"   "seq_strand" "seq_coord_" "symbol"    
+[11] "baseMean"   "baseVar"    "allZero"    "dispGeneEs" "dispGeneIt" "dispFit"    "dispersion" "dispIter"   "dispOutlie" "dispMAP"   
+[21] "Intercept"  "cell_N0610" "cell_N0806" "cell_N6131" "dex_trt_vs" "SE_Interce" "SE_cell_N0" "SE_cell_N0" "SE_cell_N6" "SE_dex_trt"
+[31] "WaldStatis" "WaldStatis" "WaldStatis" "WaldStatis" "WaldStatis" "WaldPvalue" "WaldPvalue" "WaldPvalue" "WaldPvalue" "WaldPvalue"
+[41] "betaConv"   "betaIter"   "deviance"   "maxCooks"  
+```
 
+```{r}
+mcols(mcols(dds), use.names=TRUE)[1:4,]
+```
+
+```
+DataFrame with 4 rows and 2 columns
+                    type description
+             <character> <character>
+gene_id            input            
+gene_name          input            
+entrezid           input            
+gene_biotype       input       
+```
+
+```{r}
+head(assays(dds)[["mu"]])
+```
+
+```
+                SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516  SRR1039517 SRR1039520 SRR1039521
+ENSG00000000003  673.34248  452.08160  902.51831  393.17109 1142.79858  1042.58208  747.83158  590.14459
+ENSG00000000419  488.64748  493.18652  590.34452  386.60353  584.75637   801.95544  422.69920  501.44208
+ENSG00000000457  247.66005  222.34744  271.65052  158.24553  258.41249   315.24588  224.95803  237.38403
+ENSG00000000460   63.38351   52.08835   51.53345   27.47883   67.09037    74.91767   69.08345   66.72862
+ENSG00000000971 3190.58151 3749.57917 5877.62169 4481.86794 6813.50109 10880.34732 5483.02959 7573.68242
+ENSG00000001036 1434.12090 1061.14400 1782.02739  855.55449 1427.62097  1435.36127 1317.39369 1145.71857
+```
+
+```{r}
+head(assays(dds)[["cooks"]])
+```
+
+```
+                  SRR1039508   SRR1039509 SRR1039512 SRR1039513   SRR1039516   SRR1039517 SRR1039520  SRR1039521
+ENSG00000000003 1.616130e-03 1.519961e-03 0.02723217 0.02412281 0.0004105617 0.0004075197 0.01981396 0.019216709
+ENSG00000000419 4.115407e-02 4.120745e-02 0.06248341 0.05851166 0.0003087819 0.0003196843 0.00360783 0.003707157
+ENSG00000000457 5.169819e-02 5.043213e-02 0.02385542 0.02074311 0.0538511444 0.0559503340 0.02508845 0.025403962
+ENSG00000000460 4.213300e-02 3.892083e-02 0.78004483 0.54909816 0.3782274780 0.3927170123 0.14870346 0.146891121
+ENSG00000000971 2.852352e-03 2.864018e-03 0.02123342 0.02113580 0.0014944796 0.0015017207 0.02532674 0.025439142
+ENSG00000001036 1.387361e-05 1.353068e-05 0.01824741 0.01715301 0.0001420261 0.0001420757 0.02213142 0.021875429
+```
+
+```{r}
+head(dispersions(dds))
+
+head(mcols(dds)$dispersion)
+```
+
+```
+[1] 0.00826147 0.01002723 0.01490438 0.05677705 0.00748182 0.00693662
+[1] 0.00826147 0.01002723 0.01490438 0.05677705 0.00748182 0.00693662
+```
+
+```{r}
+sizeFactors(dds)
+```
+
+```
+SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516 SRR1039517 SRR1039520 SRR1039521 
+ 1.0223204  0.8956557  1.1751624  0.6680312  1.1760124  1.3999925  0.9169654  0.9442367 
+```
+
+```{r}
+head(coef(dds))
+```
+
+```
+                Intercept cell_N061011_vs_N052611 cell_N080611_vs_N052611 cell_N61311_vs_N052611 dex_trt_vs_untrt
+ENSG00000000003  9.584952              0.08667815              0.33950004            -0.22160289      -0.38392609
+ENSG00000000419  8.972553             -0.12400478             -0.01476449            -0.07175025       0.20417051
+ENSG00000000457  7.852748              0.08582504             -0.07311903             0.06762217       0.03528580
+ENSG00000000460  5.454577              0.78075193              0.37955356             0.49961124      -0.09231568
+ENSG00000000971 12.288157              0.25766172              0.21212080            -0.68040028       0.42374050
+ENSG00000001036 10.566444             -0.07791200             -0.32094952            -0.11234002      -0.24371500
+```
+
+```{r}
+attr(dds, "betaPriorVar")
+```
+
+```
+[1] 1e+06 1e+06 1e+06 1e+06 1e+06
+```
+
+```{r}
+priorInfo(resLFC)
+```
+
+```
+                Intercept cell_N061011_vs_N052611 cell_N080611_vs_N052611 cell_N61311_vs_N052611 dex_trt_vs_untrt
+ENSG00000000003  9.584952              0.08667815              0.33950004            -0.22160289      -0.38392609
+ENSG00000000419  8.972553             -0.12400478             -0.01476449            -0.07175025       0.20417051
+ENSG00000000457  7.852748              0.08582504             -0.07311903             0.06762217       0.03528580
+ENSG00000000460  5.454577              0.78075193              0.37955356             0.49961124      -0.09231568
+ENSG00000000971 12.288157              0.25766172              0.21212080            -0.68040028       0.42374050
+ENSG00000001036 10.566444             -0.07791200             -0.32094952            -0.11234002      -0.24371500
+> attr(dds, "betaPriorVar")
+[1] 1e+06 1e+06 1e+06 1e+06 1e+06
+> priorInfo(resLFC)
+$type
+[1] "apeglm"
+
+$package
+[1] "apeglm"
+
+$version
+[1] ‘1.28.0’
+
+$prior.control
+$prior.control$no.shrink
+[1] 1 2 3 4
+
+$prior.control$prior.mean
+[1] 0
+
+$prior.control$prior.scale
+[1] 0.31093
+
+$prior.control$prior.df
+[1] 1
+
+$prior.control$prior.no.shrink.mean
+[1] 0
+
+$prior.control$prior.no.shrink.scale
+[1] 15
+
+$prior.control$prior.var
+[1] 0.09667748
+```
+
+```{r}
+priorInfo(resNorm)
+```
+
+```
+$type
+[1] "normal"
+
+$package
+[1] "DESeq2"
+
+$version
+[1] ‘1.46.0’
+
+$betaPriorVar
+   Intercept  cellN061011  cellN080611   cellN61311       dextrt 
+1.000000e+06 9.533906e-02 2.021624e-01 1.735684e-01 2.737881e-01 
+```
+
+```{r}
+priorInfo(resAsh)
+```
+
+```
+$type
+[1] "ashr"
+
+$package
+[1] "ashr"
+
+$version
+[1] ‘2.2.63’
+
+$fitted_g
+$pi
+ [1] 0.0439744520 0.0000000000 0.0000000000 0.0000000000 0.0685644908 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.1450487790
+[11] 0.4059417499 0.0000000000 0.0638784291 0.2095170944 0.0000000000 0.0307184366 0.0314564441 0.0000000000 0.0003641027 0.0005360216
+[21] 0.0000000000 0.0000000000 0.0000000000 0.0000000000
+
+$mean
+ [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+$sd
+ [1]  0.006522069  0.009223599  0.013044138  0.018447197  0.026088277  0.036894395  0.052176554  0.073788790  0.104353107  0.147577580
+[11]  0.208706215  0.295155159  0.417412429  0.590310319  0.834824859  1.180620637  1.669649717  2.361241274  3.339299434  4.722482549
+[21]  6.678598869  9.444965098 13.357197737 18.889930195
+
+attr(,"class")
+[1] "normalmix"
+attr(,"row.names")
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+```
+
+```{r}
+dispersionFunction(dds)
+```
+
+```
+function (q) 
+coefs[1] + coefs[2]/q
+<bytecode: 0x000002b54cccbc00>
+<environment: 0x000002b576d03618>
+attr(,"coefficients")
+asymptDisp  extraPois 
+0.01004404 3.15951336 
+attr(,"fitType")
+[1] "parametric"
+attr(,"varLogDispEsts")
+[1] 0.9537109
+attr(,"dispPriorVar")
+[1] 0.5205205
+```
+
+```{r}
+attr(dispersionFunction(dds), "dispPriorVar")
+```
+
+```
+[1] 0.5205205
+```
+
+```{r}
+metadata(dds)[["version"]]
+```
+
+```
+[1] ‘1.46.0’
+```
 
 # 其他視覺化軟體
 
