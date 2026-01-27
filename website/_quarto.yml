@@ -97,12 +97,20 @@ website:
       - text: Workflow
         icon: diagram-3
         menu:
+          - text: RNA-Seq with replicates
+          - href: workflow/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
+            text: rnaseq-with-replicates-limma
+          - href: workflow/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
+            text: rnaseq-with-replicates-deseq2
+
+          - text: RNA-Seq without replicates
+          - href: workflow/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
+            text: rnaseq-no-replicates-edger
+
+          - text: Others
           - href: workflow/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
-          - href: workflow/rna-seq-deseq2-workflow/rna-seq-deseq2-workflow.qmd
-            text: rna-seq-deseq2
-          - href: workflow/rna-seq-limma-edger-workflow/rna-seq-limma-edger-workflow.qmd
-            text: rna-seq-limma-edger
+
 
     tools:
       - icon: book

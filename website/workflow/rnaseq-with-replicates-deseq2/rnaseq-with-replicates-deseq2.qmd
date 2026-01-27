@@ -1,5 +1,5 @@
 ---
-title: "RNA-seq deseq2 workflow"
+title: "rnaseq-with-replicates-deseq2"
 date: "2026-01-24"
 ---
 
