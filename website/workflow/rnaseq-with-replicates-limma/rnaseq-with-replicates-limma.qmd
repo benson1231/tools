@@ -1,6 +1,6 @@
 ---
 title: "rnaseq-with-replicates-limma"
-date: "2026-01-22"
+date: "2026-01-27"
 ---
 
 ::: {.callout-tip}
@@ -11,9 +11,7 @@ Bioconductor RNA-seq workflow for educational purposes.
 
 Original workflow:
 - Charity Law, Monther Alhamdoosh, Shian Su, Xueyi Dong, Luyi Tian, Gordon K. Smyth and Matthew E. Ritchie
-  *RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR*
-- Bioconductor Workflow
-- [https://bioconductor.org/packages/release/workflows/vignettes/RNAseq123/inst/doc/limmaWorkflow.html](https://bioconductor.org/packages/release/workflows/vignettes/RNAseq123/inst/doc/limmaWorkflow.html)
+- [*RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR*](https://bioconductor.org/packages/release/workflows/vignettes/RNAseq123/inst/doc/limmaWorkflow.html)
 :::
 
 # 下載範例資料
