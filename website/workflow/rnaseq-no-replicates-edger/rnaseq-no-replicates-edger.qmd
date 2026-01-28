@@ -2,3 +2,397 @@
 title: "rnaseq-no-replicates-edger"
 date: "2026-01-27"
 ---
+
+# 匯入樣本
+
+## metadata
+
+```{r}
+library("tximport")
+library("readr")
+library("tximportData")
+
+# get sample information
+dir <- system.file("extdata", package="tximportData")
+sample_info <- read.table(file.path(dir,"samples.txt"), header=TRUE)
+rownames(sample_info) <- sample_info$run
+
+# mimic no-replicates
+sample_info$condition <- factor(rep(c("A","B","C","D","E","F")))
+head(sample_info)
+```
+
+```
+          pop center                assay    sample experiment       run condition
+ERR188297 TSI  UNIGE NA20503.1.M_111124_5 ERS185497  ERX163094 ERR188297         A
+ERR188088 TSI  UNIGE NA20504.1.M_111124_7 ERS185242  ERX162972 ERR188088         B
+ERR188329 TSI  UNIGE NA20505.1.M_111124_6 ERS185048  ERX163009 ERR188329         C
+ERR188288 TSI  UNIGE NA20507.1.M_111124_7 ERS185412  ERX163158 ERR188288         D
+ERR188021 TSI  UNIGE NA20508.1.M_111124_2 ERS185362  ERX163159 ERR188021         E
+ERR188356 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356         F
+```
+
+## tx2gene mapping
+
+```{r}
+tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
+
+# 由於範例 kallisto id 沒有版本號後綴，因此 mapping table 也移除
+tx2gene$TXNAME <- sub("\\..*$", "", tx2gene$TXNAME)
+tx2gene$GENEID <- sub("\\..*$", "", tx2gene$GENEID)
+head(tx2gene)
+```
+
+```
+Rows: 200401 Columns: 2
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (2): TXNAME, GENEID
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# A tibble: 6 × 2
+  TXNAME          GENEID         
+  <chr>           <chr>          
+1 ENST00000456328 ENSG00000223972
+2 ENST00000450305 ENSG00000223972
+3 ENST00000473358 ENSG00000243485
+4 ENST00000469289 ENSG00000243485
+5 ENST00000607096 ENSG00000284332
+6 ENST00000606857 ENSG00000268020
+```
+
+## count matrix
+
+```{r} 
+files <- file.path(dir,"kallisto", samples$run, "abundance.h5")
+names(files) <- sample_info$run
+
+txi.kallisto <- tximport(
+  files = files,
+  type = "kallisto",
+  tx2gene = tx2gene,
+  txOut = FALSE,
+  ignoreTxVersion = TRUE
+)
+```
+
+```
+1 2 3 4 5 6 
+removing duplicated transcript rows from tx2gene
+summarizing abundance
+summarizing counts
+summarizing length
+```
+
+## 建立 DGEList 物件
+
+```{r}
+library(edgeR)
+
+dge <- DGEList(
+  counts = txi.kallisto$counts,
+  samples = sample_info
+)
+
+dge
+```
+
+```
+An object of class "DGEList"
+$counts
+                  ERR188297 ERR188088  ERR188329   ERR188288  ERR188021   ERR188356
+ENSG00000000003    2.597454    2.0000   27.15883    8.406228   5.064623    5.741246
+ENSG00000000005    0.000000    0.0000    0.00000    0.000000   0.000000    0.000000
+ENSG00000000419 1057.000000 1338.0000 1453.00000 1289.000000 921.000000 1332.000000
+ENSG00000000457  462.528935  495.4176  564.18466  385.988581 532.848389  543.533790
+ENSG00000000460  630.398169  418.5461 1166.26652  611.513416 915.493338  636.256168
+58238 more rows ...
+
+$samples
+          group lib.size norm.factors pop center                assay    sample experiment       run condition
+ERR188297     1 22844138            1 TSI  UNIGE NA20503.1.M_111124_5 ERS185497  ERX163094 ERR188297         A
+ERR188088     1 23742623            1 TSI  UNIGE NA20504.1.M_111124_7 ERS185242  ERX162972 ERR188088         B
+ERR188329     1 34513836            1 TSI  UNIGE NA20505.1.M_111124_6 ERS185048  ERX163009 ERR188329         C
+ERR188288     1 23867902            1 TSI  UNIGE NA20507.1.M_111124_7 ERS185412  ERX163158 ERR188288         D
+ERR188021     1 28702608            1 TSI  UNIGE NA20508.1.M_111124_2 ERS185362  ERX163159 ERR188021         E
+ERR188356     1 22615555            1 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356         F
+```
+
+# 前處理
+
+## 過濾低表現基因
+
+```{r}
+cpm_mat <- cpm(dge)
+keep <- rowSums(cpm_mat >= 1) >= (ncol(dge) / 2)    # 篩選：至少一半樣本CPM >= 1
+dge_filt <- dge[keep, , keep.lib.sizes = FALSE]
+```
+
+```{r}
+library(RColorBrewer)
+
+lcpm_raw <- cpm(dge, log = TRUE)
+cpm_cutoff <- log2(1 + 1e-6)
+nsamples <- ncol(dge)
+col <- brewer.pal(nsamples, "Paired")
+
+png("./images/filter_cpm_density.png", width = 2000, height = 1000, res = 200)
+par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
+
+# ----------------------------
+# A. Before filtering
+# ----------------------------
+plot(density(lcpm_raw[,1]), col = col[1], lwd = 2,
+     ylim = c(0, 0.3), main = "", xlab = "log2-CPM")
+title(main = "A. Before CPM filtering")
+abline(v = cpm_cutoff, lty = 3)
+
+for (i in 2:nsamples) {
+  den <- density(lcpm_raw[,i])
+  lines(den$x, den$y, col = col[i], lwd = 2)
+}
+
+legend("topright", colnames(dge), text.col = col, bty = "n")
+
+# ----------------------------
+# B. After filtering
+# ----------------------------
+lcpm_filt <- cpm(dge_filt, log = TRUE)
+
+plot(density(lcpm_filt[,1]), col = col[1], lwd = 2,
+     ylim = c(0, 0.3), main = "", xlab = "log2-CPM")
+title(main = "B. After CPM filtering")
+abline(v = cpm_cutoff, lty = 3)
+
+for (i in 2:ncol(dge_filt)) {
+  den <- density(lcpm_filt[,i])
+  lines(den$x, den$y, col = col[i], lwd = 2)
+}
+
+legend("topright", colnames(dge_filt), text.col = col, bty = "n")
+
+dev.off()
+par(mfrow = c(1,1))
+```
+
+![](./images/filter_cpm_density.png)
+
+## TMM
+
+```{r}
+dge_norm <- calcNormFactors(dge_filt, method = c("TMM"))
+dge_norm$samples
+```
+
+```
+          group lib.size norm.factors pop center                assay    sample experiment       run condition
+ERR188297     1 22774970    0.9826883 TSI  UNIGE NA20503.1.M_111124_5 ERS185497  ERX163094 ERR188297         A
+ERR188088     1 23663007    0.9772987 TSI  UNIGE NA20504.1.M_111124_7 ERS185242  ERX162972 ERR188088         B
+ERR188329     1 34399139    0.9755415 TSI  UNIGE NA20505.1.M_111124_6 ERS185048  ERX163009 ERR188329         C
+ERR188288     1 23746536    0.9969002 TSI  UNIGE NA20507.1.M_111124_7 ERS185412  ERX163158 ERR188288         D
+ERR188021     1 28594120    1.0159830 TSI  UNIGE NA20508.1.M_111124_2 ERS185362  ERX163159 ERR188021         E
+ERR188356     1 22469952    1.0538359 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356         F
+```
+
+```{r}
+library(RColorBrewer)
+
+nsamples <- ncol(dge_filt)
+col <- brewer.pal(nsamples, "Paired")
+dge_filt$samples$norm.factors <- 1
+
+png("./images/tmm_boxplot_realdata.png", width=2000, height=1000, res=200)
+par(mfrow=c(1,2))
+
+boxplot(cpm(dge_filt, log=TRUE), las=2, col=col, outline=FALSE,
+        main="A. Before TMM", ylab="log2-CPM")
+
+boxplot(cpm(dge_norm, log=TRUE), las=2, col=col, outline=FALSE,
+        main="B. After TMM", ylab="log2-CPM")
+
+dev.off()
+par(mfrow=c(1,1))
+```
+
+![](./images/tmm_boxplot_realdata.png)
+
+# DE分析
+
+## 手動設定 dispersion
+
+```{r}
+# Common dispersion manually set to 0.05 because no biological replicates
+dge_norm$common.dispersion <- 0.05
+```
+
+## 設定 design
+
+```{r}
+design <- model.matrix(~0 + condition, data = dge_norm$samples)
+colnames(design) <- levels(dge_norm$samples$condition)
+design
+```
+
+```
+          A B C D E F
+ERR188297 1 0 0 0 0 0
+ERR188088 0 1 0 0 0 0
+ERR188329 0 0 1 0 0 0
+ERR188288 0 0 0 1 0 0
+ERR188021 0 0 0 0 1 0
+ERR188356 0 0 0 0 0 1
+attr(,"assign")
+[1] 1 1 1 1 1 1
+attr(,"contrasts")
+attr(,"contrasts")$condition
+[1] "contr.treatment"
+```
+
+## (手動)設定 contrast
+
+對照放後面
+
+```{r}
+contrast_matrix <- makeContrasts(
+   BvsA = B - A, 
+   CvsA = C - A, 
+   levels = colnames(design))
+contrast_matrix
+```
+
+```
+      Contrasts
+Levels BvsA CvsA
+     A   -1   -1
+     B    1    0
+     C    0    1
+     D    0    0
+     E    0    0
+     F    0    0
+```
+
+## (進階)匯入 contrast
+
+`comparisons.csv`:
+
+```
+Treatment,Control
+B,A
+C,A
+D,A
+E,A
+F,A
+B,C
+```
+
+```{r}
+comparisons <- read.csv("data/comparisons.csv", stringsAsFactors = FALSE)
+comparisons
+```
+
+```
+  Treatment Control
+1         B       A
+2         C       A
+3         D       A
+4         E       A
+5         F       A
+6         B       C
+```
+
+```{r}
+make_contrast_matrix <- function(comparisons, design) {
+  levs <- colnames(design)
+  n_comp <- nrow(comparisons)
+  
+  contrast_matrix <- matrix(
+    0,
+    nrow = length(levs),
+    ncol = n_comp,
+    dimnames = list(
+      levs,
+      paste0(comparisons$Treatment, "vs", comparisons$Control)
+    )
+  )
+  
+  for (i in seq_len(n_comp)) {
+    contrast_matrix[comparisons$Treatment[i], i] <-  1
+    contrast_matrix[comparisons$Control[i],  i] <- -1
+  }
+  
+  contrast_matrix
+}
+```
+
+```{r}
+contrast_matrix <- make_contrast_matrix(comparisons, design)
+contrast_matrix
+```
+
+```
+  BvsA CvsA DvsA EvsA FvsA BvsC
+A   -1   -1   -1   -1   -1    0
+B    1    0    0    0    0    1
+C    0    1    0    0    0   -1
+D    0    0    1    0    0    0
+E    0    0    0    1    0    0
+F    0    0    0    0    1    0
+```
+
+# GLM 模型
+
+## GLM fitting
+```{r}
+fit <- glmFit(dge_norm, design)
+```
+
+## Likelihood ratio tests
+
+```{r}
+# 以下兩個指令等價，但上面更直觀
+lrt <- glmLRT(fit, contrast = contrast_matrix[, "BvsA"])
+lrt <- glmLRT(fit, contrast = c(1, -1, 0, 0, 0, 0))
+
+# 使用 `topTags` 索引結果
+topTags(lrt)
+```
+
+```
+Coefficient:  1*A -1*B 
+                     logFC   logCPM       LR       PValue          FDR
+ENSG00000211644   8.602423 7.706599 176.7697 2.459000e-40 3.432519e-36
+ENSG00000244398 -14.290756 5.707485 172.4603 2.147016e-39 1.498510e-35
+ENSG00000211947   7.789757 7.727715 158.0047 3.087496e-36 1.436612e-32
+ENSG00000240342   7.174882 7.069052 135.6556 2.373213e-31 8.281920e-28
+ENSG00000211659  -7.972426 5.947324 131.1426 2.304456e-30 6.433581e-27
+ENSG00000211966  -6.821394 5.490954 126.0942 2.932350e-29 6.822113e-26
+ENSG00000090530   7.434324 3.640713 116.7308 3.288038e-27 6.556818e-24
+ENSG00000184368  -7.122196 3.951757 116.1274 4.457148e-27 7.777166e-24
+ENSG00000211648   6.814211 5.354604 114.9717 7.982812e-27 1.238134e-23
+ENSG00000137731  -6.632437 4.777895 112.6390 2.588623e-26 3.613459e-23
+```
+
+```{r}
+lrt_results <- lapply(colnames(contrast_matrix), function(cn) {
+  glmLRT(fit, contrast = contrast_matrix[, cn])
+})
+
+names(lrt_results) <- colnames(contrast_matrix)
+topTags(lrt_results[["BvsA"]])
+```
+
+```
+Coefficient:  -1*A 1*B 
+                    logFC   logCPM       LR       PValue          FDR
+ENSG00000211644 -8.602423 7.706599 176.7697 2.459000e-40 3.432519e-36
+ENSG00000244398 14.290756 5.707485 172.4603 2.147016e-39 1.498510e-35
+ENSG00000211947 -7.789757 7.727715 158.0047 3.087496e-36 1.436612e-32
+ENSG00000240342 -7.174882 7.069052 135.6556 2.373213e-31 8.281920e-28
+ENSG00000211659  7.972426 5.947324 131.1426 2.304456e-30 6.433581e-27
+ENSG00000211966  6.821394 5.490954 126.0942 2.932350e-29 6.822113e-26
+ENSG00000090530 -7.434324 3.640713 116.7308 3.288038e-27 6.556818e-24
+ENSG00000184368  7.122196 3.951757 116.1274 4.457148e-27 7.777166e-24
+ENSG00000211648 -6.814211 5.354604 114.9717 7.982812e-27 1.238134e-23
+ENSG00000137731  6.632437 4.777895 112.6390 2.588623e-26 3.613459e-23
+```
