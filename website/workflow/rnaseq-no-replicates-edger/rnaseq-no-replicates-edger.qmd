@@ -352,7 +352,7 @@ fit <- glmFit(dge_norm, design)
 ```{r}
 # 以下兩個指令等價，但上面更直觀
 lrt <- glmLRT(fit, contrast = contrast_matrix[, "BvsA"])
-lrt <- glmLRT(fit, contrast = c(1, -1, 0, 0, 0, 0))
+lrt <- glmLRT(fit, contrast = c(-1, 1, 0, 0, 0, 0))
 
 # 使用 `topTags` 索引結果
 topTags(lrt)
