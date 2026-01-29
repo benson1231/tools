@@ -1,11 +1,21 @@
 ---
 title: "rnaseq-no-replicates-edger"
-date: "2026-01-27"
+date: "2026-01-29"
 ---
 
 # 匯入樣本
 
 ## metadata
+
+使用 `tximportData` 套件提供的資料進行示範
+
+::: {.callout-important}
+樣本的 metadata 在分析流程中具有關鍵作用，用於記錄每個樣本所對應的實驗條件、分組資訊與相關註解。建議以結構化格式（如 `csv` 或 `txt` 檔案）進行整理與匯入，以利後續分析與流程自動化。
+:::
+
+::: {.callout-note}
+為了模擬沒有生物重複的樣本，我們設定 `condition` 是 A 到 F 不同狀況
+:::
 
 ```{r}
 library("tximport")
@@ -34,10 +44,23 @@ ERR188356 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356        
 
 ## tx2gene mapping
 
+::: {.callout-important}
+由於 RNA-seq 定量工具（如 kallisto）輸出的計數資料通常位於**轉錄本（transcript）層級**，而後續差異表達分析多以**基因（gene）層級**進行，因此需要透過 `tx2gene` 對照表，將轉錄本層級的定量結果彙總至基因層級。
+
+此類轉錄本與基因之間的對應關係可由公開註解資料取得，例如可自 GENCODE（Ensembl）或 NCBI RefSeq 等來源下載對應物種的 GTF 註解檔，並由其中擷取 transcript ID 與 gene ID 的對照資訊，以建立 tx2gene 映射表。
+
+外部連結: [ensembl release-113 gtf](https://ftp.ensembl.org/pub/release-113/gtf/homo_sapiens/)
+:::
+
+::: {.callout-note}
+本範例資料使用 kallisto 進行定量，其輸出的轉錄本 ID 不包含版本號後綴（如 `.1`, `.2`）。為確保 `tx2gene` 對照正確，需將對照表中轉錄本與基因 ID 的版本號後綴一併移除。
+:::
+
 ```{r}
+# 同樣使用 `tximportData` 提供的 tx2gene table
 tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
 
-# 由於範例 kallisto id 沒有版本號後綴，因此 mapping table 也移除
+# 移除版本號後綴
 tx2gene$TXNAME <- sub("\\..*$", "", tx2gene$TXNAME)
 tx2gene$GENEID <- sub("\\..*$", "", tx2gene$GENEID)
 head(tx2gene)
