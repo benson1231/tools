@@ -256,6 +256,8 @@ par(mfrow = c(1,1))
 
 ![](./images/filter_cpm_density.png)
 
+## 過濾低表現基因(自訂繪圖函式)
+
 <details>
 <summary><strong>plot_cpm_density() 函式版本（點擊展開）</strong></summary>
 
@@ -369,6 +371,8 @@ ERR188021     1 28594120    1.0159830 TSI  UNIGE NA20508.1.M_111124_2 ERS185362 
 ERR188356     1 22469952    1.0538359 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356         F
 ```
 
+## TMM(繪圖)
+
 ```{r}
 library(RColorBrewer)
 
@@ -391,13 +395,15 @@ par(mfrow=c(1,1))
 
 ![](./images/tmm_boxplot_realdata.png)
 
+## TMM(自訂繪圖函式)
+
 <details>
 <summary><strong>plot_tmm_boxplot() 函式版本（點擊展開）</strong></summary>
 
 ```{r}
 plot_tmm_boxplot <- function(
   dge,
-  outfile = "./images/tmm_boxplot_realdata.png",
+  outfile = "./tmm_boxplot_realdata.png",
   palette = "Paired",
   width = 2000,
   height = 1000,
@@ -477,7 +483,7 @@ plot_tmm_boxplot <- function(
 </details>
 
 ```{r}
-plot_tmm_boxplot(dge_filt)
+plot_tmm_boxplot(dge_filt, outfile = "./images/tmm_boxplot_realdata.png")
 ```
 
 # DE分析
