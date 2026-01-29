@@ -95,10 +95,6 @@ chr (2): TXNAME, GENEID
 
 ## count matrix
 
-::: {.callout-note}
-根據上游分析的工具，設定 `tximport` 函數的 `type` 參數，常見可用的有 `salmon`, `kallisto` 與 `rsem` 等等，若要詳細瞭解可以在 R 中輸入 `?tximport` 看詳細資料，也可以參考[tximport套件官方說明](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html)了解該函數的用法
-:::
-
 ```{r} 
 # 列出所有樣本對應的 kallisto 定量檔案路徑（abundance.h5）
 # 並將樣本名稱指定為 list 的 key，以確保匯入後的欄位名稱
@@ -122,6 +118,10 @@ files
                                                                                                  ERR188356 
 "C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188356/abundance.h5" 
 ```
+
+::: {.callout-note}
+根據上游分析的工具，設定 `tximport` 函數的 `type` 參數，常見可用的有 `salmon`, `kallisto` 與 `rsem` 等等，若要詳細瞭解可以在 R 中輸入 `?tximport` 看詳細資料，也可以參考[tximport套件官方說明](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html)了解該函數的用法
+:::
 
 ```{r}
 # 使用 tximport 將轉錄本層級的定量結果匯入，
