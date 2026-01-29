@@ -196,7 +196,7 @@ attr(,"package")
 
 # 前處理
 
-## 過濾低表現基因
+## 過濾低表現基因(篩選)
 
 ```{r}
 cpm_mat <- edgeR::cpm(dge)
@@ -204,8 +204,7 @@ keep <- rowSums(cpm_mat >= 1) >= (ncol(dge) / 2)    # 篩選：至少一半樣�
 dge_filt <- dge[keep, , keep.lib.sizes = FALSE]
 ```
 
-<details>
-<summary><strong>plot_cpm_density() 函式（點擊展開）</strong></summary>
+## 過濾低表現基因(繪圖)
 
 ```{r}
 library(RColorBrewer)
@@ -254,7 +253,8 @@ dev.off()
 par(mfrow = c(1,1))
 ```
 
-</details>
+<details>
+<summary><strong>plot_cpm_density() 函式（點擊展開）</strong></summary>
 
 ```{r}
 plot_cpm_density <- function(
@@ -339,6 +339,8 @@ plot_cpm_density <- function(
   invisible(outfile)
 }
 ```
+
+</details>
 
 ```{r}
 plot_cpm_density(dge, dge_filt, outfile = "./images/filter_cpm_density.png")
