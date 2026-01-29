@@ -5,9 +5,17 @@ date: "2026-01-29"
 
 # 匯入樣本
 
-## metadata
+本 workflow 使用 `tximportData` 套件提供的資料進行示範
 
-使用 `tximportData` 套件提供的資料進行示範
+::: {.callout-important}
+進行差異表達（DE）分析前，需具備完整的樣本與定量資訊，包括：
+
+- 樣本的 **metadata**（分組、條件與樣本識別碼）
+- 轉錄本定量工具（如 kallisto）輸出的 **count 資料**
+- 將轉錄本彙整至基因層級所需的 **tx2gene 對照表**
+::: 
+
+## metadata
 
 ::: {.callout-important}
 樣本的 metadata 在分析流程中具有關鍵作用，用於記錄每個樣本所對應的實驗條件、分組資訊與相關註解。建議以結構化格式（如 `csv` 或 `txt` 檔案）進行整理與匯入，以利後續分析與流程自動化。
@@ -87,11 +95,38 @@ chr (2): TXNAME, GENEID
 
 ## count matrix
 
+::: {.callout-note}
+根據上游分析的工具，設定 `tximport` 函數的 `type` 參數，常見可用的有 `salmon`, `kallisto` 與 `rsem` 等等，若要詳細瞭解可以在 R 中輸入 `?tximport` 看詳細資料，也可以參考[tximport套件官方說明](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html)了解該函數的用法
+:::
+
 ```{r} 
+# 列出所有樣本對應的 kallisto 定量檔案路徑（abundance.h5）
+# 並將樣本名稱指定為 list 的 key，以確保匯入後的欄位名稱
+# 能正確對應到 metadata 中的樣本順序與識別碼
 files <- file.path(dir,"kallisto", samples$run, "abundance.h5")
 names(files) <- sample_info$run
+files
+```
 
-txi.kallisto <- tximport(
+```
+                                                                                                 ERR188297 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188297/abundance.h5" 
+                                                                                                 ERR188088 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188088/abundance.h5" 
+                                                                                                 ERR188329 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188329/abundance.h5" 
+                                                                                                 ERR188288 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188288/abundance.h5" 
+                                                                                                 ERR188021 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188021/abundance.h5" 
+                                                                                                 ERR188356 
+"C:/Users/benson_lee/AppData/Local/R/win-library/4.4/tximportData/extdata/kallisto/ERR188356/abundance.h5" 
+```
+
+```{r}
+# 使用 tximport 將轉錄本層級的定量結果匯入，
+# 並透過 tx2gene 對照表彙整為基因層級的 count matrix
+txi.kallisto <- tximport::tximport(
   files = files,
   type = "kallisto",
   tx2gene = tx2gene,
@@ -110,15 +145,22 @@ summarizing length
 
 ## 建立 DGEList 物件
 
+::: {.callout-important}
+此步驟僅是將基因層級的 count matrix 與樣本 metadata  
+封裝成 edgeR 可辨識的 `DGEList` 物件，**尚未進行任何正規化或差異表達分析**。  
+後續仍需依序進行 library size 校正、離群基因過濾、模型建立與統計檢定。
+:::
+
 ```{r}
 library(edgeR)
 
-dge <- DGEList(
+dge <- edgeR::DGEList(
   counts = txi.kallisto$counts,
   samples = sample_info
 )
 
 dge
+class(dge)
 ```
 
 ```
@@ -140,17 +182,30 @@ ERR188329     1 34513836            1 TSI  UNIGE NA20505.1.M_111124_6 ERS185048 
 ERR188288     1 23867902            1 TSI  UNIGE NA20507.1.M_111124_7 ERS185412  ERX163158 ERR188288         D
 ERR188021     1 28702608            1 TSI  UNIGE NA20508.1.M_111124_2 ERS185362  ERX163159 ERR188021         E
 ERR188356     1 22615555            1 TSI  UNIGE NA20514.1.M_111124_4 ERS185217  ERX163062 ERR188356         F
+
+[1] "DGEList"
+attr(,"package")
+[1] "edgeR"
 ```
+
+::: {.callout-note}
+以上是讀取資料的部分，接下來是針對 `dge` 物件進行各種前處理操作，包含過濾低表現量的基因以及TMM標準化
+:::
+
+---
 
 # 前處理
 
 ## 過濾低表現基因
 
 ```{r}
-cpm_mat <- cpm(dge)
+cpm_mat <- edgeR::cpm(dge)
 keep <- rowSums(cpm_mat >= 1) >= (ncol(dge) / 2)    # 篩選：至少一半樣本CPM >= 1
 dge_filt <- dge[keep, , keep.lib.sizes = FALSE]
 ```
+
+<details>
+<summary><strong>plot_cpm_density() 函式（點擊展開）</strong></summary>
 
 ```{r}
 library(RColorBrewer)
@@ -197,6 +252,96 @@ legend("topright", colnames(dge_filt), text.col = col, bty = "n")
 
 dev.off()
 par(mfrow = c(1,1))
+```
+
+</details>
+
+```{r}
+plot_cpm_density <- function(
+  dge_raw,
+  dge_filt,
+  outfile = "./filter_cpm_density.png",
+  palette = "Paired",
+  ylim = c(0, 0.3),
+  width = 2000,
+  height = 1000,
+  res = 200,
+  prior_count = 2
+) {
+  # ----------------------------
+  # Input checks
+  # ----------------------------
+  if (!inherits(dge_raw, "DGEList"))
+    stop("`dge_raw` must be an edgeR DGEList object")
+
+  if (!inherits(dge_filt, "DGEList"))
+    stop("`dge_filt` must be an edgeR DGEList object")
+
+  if (!requireNamespace("edgeR", quietly = TRUE))
+    stop("Package 'edgeR' is required")
+
+  if (!requireNamespace("RColorBrewer", quietly = TRUE))
+    stop("Package 'RColorBrewer' is required")
+
+  # ----------------------------
+  # log-CPM calculation
+  # ----------------------------
+  lcpm_raw  <- edgeR::cpm(dge_raw,  log = TRUE, prior.count = prior_count)
+  lcpm_filt <- edgeR::cpm(dge_filt, log = TRUE, prior.count = prior_count)
+
+  nsamples <- ncol(dge_raw)
+
+  # 檢查 palette 是否支援樣本數
+  max_cols <- RColorBrewer::brewer.pal.info[palette, "maxcolors"]
+  if (nsamples > max_cols) {
+    stop(
+      sprintf(
+        "Palette '%s' supports up to %d colors, but nsamples = %d.",
+        palette, max_cols, nsamples
+      )
+    )
+  }
+  cols <- RColorBrewer::brewer.pal(nsamples, palette)
+
+  # ----------------------------
+  # Plot
+  # ----------------------------
+  png(outfile, width = width, height = height, res = res)
+  op <- par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
+  on.exit({ par(op); dev.off() }, add = TRUE)
+
+  ## A. Before filtering
+  plot(
+    density(lcpm_raw[, 1]),
+    col = cols[1], lwd = 2,
+    ylim = ylim,
+    xlab = "log2-CPM",
+    main = "A. Before filtering"
+  )
+  for (i in 2:nsamples) {
+    lines(density(lcpm_raw[, i]), col = cols[i], lwd = 2)
+  }
+  legend("topright", colnames(dge_raw), text.col = cols, bty = "n")
+
+  ## B. After filtering
+  plot(
+    density(lcpm_filt[, 1]),
+    col = cols[1], lwd = 2,
+    ylim = ylim,
+    xlab = "log2-CPM",
+    main = "B. After filtering"
+  )
+  for (i in 2:ncol(dge_filt)) {
+    lines(density(lcpm_filt[, i]), col = cols[i], lwd = 2)
+  }
+  legend("topright", colnames(dge_filt), text.col = cols, bty = "n")
+
+  invisible(outfile)
+}
+```
+
+```{r}
+plot_cpm_density(dge, dge_filt, outfile = "./images/filter_cpm_density.png")
 ```
 
 ![](./images/filter_cpm_density.png)
