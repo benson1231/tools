@@ -253,8 +253,11 @@ dev.off()
 par(mfrow = c(1,1))
 ```
 
+
+![](./images/filter_cpm_density.png)
+
 <details>
-<summary><strong>plot_cpm_density() 函式（點擊展開）</strong></summary>
+<summary><strong>plot_cpm_density() 函式版本（點擊展開）</strong></summary>
 
 ```{r}
 plot_cpm_density <- function(
@@ -343,10 +346,11 @@ plot_cpm_density <- function(
 </details>
 
 ```{r}
-plot_cpm_density(dge, dge_filt, outfile = "./images/filter_cpm_density.png")
+plot_cpm_density(
+    dge_raw = dge, 
+    dge_filt = dge_filt, 
+    outfile = "./images/filter_cpm_density.png")
 ```
-
-![](./images/filter_cpm_density.png)
 
 ## TMM
 
@@ -387,9 +391,103 @@ par(mfrow=c(1,1))
 
 ![](./images/tmm_boxplot_realdata.png)
 
+<details>
+<summary><strong>plot_tmm_boxplot() 函式版本（點擊展開）</strong></summary>
+
+```{r}
+plot_tmm_boxplot <- function(
+  dge,
+  outfile = "./images/tmm_boxplot_realdata.png",
+  palette = "Paired",
+  width = 2000,
+  height = 1000,
+  res = 200
+) {
+  # ----------------------------
+  # Input checks
+  # ----------------------------
+  if (!inherits(dge, "DGEList"))
+    stop("`dge` must be an edgeR DGEList object")
+
+  if (!requireNamespace("edgeR", quietly = TRUE))
+    stop("Package 'edgeR' is required")
+
+  if (!requireNamespace("RColorBrewer", quietly = TRUE))
+    stop("Package 'RColorBrewer' is required")
+
+  nsamples <- ncol(dge)
+
+  max_cols <- RColorBrewer::brewer.pal.info[palette, "maxcolors"]
+  if (nsamples > max_cols) {
+    stop(
+      sprintf(
+        "Palette '%s' supports up to %d colors, but nsamples = %d.",
+        palette, max_cols, nsamples
+      )
+    )
+  }
+  cols <- RColorBrewer::brewer.pal(nsamples, palette)
+
+  # ----------------------------
+  # Before TMM: force norm.factors = 1
+  # ----------------------------
+  dge_before <- dge
+  dge_before$samples$norm.factors <- 1
+
+  # ----------------------------
+  # After TMM
+  # ----------------------------
+  dge_after <- edgeR::calcNormFactors(dge_before)
+
+  # ----------------------------
+  # Plot
+  # ----------------------------
+  png(outfile, width = width, height = height, res = res)
+  op <- par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
+  on.exit({ par(op); dev.off() }, add = TRUE)
+
+  ## A. Before TMM
+  boxplot(
+    edgeR::cpm(dge_before, log = TRUE),
+    las = 2,
+    col = cols,
+    outline = FALSE,
+    main = "A. Before TMM",
+    ylab = "log2-CPM"
+  )
+
+  ## B. After TMM
+  boxplot(
+    edgeR::cpm(dge_after, log = TRUE),
+    las = 2,
+    col = cols,
+    outline = FALSE,
+    main = "B. After TMM",
+    ylab = "log2-CPM"
+  )
+
+  invisible(list(
+    dge_before = dge_before,
+    dge_after  = dge_after,
+    outfile    = outfile
+  ))
+}
+```
+
+</details>
+
+```{r}
+plot_tmm_boxplot(dge_filt)
+```
+
 # DE分析
 
 ## 手動設定 dispersion
+
+::: {.callout-important}
+在缺乏生物重複（no biological replicates）的情況下，edgeR 無法從資料中可靠地估計離散度（dispersion）。因此，此處**手動指定 common dispersion**（例如 0.05），僅作為示範與流程展示用途。  
+實際研究分析中，建議至少包含生物重複，並透過 `estimateDisp()` 由資料本身估計 dispersion，以確保統計推論的可靠性。
+:::
 
 ```{r}
 # Common dispersion manually set to 0.05 because no biological replicates
