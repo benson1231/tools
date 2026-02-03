@@ -426,7 +426,7 @@ ggsave("./images/ROC_curve.png")
 
 <div class="page-footer-license">
   <p>
-    This work is adapted from<br>
+    This page is adapted from<br>
     <a href="https://bioconnector.github.io/workshops/r-survival.html" target="_blank" rel="noopener noreferrer">
       UVA HSL – BIMS 8382: Research & Data Courses / Workshops
     </a><br>
