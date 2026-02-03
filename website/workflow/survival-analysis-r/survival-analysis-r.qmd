@@ -11,7 +11,7 @@ date: "2026-01-21"
 ::: {.callout-tip}
 ## Reference
 
-以下範例參考 [UVA HSL Research & Data Courses](https://bioconnector.github.io/workshops/r-survival.html) 之 workshop 內容
+以下分析流程與範例內容參考 [UVA HSL – BIMS 8382: Research & Data Courses / Workshops](https://bioconnector.github.io/workshops/r-survival.html) 之教學素材進行整理與改寫；完整來源與授權資訊請參考**頁尾說明**。
 :::
 
 # 需求套件
@@ -428,11 +428,11 @@ ggsave("./images/ROC_curve.png")
 <div class="page-footer-license">
   <p>
     This work is adapted from<br>
-    <a href="https://bioconnector.github.io/workshops/r-survival.html">
+    <a href="https://bioconnector.github.io/workshops/r-survival.html" target="_blank" rel="noopener noreferrer">
       UVA HSL – BIMS 8382: Research & Data Courses / Workshops
     </a><br>
     and is licensed under the<br>
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">
       CC BY-NC-SA 4.0
     </a>
   </p>
