@@ -11,6 +11,8 @@ date-format: "YYYY-MM-DD"
 format:
   html:
     css: styles/styles.css
+    include-after-body:
+      - includes/lightbox.html
     theme: 
       light: flatly
       dark: darkly
