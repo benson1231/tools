@@ -13,6 +13,8 @@ format:
     css: styles/styles.css
     include-after-body:
       - includes/lightbox.html
+    js:
+      - scripts/lightbox.js
     theme: 
       light: flatly
       dark: darkly
