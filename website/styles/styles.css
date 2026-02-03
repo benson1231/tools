@@ -38,3 +38,21 @@ h1, h2, h3, h4, h5, h6 {
   --dropdown-header-bg: rgb(252, 253, 255);
   --dropdown-header-text: #5863a0;
 }
+
+.page-footer-license {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e5e5;
+}
+
+.page-footer-license a {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+.page-footer-license a:hover {
+  text-decoration: underline;
+}

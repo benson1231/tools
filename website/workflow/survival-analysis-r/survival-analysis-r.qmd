@@ -423,15 +423,22 @@ ggsave("./images/ROC_curve.png")
 
 ![](./images/ROC_curve.png)
 
-# 授權（License）
+---
 
-本頁內容為教學筆記之**重新整理與改寫版本**，其課程架構與部分範例概念改作自  
-University of Virginia Health Sciences Library（UVA HSL）所提供之  
-[BIMS 8382：Research & Data Courses / Workshops](https://bioconnector.github.io/workshops/r-survival.html) 教學材料。
+<div class="page-footer-license">
+  <p>
+    This work is adapted from<br>
+    <a href="https://bioconnector.github.io/workshops/r-survival.html">
+      UVA HSL – BIMS 8382: Research & Data Courses / Workshops
+    </a><br>
+    and is licensed under the<br>
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+      CC BY-NC-SA 4.0
+    </a>
+  </p>
+</div>
 
-- **原作授權**：[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-- **本改作授權**：[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)（依相同授權條款釋出）
 
 
 
