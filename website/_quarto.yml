@@ -6,15 +6,12 @@ project:
 execute: 
   enabled: false  
 number-sections: true
+lightbox: true
 date-format: "YYYY-MM-DD"
 
 format:
   html:
     css: styles/styles.css
-    include-after-body:
-      - includes/lightbox.html
-    js:
-      - scripts/lightbox.js
     theme: 
       light: flatly
       dark: darkly
