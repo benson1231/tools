@@ -423,7 +423,6 @@ ggsave("./images/ROC_curve.png")
 
 ![](./images/ROC_curve.png)
 
----
 
 <div class="page-footer-license">
   <p>
