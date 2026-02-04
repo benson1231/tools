@@ -3,6 +3,12 @@ title: "16s-qiime2"
 date: "2026-02-02"
 ---
 
+::: {.callout-tip}
+## Reference
+
+本文參考自官方文檔，[Moving Pictures tutorial](https://amplicon-docs.qiime2.org/en/stable/tutorials/moving-pictures.html)，
+:::
+
 # 環境設置
 
 由於 `qiime2` 環境比較複雜，建議使用 `docker` 或 `conda/mamba` 等工具
@@ -18,3 +24,10 @@ docker run \
 ```
 
 </details>
+
+# 取得範例資料
+
+::: {.callout-note}
+使用 qiime2 官方提供之範例 metadata `sample-metadata.tsv`
+:::
+
