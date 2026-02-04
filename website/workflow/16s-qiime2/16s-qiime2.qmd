@@ -3,4 +3,18 @@ title: "16s-qiime2"
 date: "2026-02-02"
 ---
 
-🛠️ 施工中
+# 環境設置
+
+由於 `qiime2` 環境比較複雜，建議使用 `docker` 或 `conda/mamba` 等工具
+
+<details><summary><strong>使用 docker 環境</strong></summary>
+
+```{bash}
+docker pull quay.io/qiime2/amplicon:2025.10
+
+docker run \
+  -v $(pwd):/data \
+  -it quay.io/qiime2/amplicon:2025.10
+```
+
+</details>
