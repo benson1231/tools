@@ -11,7 +11,7 @@ date: "2026-02-09"
 small RNA-seq 前處理與 miRNA 定量部分，已整理為完整 workflow 並公開於 [https://github.com/benson1231/mirdeep2](https://github.com/benson1231/mirdeep2)（基於 miRDeep2 工具進行調整與最佳化，適用於人類檢體分析）。詳細流程、腳本與範例資料請參考該 repository。
 :::
 
-# miRNA 標的預測(演算法)
+# miRNA 標的預測工具
 
 ::: {.callout-note}
 miRNA target prediction 在研究上大致可分為三種主要方向：
@@ -174,4 +174,50 @@ coordinated by Anton Enright and Chris Sander (miranda (at) cbio.mskcc.org).
 
 Please send bug reports to: miranda (at) cbio.mskcc.org.
 ```
+:::
+
+---
+
+# miRNA 標的預測平台
+
+## TargetScan
+
+[TargetScan](https://www.targetscan.org/vert_80/)
+
+## miRWalk
+
+[miRWalk](http://mirwalk.umm.uni-heidelberg.de/)
+
+## miRDB
+
+[miRDB]([miRDB](https://mirdb.org/))
+
+---
+
+# miRNA 資料庫
+
+## miRTarBase
+
+[miRTarBase](https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/php/index.php)
+
+::: {.callout-tip}
+## Reference
+
+Cui, Shidong et al. “miRTarBase 2025: updates to the collection of experimentally validated microRNA-target interactions.” Nucleic acids research vol. 53,D1 (2025): D147-D156. doi:10.1093/nar/gkae1072
+:::
+
+---
+
+# 綜合整理
+
+## Tools4miRs
+
+[Tools4miRs](https://tools4mirs.org/) 是一個很詳盡的 miRNA 分析方法整理平台，彙總了所有處理 miRNA 可能會用到工具，並詳細比較各個工具的特性，非常值得參考。
+
+::: {.callout-tip}
+## Reference
+
+[Lukasik A, Wójcikowski M, Zielenkiewicz P.
+Tools4miRs – one place to gather all the tools for miRNA analysis. Bioinformatics. 2016;
+doi:10.1093/bioinformatics/btw189](https://academic.oup.com/bioinformatics/article/32/17/2722/2450725)
 :::
