@@ -1,0 +1,7 @@
+name: mirna
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - rnahybrid
+  - miranda
