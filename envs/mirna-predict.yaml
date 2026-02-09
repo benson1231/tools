@@ -1,0 +1,7 @@
+name: mirna-predict
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - rnahybrid=2.1.2
+  - miranda=3.3a

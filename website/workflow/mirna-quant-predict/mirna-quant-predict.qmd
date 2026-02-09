@@ -1,0 +1,26 @@
+---
+title: "mirna-quant-predict"
+date: "2026-02-09"
+---
+
+::: {.callout-important}
+本流程說明如何從 small RNA-seq FASTQ 檔案進行 miRNA 定量（quantification），並進一步執行 miRNA target prediction（RNAhybrid 與 miRanda）。
+
+small RNA-seq 前處理與 miRNA 定量部分，已整理為完整 workflow 並公開於 [GitHub](https://github.com/benson1231/mirdeep2)（基於 miRDeep2 工具進行調整與最佳化，適用於人類檢體分析）。  
+詳細流程、腳本與範例資料請參考該 repository。
+:::
+
+
+```bash
+conda env create -f https://raw.githubusercontent.com/benson1231/tools/main/envs/mirna.yaml
+conda activate mirna
+```
+
+
+```bash
+RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
+```
+
+```bash
+miranda data/mirna.fa data/target.fa -out results/miranda.out
+```

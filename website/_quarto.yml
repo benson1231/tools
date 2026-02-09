@@ -108,6 +108,10 @@ website:
           - href: workflow/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
             text: rnaseq-no-replicates-edger
 
+          - text: miRNA
+          - href: workflow/mirna-quant-predict/mirna-quant-predict.qmd
+            text: mirna-quant-predict
+
           - text: Others
           - href: workflow/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
