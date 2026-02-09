@@ -1,6 +1,19 @@
 ---
 title: "mirna-mirdeep2"
-date: "2026-02-06"
+date: "2026-02-09"
 ---
 
-🛠️ 修改中...
+
+```bash
+conda env create -f https://raw.githubusercontent.com/benson1231/tools/main/envs/mirna.yaml
+conda activate mirna
+```
+
+
+```bash
+RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
+```
+
+```bash
+miranda data/mirna.fa data/target.fa -out results/miranda.out
+```
