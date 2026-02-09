@@ -36,6 +36,12 @@ mkdir results/
 
 ## 使用 `RNAhybrid` 演算法
 
+::: {.callout-tip}
+## Reference
+
+Krüger, Jan, and Marc Rehmsmeier. “RNAhybrid: microRNA target prediction easy, fast and flexible.” Nucleic acids research vol. 34,Web Server issue (2006): W451-4. doi:10.1093/nar/gkl243
+:::
+
 - [RNAhybrid 使用手冊](https://manpages.ubuntu.com/manpages/jammy/man1/RNAhybrid.1.html) 
 
 ```bash
@@ -87,6 +93,12 @@ PS graphical output not supported.
 
 ## 使用 `miranda` 演算法
 
+::: {.callout-tip}
+## Reference
+
+Enright, Anton J et al. “MicroRNA targets in Drosophila.” Genome biology vol. 5,1 (2003): R1. doi:10.1186/gb-2003-5-1-r1
+:::
+
 ```bash
 miranda data/mirna.fa data/target.fa -out results/miranda.out
 ```
@@ -94,6 +106,7 @@ miranda data/mirna.fa data/target.fa -out results/miranda.out
 ::: {.callout-note collapse="true"}
 ## miranda --help（點擊展開結果）
 
+```
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 miranda v3.3a    microRNA Target Scanning Algorithm
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -160,4 +173,5 @@ This software will be further developed under the open source model,
 coordinated by Anton Enright and Chris Sander (miranda (at) cbio.mskcc.org).
 
 Please send bug reports to: miranda (at) cbio.mskcc.org.
+```
 :::
