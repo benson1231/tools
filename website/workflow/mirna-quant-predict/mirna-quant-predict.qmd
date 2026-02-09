@@ -47,8 +47,9 @@ RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
 RNAhybrid -h
 ```
 
-<details>
-<summary><strong>點我展開：RNAhybrid Usage 說明</strong></summary>
+::: {.callout-note collapse="true"}
+## RNAhybrid Usage（點擊展開）
+
 ```
 Usage: RNAhybrid [options] [target sequence] [query sequence].
 
@@ -69,7 +70,7 @@ options:
   -g (ps|png|jpg|all)
   -t <target file>
   -q <query file>
-  
+
 Either a target file has to be given (FASTA format)
 or one target sequence directly.
 
@@ -87,7 +88,7 @@ In that case, a data set name has to be given with the -s flag.
 
 PS graphical output not supported.
 ```
-</details>
+:::
 
 ## 使用 `miranda` 演算法
 
