@@ -37,9 +37,57 @@ mkdir results/
 
 ## 使用 `RNAhybrid` 演算法
 
+- [RNAhybrid 使用手冊](https://manpages.ubuntu.com/manpages/jammy/man1/RNAhybrid.1.html) 
+
 ```bash
 RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
 ```
+
+```bash
+RNAhybrid -h
+```
+
+<details>
+<summary><strong>點我展開：RNAhybrid Usage 說明</strong></summary>
+```
+Usage: RNAhybrid [options] [target sequence] [query sequence].
+
+options:
+
+  -b <number of hits per target>
+  -c compact output
+  -d <xi>,<theta>
+  -f helix constraint
+  -h help
+  -m <max targetlength>
+  -n <max query length>
+  -u <max internal loop size (per side)>
+  -v <max bulge loop size>
+  -e <energy cut-off>
+  -p <p-value cut-off>
+  -s (3utr_fly|3utr_worm|3utr_human)
+  -g (ps|png|jpg|all)
+  -t <target file>
+  -q <query file>
+  
+Either a target file has to be given (FASTA format)
+or one target sequence directly.
+
+Either a query file has to be given (FASTA format)
+or one query sequence directly.
+
+The helix constraint format is "from,to", eg. -f 2,7 forces
+structures to have a helix from position 2 to 7 with respect to the query.
+
+<xi> and <theta> are the position and shape parameters, respectively,
+of the extreme value distribution assumed for p-value calculation.
+If omitted, they are estimated from the maximal duplex energy of the query.
+In that case, a data set name has to be given with the -s flag.
+
+
+PS graphical output not supported.
+```
+</details>
 
 ## 使用 `miranda` 演算法
 
