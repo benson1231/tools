@@ -73,7 +73,6 @@ CGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGA
 ```
 :::
 
-本步驟說明如何利用 `RNAhybrid` 與 `miRanda` 演算法進行 miRNA–mRNA 配對分析，以預測潛在 target genes。
 
 ### 建立分析環境
 
