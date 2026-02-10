@@ -182,15 +182,33 @@ Please send bug reports to: miranda (at) cbio.mskcc.org.
 
 ## TargetScan
 
-[TargetScan](https://www.targetscan.org/vert_80/)
+[TargetScan](https://www.targetscan.org/vert_80/) 是目前最廣泛使用的 miRNA 標的預測工具之一，最早由 Benjamin P. Lewis 等人在 Cell（2003）提出，其核心概念為 miRNA 透過 seed region（第 2–8 個核苷酸）與 mRNA 3′UTR 之 Watson-Crick 配對進行辨識與調控。該演算法結合 seed match、RNA 結構穩定度（free energy）、結合位點數量與跨物種保守性等資訊，以預測具有生物學意義的 miRNA–target interaction。後續版本進一步導入 context score、site accessibility 與 UTR 特徵等評估指標，並整合多物種基因組資料，以提高預測準確度與生物學相關性。TargetScan 特別強調保守性（evolutionary conservation）在 miRNA 標的辨識中的重要性，因此在功能性研究與機制探索中具有高度參考價值。
+
+::: {.callout-tip}
+## Reference
+
+Lewis, B. P., Shih, I. H., Jones-Rhoades, M. W., Bartel, D. P., & Burge, C. B. (2003). Prediction of mammalian microRNA targets. Cell, 115(7), 787–798. [https://doi.org/10.1016/s0092-8674(03)01018-3](https://doi.org/10.1016/s0092-8674(03)01018-3)
+:::
 
 ## miRWalk
 
-[miRWalk](http://mirwalk.umm.uni-heidelberg.de/)
+[miRWalk](http://mirwalk.umm.uni-heidelberg.de/) 提供完整的 miRNA–gene interaction 預測與整合資料，涵蓋 mRNA 全長區域（包括 3′UTR、5′UTR 與 coding sequence）。平台整合多種預測演算法與已發表研究資料，並提供疾病關聯與功能分析資訊，有助於進行 miRNA 調控網路與生物功能探索。
+
+::: {.callout-tip}
+## Reference
+
+Dweep, H., Sticht, C., Pandey, P., & Gretz, N. (2011). miRWalk--database: prediction of possible miRNA binding sites by "walking" the genes of three genomes. Journal of biomedical informatics, 44(5), 839–847. [https://doi.org/10.1016/j.jbi.2011.05.002](https://doi.org/10.1016/j.jbi.2011.05.002)
+:::
 
 ## miRDB
 
-[miRDB]([miRDB](https://mirdb.org/))
+[miRDB]([miRDB](https://mirdb.org/)) 是以機器學習模型（machine learning-based algorithm）建立的 miRNA 標的預測資料庫，透過大量實驗資料訓練模型來預測 miRNA–target interaction。其預測結果以 score 呈現，可用於篩選高可信度候選基因，常被應用於 miRNA 功能研究與候選標的篩選。
+
+::: {.callout-tip}
+## Reference
+
+Yuhao Chen, Xiaowei Wang, miRDB: an online database for prediction of functional microRNA targets, Nucleic Acids Research, Volume 48, Issue D1, 08 January 2020, Pages D127–D131, [https://doi.org/10.1093/nar/gkz757](https://doi.org/10.1093/nar/gkz757)
+:::
 
 ---
 
@@ -198,26 +216,24 @@ Please send bug reports to: miranda (at) cbio.mskcc.org.
 
 ## miRTarBase
 
-* https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/php/index.php
+[miRTarBase(若連結無法開啟，請複製網址並直接於瀏覽器開啟)](https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/php/index.php) 是一個專門收錄經實驗驗證（experimentally validated）之 microRNA–target interaction(MTI) 的資料庫
 
 ::: {.callout-tip}
 ## Reference
 
-Cui, Shidong et al. “miRTarBase 2025: updates to the collection of experimentally validated microRNA-target interactions.” Nucleic acids research vol. 53,D1 (2025): D147-D156. doi:10.1093/nar/gkae1072
+Shidong Cui, Sicong Yu, Hsi-Yuan Huang, Yang-Chi-Dung Lin, Yixian Huang, Bojian Zhang, Jihan Xiao, Huali Zuo, Jiayi Wang, Zhuoran Li, Guanghao Li, Jiajun Ma, Baiming Chen, Haoxuan Zhang, Jiehui Fu, Liang Wang, Hsien-Da Huang, miRTarBase 2025: updates to the collection of experimentally validated microRNA–target interactions, Nucleic Acids Research, Volume 53, Issue D1, 6 January 2025, Pages D147–D156, [https://doi.org/10.1093/nar/gkae1072](https://doi.org/10.1093/nar/gkae1072)
 :::
 
 ---
 
-# 綜合整理
+# 分析工具整理
 
 ## Tools4miRs
 
-[Tools4miRs](https://tools4mirs.org/) 是一個很詳盡的 miRNA 分析方法整理平台，彙總了所有處理 miRNA 可能會用到工具，並詳細比較各個工具的特性，非常值得參考。
+[Tools4miRs](https://tools4mirs.org/) 是一個很詳盡的 miRNA 分析方法整理平台，彙總了幾乎所有處理 miRNA 可能會用到工具，並詳細比較各個工具的特性，非常值得參考。
 
 ::: {.callout-tip}
 ## Reference
 
-[Lukasik A, Wójcikowski M, Zielenkiewicz P.
-Tools4miRs – one place to gather all the tools for miRNA analysis. Bioinformatics. 2016;
-doi:10.1093/bioinformatics/btw189](https://academic.oup.com/bioinformatics/article/32/17/2722/2450725)
+Anna Lukasik, Maciej Wójcikowski, Piotr Zielenkiewicz, Tools4miRs – one place to gather all the tools for miRNA analysis, Bioinformatics, Volume 32, Issue 17, September 2016, Pages 2722–2724, [https://doi.org/10.1093/bioinformatics/btw189](https://doi.org/10.1093/bioinformatics/btw189)
 :::
