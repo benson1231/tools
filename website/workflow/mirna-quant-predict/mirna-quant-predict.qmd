@@ -15,11 +15,24 @@ small RNA-seq 前處理與 miRNA 定量部分，已整理為完整 workflow 並�
 
 # miRNA 標的預測工具
 
+miRNA target prediction 在研究上大致可分為三種主要方向：
+
+* 序列互補性與結合能量預測演算法，例如：RNAhybrid、miRanda
+* 演化保守性或機器學習模型預測，例如：TargetScan、miRDB
+* 實驗驗證資料庫，例如：miRTarBase、starBase
+
+通常會與資料庫或其他預測工具交叉比對，以降低假陽性。
+
+## 資料格式
+
 需要準備 `mirna.fa` 與 `target.fa` 兩個 FASTA 檔案：
 
 * mirna.fa：已鑑定出的 miRNA 序列（query），例如來自 small RNA-seq 或 miRBase 的 mature miRNA
 
-```
+::: {.callout-note collapse="true"} 
+## mirna.fa 範例
+
+```text
 >hsa-miR-21-5p
 UAGCUUAUCAGACUGAUGUUGA
 
@@ -29,10 +42,14 @@ UGAGAACUGAAUUCCAUGGGUU
 >hsa-miR-155-5p
 UUAAUGCUAAUCGUGAUAGGGGU
 ```
+:::
 
 * target.fa：欲預測結合的目標序列（target），通常為基因的 3′UTR 序列、mRNA 序列或候選基因區段
 
-```
+::: {.callout-note collapse="true"} 
+## target.fa 範例
+
+```text
 >TP53
 AGTCTGACTGACTGACTGACTGACTGACTGATCGATCGATCGATCGATCGACTGACTGACTGACTGACTGA
 
@@ -42,21 +59,14 @@ TGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGA
 >PTEN
 CGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGA
 ```
-
-::: {.callout-note}
-miRNA target prediction 在研究上大致可分為三種主要方向：
-
-* 序列互補性與結合能量預測演算法，例如：RNAhybrid、miRanda
-* 演化保守性或機器學習模型預測，例如：TargetScan、miRDB
-* 實驗驗證資料庫，例如：miRTarBase、starBase
-
-實務上通常會與資料庫或其他預測工具交叉比對，以降低假陽性。
 :::
 
 本步驟說明如何利用 `RNAhybrid` 與 `miRanda` 演算法進行 miRNA–mRNA 配對分析，以預測潛在 target genes。
 
 ::: {.callout-note collapse="true"}
 ## 如何建立 conda 環境?
+
+使用 mamba 創建環境， mamba 用法可以參考 [mamba介紹](https://benson1231.github.io/tools/cicd/mamba.html)
 
 ```bash
 mamba env create -f https://raw.githubusercontent.com/benson1231/tools/main/envs/mirna-predict.yaml
