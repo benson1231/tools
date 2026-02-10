@@ -99,7 +99,7 @@ RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
 ```
 
 ::: {.callout-note collapse="true"}
-## `hybrid.out` 結果範例
+## 輸出檔 hybrid.out 結果範例
 
 ```text
 target: TP53
@@ -119,7 +119,7 @@ miRNA  3' AGUUGUAG           C     5'
 :::
 
 ::: {.callout-note collapse="true"}
-## RNAhybrid -h（點擊展開結果）
+## 可以輸入 `RNAhybrid -h` 查看使用說明（點擊展開結果）
 
 ```
 Usage: RNAhybrid [options] [target sequence] [query sequence].
@@ -174,7 +174,7 @@ miranda data/mirna.fa data/target.fa -out results/miranda.out
 ```
 
 ::: {.callout-note collapse="true"}
-## 輸出的 `miranda.out` 結果範例
+## 輸出檔 miranda.out 結果範例
 
 ```
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -227,7 +227,7 @@ Complete
 :::
 
 ::: {.callout-note collapse="true"}
-## miranda --help（點擊展開結果）
+## 可以輸入 `miranda --help` 查看說明（點擊展開結果）
 
 ```
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
