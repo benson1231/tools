@@ -92,7 +92,7 @@ RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
 ::: {.callout-note collapse="true"}
 ## `hybrid.out` 結果範例
 
-```text
+```default
 target: TP53
 length: 71
 miRNA : hsa-miR-21-5p
