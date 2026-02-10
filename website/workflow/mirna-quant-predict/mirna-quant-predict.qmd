@@ -7,8 +7,16 @@ date: "2026-02-10"
 
 # miRNA 定量
 
-::: {.callout-important}
-small RNA-seq 前處理與 miRNA 定量部分，已整理為完整 workflow 並公開於 [https://github.com/benson1231/mirdeep2](https://github.com/benson1231/mirdeep2)（基於 miRDeep2 工具進行調整與最佳化，適用於人類檢體分析）。詳細流程、腳本與範例資料請參考該 repository。
+本文使用 Sebastian Mackowiak & Marc Friedländer 開發之 [rajewsky-lab/mirdeep2](https://github.com/rajewsky-lab/mirdeep2) 工具進行 miRNA 定量分析。該工具可將 `small RNA-seq 之 FASTA（或由 FASTQ 轉換而來之序列）` 進行比對與解析，透過已知 miRNA 參考資料（如 miRBase）辨識成熟 miRNA，並計算各 miRNA 的表現量。
+
+miRDeep2 亦可同時預測潛在的新穎 miRNA（novel miRNA），其核心流程包括序列品質處理、比對至參考基因組、前驅 miRNA 結構辨識（hairpin structure）與表現量評估，最終輸出成熟 miRNA 之 read count、normalized expression 與相關品質指標，供後續差異表現分析與功能註解使用。
+
+而本人 fork 版本僅建立 docker 環境並新增適用於人類樣本的 workflow，詳細分析流程請見 [benson1231/mirdeep2](https://github.com/benson1231/mirdeep2)。
+
+::: {.callout-tip}
+## Reference
+
+Marc R. Friedländer, Sebastian D. Mackowiak, Na Li, Wei Chen, Nikolaus Rajewsky, miRDeep2 accurately identifies known and hundreds of novel microRNA genes in seven animal clades, Nucleic Acids Research, Volume 40, Issue 1, 1 January 2012, Pages 37–52, [https://doi.org/10.1093/nar/gkr688](https://doi.org/10.1093/nar/gkr688)
 :::
 
 ---
@@ -92,7 +100,7 @@ RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
 ::: {.callout-note collapse="true"}
 ## `hybrid.out` 結果範例
 
-```default
+```text
 target: TP53
 length: 71
 miRNA : hsa-miR-21-5p
