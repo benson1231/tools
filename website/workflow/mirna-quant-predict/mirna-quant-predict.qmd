@@ -198,7 +198,7 @@ Please send bug reports to: miranda (at) cbio.mskcc.org.
 
 ## miRTarBase
 
-[miRTarBase](https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/php/index.php)
+[miRTarBase](https://awi.cuhk.edu.cn/~miRTarBase/miRTarBase_2025/)
 
 ::: {.callout-tip}
 ## Reference
