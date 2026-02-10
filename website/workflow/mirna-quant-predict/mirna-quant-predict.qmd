@@ -89,9 +89,10 @@ Krüger, Jan, and Marc Rehmsmeier. “RNAhybrid: microRNA target prediction easy
 RNAhybrid -s 3utr_human -t data/target.fa -q data/mirna.fa > results/hybrid.out
 ```
 
-* 輸出的 `hybrid.out` 結果範例:
+::: {.callout-note collapse="true"}
+## `hybrid.out` 結果範例
 
-```
+```text
 target: TP53
 length: 71
 miRNA : hsa-miR-21-5p
@@ -106,6 +107,7 @@ target 5'                C       A 3'
                   UCAGACU AUU GAU    
 miRNA  3' AGUUGUAG           C     5'
 ```
+:::
 
 ::: {.callout-note collapse="true"}
 ## RNAhybrid -h（點擊展開結果）
