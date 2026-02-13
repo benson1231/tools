@@ -106,6 +106,52 @@ samtools = ">=1.22.1,<2"
 
 ---
 
+# pixi install
+
+安裝 pixi.toml 中定義的所有套件
+
+```bash
+pixi install
+```
+
+::: {.callout-note}
+## 第一次執行會產生 pixi.lock（或在依賴變更時更新）
+
+pixi.lock 會記錄所有套件的確切版本與來源，用於確保環境可重現（reproducible）。
+
+- `pixi.lock` 範例:
+
+```text
+version: 6
+environments:
+  default:
+    channels:
+    - url: https://conda.anaconda.org/conda-forge/
+    - url: https://conda.anaconda.org/bioconda/
+    options:
+      pypi-prerelease-mode: if-necessary-or-explicit
+    packages:
+      linux-64:
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/_r-mutex-1.0.1-anacondar_1.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/binutils_impl_linux-64-2.45.1-default_hfdba357_101.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/bwidget-1.10.1-ha770c72_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-hda65f42_8.conda
+
+      ...以下省略
+```
+:::
+
+## pixi install --locked
+
+使用 lockfile 安裝，確保版本完全一致
+
+```bash
+pixi install --locked
+```
+
+---
+
 # pixi task add
 
 使用 `pixi task add` 新增
@@ -172,3 +218,4 @@ pixi run run_python
 pixi run run_samtools
 pixi run run_R
 ```
+
