@@ -44,17 +44,19 @@ website:
       - text: CI/CD
         icon: boxes
         menu:
-          - href: cicd/linux.qmd
+          - href: cicd/linux/linux.qmd
             text: linux
-          - href: cicd/conda.qmd
+          - href: cicd/conda/conda.qmd
             text: conda
-          - href: cicd/mamba.qmd
+          - href: cicd/mamba/mamba.qmd
             text: mamba
-          - href: cicd/docker.qmd
+          - href: cicd/pixi/pixi.qmd
+            text: pixi
+          - href: cicd/docker/docker.qmd
             text: docker
-          - href: cicd/github-actions.qmd
+          - href: cicd/github-actions/github-actions.qmd
             text: github actions
-          - href: cicd/kubernetes.qmd
+          - href: cicd/kubernetes/kubernetes.qmd
             text: kubernetes
       - text: NGS Tools
         icon: tools

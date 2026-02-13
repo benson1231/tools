@@ -1,0 +1,174 @@
+---
+title: "pixi 基本使用"
+date: "2026-02-13"
+---
+
+# pixi 介紹
+
+pixi 是新一代的套件管理工具
+
+# pixi 安裝
+
+```bash
+curl -fsSL https://pixi.sh/install.sh | sh
+```
+
+::: {.callout-note}
+執行完後重啟 terminal
+
+若下載遇到任何問題或需要下載 `windows` 版本可參考 [官方網站教學](https://pixi.prefix.dev/latest/#installation)
+:::
+
+# pixi init
+
+```bash
+pixi init ./pixi-project
+cd ./pixi-project
+```
+
+::: {.callout-tip collapse="true"}
+## 本步驟會在 `pixi-project` 資料夾創建 `pixi.toml`，點我看範例
+
+```text
+[workspace]
+authors = ["benson lee <benson106075@gmail.com>"]
+channels = ["conda-forge"]
+name = "pixi-project"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+```
+:::
+
+修改 channel，新增 `bioconda`
+
+```bash
+pixi project channel add conda-forge
+pixi project channel add bioconda
+```
+
+::: {.callout-tip collapse="true"}
+## 本步驟會修改 `pixi.toml`，在 channels 新增 `bioconda` ，點我看範例
+
+```text
+[workspace]
+authors = ["benson lee <benson106075@gmail.com>"]
+channels = ["conda-forge", "bioconda"]
+name = "pixi-project"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+```
+:::
+
+---
+
+# pixi add
+
+透過 `pixi add` 新增套件
+
+```bash
+pixi add python cowpy numpy
+
+pixi add r-base r-ggplot2
+
+pixi add samtools
+```
+
+::: {.callout-tip collapse="true"}
+## 本步驟會修改 `pixi.toml`，在 dependencies 新增各套件 ，點我看範例
+
+```text
+[workspace]
+authors = ["benson lee <benson106075@gmail.com>"]
+channels = ["conda-forge", "bioconda"]
+name = "pixi-project"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = ">=3.14.3,<3.15"
+cowpy = ">=1.1.5,<2"
+numpy = ">=2.4.2,<3"
+r-base = ">=4.5.2,<4.6"
+r-ggplot2 = ">=4.0.2,<5"
+samtools = ">=1.22.1,<2"
+```
+:::
+
+---
+
+# pixi task add
+
+使用 `pixi task add` 新增
+
+```bash
+pixi task add run_python python ./src/hello.py
+
+pixi task add run_samtools ./src/samtools_test.sh
+
+pixi task add run_R Rscript ./src/demo_ggplot.R
+```
+
+::: {.callout-tip collapse="true"}
+## 本步驟會修改 `pixi.toml`，在 tasks 新增各指令 ，點我看範例
+
+```text
+[workspace]
+authors = ["benson lee <benson106075@gmail.com>"]
+channels = ["conda-forge", "bioconda"]
+name = "pixi-project"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+run_python = "python ./src/hello.py"
+run_samtools = "./src/samtools_test.sh"
+run_R = "Rscript ./src/demo_ggplot.R"
+
+[dependencies]
+python = ">=3.14.3,<3.15"
+cowpy = ">=1.1.5,<2"
+numpy = ">=2.4.2,<3"
+r-base = ">=4.5.2,<4.6"
+r-ggplot2 = ">=4.0.2,<5"
+samtools = ">=1.22.1,<2"
+```
+:::
+
+# pixi run
+
+```bash
+pixi run run_python
+```
+
+::: {.callout-note collapse="true"}
+## 預期輸出
+
+```
+ __________________                                                                                                                                                                                       
+< Hello Pixi fans! >
+ ------------------
+     \   ^__^
+      \  (oo)\_______
+         (__)\       )\/\
+           ||----w |
+           ||     ||
+任意一個 1~100的數值
+```
+:::
+
+- 同樣也能測試看看這兩個功能
+
+```bash
+pixi run run_samtools
+pixi run run_R
+```
