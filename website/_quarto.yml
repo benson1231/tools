@@ -58,6 +58,8 @@ website:
             text: github actions
           - href: cicd/kubernetes/kubernetes.qmd
             text: kubernetes
+          - href: cicd/renv/renv.qmd
+            text: renv
       - text: NGS Tools
         icon: tools
         menu:
