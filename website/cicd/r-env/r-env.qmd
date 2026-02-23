@@ -242,6 +242,7 @@ Successfully downloaded 1 package in 0.81 seconds.
 - Installing tinytex 0.58 ...                   OK [linked from cache]
 - Installing rmarkdown 2.30 ...                 OK [linked from cache]
 ```
+:::
 
 即可依照 `renv.lock` 重新安裝當時版本。
 
