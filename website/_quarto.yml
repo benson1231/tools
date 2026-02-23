@@ -41,25 +41,33 @@ website:
         text: Home
         icon: house
 
-      - text: CI/CD
-        icon: boxes
+      - text: Platform
+        icon: cpu
         menu:
+          - text: System
           - href: cicd/linux/linux.qmd
             text: linux
+
+          - text: Environment
           - href: cicd/conda/conda.qmd
             text: conda
           - href: cicd/mamba/mamba.qmd
             text: mamba
           - href: cicd/pixi/pixi.qmd
             text: pixi
-          - href: cicd/docker/docker.qmd
-            text: docker
-          - href: cicd/github-actions/github-actions.qmd
-            text: github actions
-          - href: cicd/kubernetes/kubernetes.qmd
-            text: kubernetes
           - href: cicd/r-env/r-env.qmd
             text: renv
+
+          - text: Infrastructure
+          - href: cicd/docker/docker.qmd
+            text: docker
+          - href: cicd/kubernetes/kubernetes.qmd
+            text: kubernetes
+
+          - text: CI/CD  
+          - href: cicd/github-actions/github-actions.qmd
+            text: github actions
+
       - text: NGS Tools
         icon: tools
         menu:
