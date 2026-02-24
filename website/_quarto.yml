@@ -130,6 +130,9 @@ website:
 
 
     tools:
+      - icon: person-circle
+        text: About Me
+        href: https://benson1231.github.io/
       - icon: book
         text: GitBook
         href: https://benson1231.gitbook.io/
