@@ -32,6 +32,7 @@ format:
 
 website:
   site-url: "https://benson1231.github.io/tools/"
+  favicon: assets/logo.svg
   back-to-top-navigation: true
   page-footer: "Copyright 2026, benson1231"
   navbar:
