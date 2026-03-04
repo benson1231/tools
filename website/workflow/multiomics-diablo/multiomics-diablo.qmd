@@ -7,11 +7,18 @@ date: "2026-03-04"
 
 在多體學（multi-omics）研究中，常會同時取得不同層級的生物資料，例如 `mRNA`、`miRNA`、`proteomics` 或 `metabolomics`。這些資料反映不同的分子調控機制，但若分開分析，往往難以完整理解其系統性關聯。因此，多體學整合方法被廣泛用於同時分析多個 omics 資料，以探索跨層級的生物訊號與潛在 biomarker。
 
-`DIABLO（Data Integration Analysis for Biomarker discovery using Latent variable approaches for Omics studies）` 是 mixOmics 套件提供的一種 監督式多體學整合方法。其核心基於 `block sparse Partial Least Squares Discriminant Analysis (block sPLS-DA)`，透過建立 latent components，同時最大化不同 omics 資料之間的相關性與 phenotype 的分類能力。DIABLO 也會透過稀疏特徵選擇（sparse feature selection），挑選少量但具有代表性的分子特徵，以建立可解釋的多體學 biomarker signature。
+`DIABLO（Data Integration Analysis for Biomarker discovery using Latent variable approaches for Omics studies）` 是 mixOmics 套件提供的一種`監督式多體學整合方法`。其核心基於 `block sparse Partial Least Squares Discriminant Analysis (block sPLS-DA)`，透過建立 `latent components`，同時最大化不同 omics 資料之間的相關性與 phenotype 的分類能力。DIABLO 也會透過稀疏特徵選擇（sparse feature selection），挑選少量但具有代表性的分子特徵，以建立可解釋的多體學 biomarker signature。
 
-在本範例中，我們使用 mixOmics 套件內建的 `TCGA breast cancer multi-omics dataset`，整合 mRNA、miRNA 與 proteomics 三種資料，示範 DIABLO 的基本分析流程，包括模型建立、參數 tuning、特徵選擇、結果視覺化以及模型評估。透過此流程，可以同時探索不同 omics 層級之間的關聯，並建立具有預測能力的多體學分類模型。
+::: {.callout-tip collapse="true"}
+## latent component 是什麼?
+
+latent component = 多個原始特徵加權組合形成的一個新變數
+:::
+
+> 在本範例中，我們使用 mixOmics 套件內建的 `TCGA breast cancer multi-omics dataset`，整合 mRNA、miRNA 與 proteomics 三種資料，示範 DIABLO 的基本分析流程，包括模型建立、參數 tuning、特徵選擇、結果視覺化以及模型評估。透過此流程，可以同時探索不同 omics 層級之間的關聯，並建立具有預測能力的多體學分類模型。
 
 # 下載套件
+
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
@@ -23,6 +30,9 @@ if (!requireNamespace("mixOmics", quietly = TRUE)) {
 
 library(mixOmics)
 ```
+
+::: {.callout-note collapse="true"}
+## outputs
 
 ```text
 Loading required package: MASS
@@ -37,6 +47,7 @@ Bookdown vignette: https://mixomicsteam.github.io/Bookdown
 Questions, issues: Follow the prompts at http://mixomics.org/contact-us
 Cite us:  citation('mixOmics')
 ```
+:::
 
 # 範例資料
 
@@ -76,15 +87,15 @@ Basal  Her2  LumA
    45    30    75 
 ```
 
-# design matrix
+# 設計 design matrix
 
-在 DIABLO 分析中，design matrix 用來定義不同 omics 資料之間的關聯程度。矩陣中的數值介於 0 到 1 之間，數值越大代表模型在建立 latent components 時，越強調不同資料區塊之間的相關性。
+在 DIABLO 分析中，`design matrix` 用來定義不同 omics 資料之間的關聯程度。矩陣中的數值`介於 0 到 1 之間`，數值越大代表模型在建立 latent components 時，越強調不同資料區塊之間的相關性。
 
 - 0：表示不強制建立跨體學關聯  
 - 接近 1：表示強化不同 omics 之間的相關性  
 - 0.1–0.5：常作為中等程度的整合強度  
 
-在此範例中，三個 omics 資料（mRNA、miRNA、proteomics）之間設定為 0.1 的弱關聯，表示模型會考慮跨體學的相關性，但不會過度強制不同資料之間必須高度一致。對角線設為 0，因為每個資料區塊本身不需要與自己建立關聯。
+> 在此範例中，三個 omics 資料（mRNA、miRNA、proteomics）之間設定為 0.1 的弱關聯，表示模型會考慮跨體學的相關性，但不會過度強制不同資料之間必須高度一致。對角線設為 0，因為每個資料區塊本身不需要與自己建立關聯。
 
 ```{r}
 design <- matrix(
@@ -348,12 +359,12 @@ dev.off()
 
 ## plotIndiv
 
-plotIndiv() 用於顯示樣本在 component 空間中的分布情況，可觀察不同分類（如癌症 subtype）是否能夠被清楚區分。
+plotIndiv() 用於顯示 `樣本` 在 `component 空間中` 的分布情況，可觀察不同分類（如癌症 subtype）是否能夠被清楚區分。
 
 ::: {.callout-important}
 ## 目的
 
-觀察樣本在 latent component 空間中的分布情形，並評估模型是否能有效區分不同的 phenotype（例如癌症 subtype）。
+觀察`樣本`在 `latent component 空間中的分布`情形，並評估模型是否能有效區分不同的 phenotype（例如癌症 subtype）。
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -401,7 +412,7 @@ dev.off()
 
 ## plotArrow
 
-plotArrow() 顯示同一樣本在不同 omics 空間中的投影位置，箭頭越短表示不同 omics 對該樣本的表示越一致。
+plotArrow() 顯示 `同一樣本` 在`不同 omics 空間中的投影位置`，箭頭越短表示不同 omics 對該樣本的表示越一致。
 
 ::: {.callout-important}
 ## 目的
@@ -452,7 +463,7 @@ dev.off()
 
 ## plotVar
 
-plotVar() 可用於觀察不同 omics 特徵在 component 空間中的分布與關聯。
+plotVar() 可用於觀察`不同 omics 特徵`在 `component 空間中的分布與關聯`。
 
 ::: {.callout-important}
 ## 目的
@@ -522,7 +533,7 @@ dev.off()
 
 ## circosPlot
 
-circosPlot() 以 circos diagram 的方式顯示不同 omics 特徵之間的相關性，常用於探索跨體學的分子關聯。
+circosPlot() 以 circos diagram 的方式顯示 `不同 omics 特徵之間的相關性`，常用於探索跨體學的分子關聯。
 
 ::: {.callout-important}
 ## 目的
@@ -577,7 +588,7 @@ dev.off()
 
 ## network
 
-network() 則可建立特徵之間的網路結構，顯示不同 omics biomarker 之間的相關性。
+network() 則可建立特徵之間的網路結構，顯示`不同 omics biomarker 之間的相關性`。
 
 ::: {.callout-important}
 ## 目的
@@ -645,9 +656,7 @@ write_graph(my.network$gR, file = "data/myNetwork.gml", format = "gml")
 
 ## plotLoadings
 
-plotLoadings() 用於顯示每個 component 中對模型貢獻最大的變數。
-
-`plotLoadings()` 用於顯示每個 component 中對模型貢獻最大的變數。
+`plotLoadings()` 用於顯示 `每個 component 中對模型貢獻最大的變數`。
 
 ::: {.callout-important}
 ## 目的
@@ -702,7 +711,7 @@ dev.off()
 
 ## cimDiablo
 
-最後，cimDiablo() 可以繪製 clustered image map (heatmap)，顯示不同 omics 特徵在樣本之間的表現模式。
+最後，cimDiablo() 可以繪製 clustered image map (heatmap)，顯示 `不同 omics 特徵` 在 `樣本之間` 的表現模式。
 
 ::: {.callout-important}
 ## 目的
