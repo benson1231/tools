@@ -39,7 +39,8 @@ This tutorial is a rewritten Quarto version of the DIABLO
 case study originally provided by the mixOmics team.
 
 Original tutorial:
-[https://mixomics.org](https://mixomics.org)
+[https://mixomics.org](https://mixomics.org)  
+[https://mixomicsteam.github.io/mixOmics-Vignette/index.html](https://mixomicsteam.github.io/mixOmics-Vignette/index.html)
 
 Reference:
 Rohart F.,  Gautier, B, Singh, A and Lê Cao, K. A. mixOmics: an R package for ‘omics feature selection and multiple data integration. PLOS 2-17.
