@@ -32,6 +32,19 @@ latent component = 多個原始特徵加權組合形成的一個新變數
 
 > 在本範例中，我們使用 mixOmics 套件內建的 `TCGA breast cancer multi-omics dataset`，整合 mRNA、miRNA 與 proteomics 三種資料，示範 DIABLO 的基本分析流程，包括模型建立、參數 tuning、特徵選擇、結果視覺化以及模型評估。透過此流程，可以同時探索不同 omics 層級之間的關聯，並建立具有預測能力的多體學分類模型。
 
+::: {.callout-tip}
+## Reference
+
+This tutorial is a rewritten Quarto version of the DIABLO
+case study originally provided by the mixOmics team.
+
+Original tutorial:
+[https://mixomics.org](https://mixomics.org)
+
+Reference:
+Rohart F.,  Gautier, B, Singh, A and Lê Cao, K. A. mixOmics: an R package for ‘omics feature selection and multiple data integration. PLOS 2-17.
+:::
+
 # 下載套件
 
 ```{r}
