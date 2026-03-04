@@ -686,34 +686,44 @@ write_graph(my.network$gR, file = "data/myNetwork.gml", format = "gml")
 
 1️⃣ **每個長條代表一個特徵 (feature)**  
 
-這些特徵是 DIABLO 在該 component 中選出的變數，例如：
+這些特徵是 DIABLO 在指定 component 中選出的變數，例如：
 
 - gene（mRNA）
 - miRNA
 - protein
 
-2️⃣ **長條長度代表 loading 大小**  
+不同 panel 代表不同的 omics block。
 
-loading 表示該特徵在 component 中的權重：
+2️⃣ **長條長度代表 loading 大小**
 
-- **loading 越大** → 對 component 的影響越大  
-- **loading 越小** → 對模型影響較小  
+loading 表示該特徵在 latent component 中的權重：
+
+- **|loading| 越大** → 對 component 的貢獻越大  
+- **|loading| 越小** → 對 component 的影響較小  
 
 因此 loading 較大的特徵通常是模型中較重要的 biomarker。
 
-3️⃣ **顏色代表不同 omics block**
+3️⃣ **正負 loading 代表特徵與 component 的方向**
 
-不同顏色用來區分不同資料來源，例如：
+- **正 loading**  
+  → 與 component 呈正相關  
 
-- mRNA  
-- miRNA  
-- proteomics  
+- **負 loading**  
+  → 與 component 呈負相關  
 
-4️⃣ **component 的意義**
+這表示該特徵在不同樣本群體中可能呈現相反的表現模式。
 
-每個 component 代表一組由多個特徵加權組合形成的 latent variable，因此 loading 較高的特徵通常與該 component 所代表的 biological signal 有較強的關聯。
+4️⃣ **顏色代表主要貢獻的 phenotype**
 
-因此，`plotLoadings()` 常用於 **篩選潛在 biomarker**，並作為後續功能分析（例如 pathway analysis 或 network analysis）的候選分子。
+顏色表示該特徵主要與哪一個分類群體相關，例如：
+
+- 藍色 → Basal  
+- 橘色 → Her2  
+- 灰色 → LumA  
+
+表示該特徵在該 subtype 中具有較強的 discriminative contribution。
+
+因此，`plotLoadings()` 可用於識別 **在特定 component 中最具分類能力的 multi-omics biomarker**。
 :::
 
 ```{r}
@@ -739,35 +749,47 @@ dev.off()
 
 在 `cimDiablo()` 圖中：
 
-1️⃣ **列 (rows) 代表特徵 (features)**  
+1️⃣ **列 (rows) 代表樣本 (samples)**  
 
-這些特徵是 DIABLO 模型在指定 component 中選出的變數，例如：
+每一列代表一個樣本，左側的顏色條表示樣本的分類，例如：
+
+- Basal
+- Her2
+- LumA
+
+樣本通常會依據表現模式進行 **hierarchical clustering**，因此相似的樣本會被分在同一群。
+
+2️⃣ **欄 (columns) 代表特徵 (features)**  
+
+每一欄代表一個被 DIABLO 模型選出的特徵，例如：
 
 - gene（mRNA）
 - miRNA
 - protein
 
-不同顏色的區塊代表不同的 omics block。
+上方的顏色條表示不同 omics block，例如：
 
-2️⃣ **欄 (columns) 代表樣本 (samples)**  
-
-每一欄代表一個樣本，通常會依據表現模式進行 **hierarchical clustering**。
+- 紫色 → mRNA
+- 紅色 → miRNA
+- 綠色 → proteomics
 
 3️⃣ **顏色代表表現量 (expression level)**  
 
-熱圖的顏色表示特徵在不同樣本中的相對表現：
+熱圖中的顏色表示特徵在不同樣本中的相對表現：
 
 - **紅色 / 暖色** → 較高表現  
 - **藍色 / 冷色** → 較低表現  
+
+通常資料會經過標準化（例如 z-score），因此顏色代表相對表現強度。
 
 4️⃣ **樣本群集 (sample clustering)**  
 
 若樣本依照 phenotype（例如癌症 subtype）形成明顯的群集，表示：
 
 - 模型選出的特徵具有良好的分類能力  
-- 這些 biomarker 能夠反映不同 biological states。
+- 這些 multi-omics biomarker 能夠區分不同 biological states。
 
-因此，`cimDiablo()` 常用於 **整體檢視 multi-omics biomarker signature 在樣本之間的表現模式**。
+因此，`cimDiablo()` 常用於 **整體檢視 multi-omics biomarker signature 在不同樣本之間的表現模式與群集關係**。
 :::
 
 ```{r}
