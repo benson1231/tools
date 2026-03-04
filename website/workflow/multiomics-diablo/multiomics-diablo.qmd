@@ -3,6 +3,21 @@ title: "multiomics-diablo 基本介紹"
 date: "2026-03-04"
 ---
 
+# 分析流程
+
+```{mermaid}
+flowchart TD
+A[Multi-omics data] --> B[Design matrix]
+B --> C[Initial DIABLO model]
+C --> D[Cross validation]
+D --> E[Select components]
+E --> F[Tune feature number]
+F --> G[Final DIABLO model]
+G --> H[Visualization]
+G --> I[Model evaluation]
+I --> J[External validation]
+```
+
 # DIABLO 介紹
 
 在多體學（multi-omics）研究中，常會同時取得不同層級的生物資料，例如 `mRNA`、`miRNA`、`proteomics` 或 `metabolomics`。這些資料反映不同的分子調控機制，但若分開分析，往往難以完整理解其系統性關聯。因此，多體學整合方法被廣泛用於同時分析多個 omics 資料，以探索跨層級的生物訊號與潛在 biomarker。
