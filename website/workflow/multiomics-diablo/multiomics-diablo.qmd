@@ -217,6 +217,9 @@ ncomp
 
 在確定最佳的 `component` 數量後，接著需要決定每個 omics 資料區塊應保留多少`特徵（keepX）`。DIABLO 採用`稀疏模型（sparse model）`，會從高維資料中選擇少量最具代表性的分子特徵，因此需要透過 `tune.block.splsda()` 來尋找最佳的特徵數量。
 
+::: {.callout-important}
+## 如果你的系統是 **Windows**，請跳過此步驟。
+
 為了加速計算，本範例使用 `BiocParallel` 套件進行 平行運算，並設定 4 個 CPU workers。同時設定 `test.keepX`，定義每個 omics 資料區塊在不同 component 下要測試的特徵數量範圍。
 
 ```{r}
@@ -227,9 +230,6 @@ library(BiocParallel)
 
 BPPARAM <- MulticoreParam(workers = 4)
 ```
-
-::: {.callout-important}
-## 如果你的系統是 **Windows**，請跳過此步驟。
 :::
 
 接著利用 `tune.block.splsda()` 進行參數調整，透過 `10-fold cross-validation` 評估不同 keepX 組合的分類表現，並找出最適合的特徵數量。
