@@ -125,6 +125,10 @@ website:
           - href: workflow/mirna-quant-predict/mirna-quant-predict.qmd
             text: mirna-quant-predict
 
+          - text: multiomics
+          - href: workflow/multiomics-diablo/multiomics-diablo.qmd
+            text: multiomics-diablo
+
           - text: Others
           - href: workflow/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
