@@ -304,12 +304,12 @@ DIABLO 的視覺化主要可分為三類：sample distribution、variable relati
 
 ## plotDIABLO
 
-plotDiablo() 可用來觀察不同 omics 資料區塊在 latent component 空間中的整合情形，並顯示不同資料區塊之間的 `correlation`，通常 `component correlation > 0.7` 就算成功。
+plotDiablo() 可用來觀察不同 omics 資料區塊在 latent component 空間中的整合情形，並顯示不同資料區塊之間的 `correlation`。
 
 ::: {.callout-important}
 ## 目的
 
-看不同 omics 的 component 是否真的在捕捉同一個 biological signal？
+評估不同 omics block 所建立的 latent components 是否捕捉到共同的 biological signal。
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -350,6 +350,47 @@ dev.off()
 
 plotIndiv() 用於顯示樣本在 component 空間中的分布情況，可觀察不同分類（如癌症 subtype）是否能夠被清楚區分。
 
+::: {.callout-important}
+## 目的
+
+觀察樣本在 latent component 空間中的分布情形，並評估模型是否能有效區分不同的 phenotype（例如癌症 subtype）。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 plotIndiv 圖
+
+`plotIndiv()` 會將每個樣本投影到 DIABLO 所建立的 **component 空間** 中：
+
+1️⃣ **每個點代表一個樣本 (sample)**  
+每個點的位置由該樣本在 component 空間中的 score 決定。
+
+2️⃣ **顏色代表不同分類 (group / phenotype)**  
+例如本範例中的 `Basal`、`Her2`、`LumA`。
+
+3️⃣ **座標軸代表 latent components**  
+例如：
+
+- `Component 1`
+- `Component 2`
+
+這些 component 是由多個 omics feature 的加權組合所形成的潛在變數。
+
+4️⃣ **群集分離程度 (cluster separation)**  
+
+若不同分類的樣本在圖中形成清楚分離的群集，表示：
+
+- 模型成功捕捉到與 phenotype 相關的 biological signal
+- 不同分類在多體學資料中具有可辨識的分子特徵
+
+若群集之間高度重疊，則可能表示：
+
+- 分類訊號較弱
+- component 數量不足
+- 或模型需要重新調整參數。
+
+因此，`plotIndiv()` 主要用於 **評估 DIABLO 模型在樣本層級的分類能力與群集分離效果**。
+:::
+
 ```{r}
 png(filename = "./images/indiv.png", width = 1500, height = 1500, res = 200)
 plotIndiv(sgccda.res, ind.names = FALSE, legend = TRUE,  style="ggplot2")
@@ -361,6 +402,45 @@ dev.off()
 ## plotArrow
 
 plotArrow() 顯示同一樣本在不同 omics 空間中的投影位置，箭頭越短表示不同 omics 對該樣本的表示越一致。
+
+::: {.callout-important}
+## 目的
+
+評估不同 omics 資料區塊對同一樣本的表示是否一致，並檢視多體學整合的效果。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 plotArrow 圖
+
+在 `plotArrow()` 圖中：
+
+1️⃣ **每條箭頭代表一個樣本 (sample)**  
+
+箭頭的起點與終點分別代表該樣本在不同 omics block 的 component 空間位置。
+
+2️⃣ **箭頭長度 (arrow length)**  
+
+箭頭長度反映不同 omics 對該樣本的表示差異：
+
+- **箭頭較短**  
+  → 不同 omics 對該樣本的表現模式一致  
+  → 表示多體學整合效果良好
+
+- **箭頭較長**  
+  → 不同 omics 對該樣本的表示差異較大  
+  → 可能表示某些 omics block 捕捉到不同的訊號
+
+3️⃣ **顏色代表樣本分類 (group / phenotype)**  
+
+例如本範例中的 `Basal`、`Her2`、`LumA`。
+
+若同一分類的樣本箭頭方向相似且長度較短，通常表示：
+
+- 不同 omics 在該分類中捕捉到一致的 biological signal
+- DIABLO 在多體學整合上具有良好的表現
+
+因此，`plotArrow()` 主要用於 **評估不同 omics 對樣本表現的整合一致性**。
+:::
 
 ```{r}
 png(filename = "./images/arrow.png", width = 1500, height = 1500, res = 200)
@@ -374,6 +454,51 @@ dev.off()
 
 plotVar() 可用於觀察不同 omics 特徵在 component 空間中的分布與關聯。
 
+::: {.callout-important}
+## 目的
+
+探索不同 omics 特徵在 component 空間中的關係，並觀察不同體學之間是否存在相關的 biomarker。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 plotVar 圖
+
+在 `plotVar()` 圖中：
+
+1️⃣ **每個點代表一個特徵 (feature)**  
+
+例如：
+
+- mRNA：gene  
+- miRNA：microRNA  
+- proteomics：protein  
+
+這些特徵的位置由其在 component 空間中的 **loading** 決定。
+
+2️⃣ **顏色代表不同 omics block**  
+
+不同顏色用來區分不同資料區塊，例如：
+
+- mRNA
+- miRNA
+- proteomics
+
+3️⃣ **點之間的距離代表特徵之間的關聯**
+
+在 component 空間中：
+
+- **距離越近** → 表示特徵具有較高相關性  
+- **距離較遠** → 表示特徵關聯較弱  
+
+若來自不同 omics 的特徵聚集在一起，通常表示這些分子可能參與相同的 biological process 或 regulatory network。
+
+4️⃣ **方向代表與 component 的關聯**
+
+位於同一方向的特徵通常具有相似的變化模式，而方向相反的特徵則可能呈現負相關。
+
+因此，`plotVar()` 主要用於 **探索跨體學 biomarker 之間的潛在關聯與調控模式**。
+:::
+
 ```{r}
 png(filename = "./images/var.png", width = 1500, height = 1500, res = 200)
 plotVar(sgccda.res, var.names = FALSE, style = 'graphics', legend = TRUE,
@@ -383,7 +508,7 @@ dev.off()
 
 ![](./images/var.png)
 
-也可以只顯示特定 component 的變數分布。
+也可以只顯示特定 component 的變數分布，例如只觀察 `component 1` 的特徵關係。
 
 ```{r}
 png(filename = "./images/var-comp.png", width = 1500, height = 1500, res = 200)
@@ -399,6 +524,46 @@ dev.off()
 
 circosPlot() 以 circos diagram 的方式顯示不同 omics 特徵之間的相關性，常用於探索跨體學的分子關聯。
 
+::: {.callout-important}
+## 目的
+
+視覺化不同 omics block 之間所選出的 biomarker，並觀察跨體學特徵之間的相關性。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 circosPlot 圖
+
+在 `circosPlot()` 圖中：
+
+1️⃣ **圓形區塊 (blocks)**  
+
+圓周上的區塊代表不同的 omics 資料，例如：
+
+- mRNA  
+- miRNA  
+- proteomics  
+
+每個區塊中排列的是 DIABLO 模型所選出的特徵（biomarker）。
+
+2️⃣ **圓弧線條 (links)**  
+
+不同區塊之間的線條代表特徵之間的相關性：
+
+- **紅色 / 深色線條** → 正相關  
+- **灰色 / 深色線條** → 負相關  
+
+只有相關係數高於 `cutoff`（本例為 0.7）的特徵關係才會顯示。
+
+3️⃣ **跨體學關聯 (cross-omics links)**  
+
+若 mRNA、miRNA 與 proteomics 之間存在大量連線，通常表示：
+
+- 不同 omics 層級之間存在強烈的分子關聯  
+- 可能形成跨體學的 regulatory network
+
+因此，`circosPlot()` 常用於探索 **multi-omics biomarker network**，並協助理解不同分子層級之間的潛在調控關係。
+:::
+
 ```{r}
 png(filename = "./images/circos.png", width = 1500, height = 1500, res = 200)
 circosPlot(sgccda.res, cutoff = 0.7, line = TRUE,
@@ -413,6 +578,52 @@ dev.off()
 ## network
 
 network() 則可建立特徵之間的網路結構，顯示不同 omics biomarker 之間的相關性。
+
+::: {.callout-important}
+## 目的
+
+將 DIABLO 模型所選出的多體學特徵轉換為網路結構，以探索不同 omics biomarker 之間的潛在分子關聯。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 network 圖
+
+在 `network()` 圖中：
+
+1️⃣ **節點 (nodes)**  
+
+每個節點代表一個被 DIABLO 選出的特徵，例如：
+
+- gene（mRNA）
+- miRNA
+- protein
+
+節點顏色代表不同的 omics block，例如：
+
+- 紫色 → mRNA  
+- 棕色 → miRNA  
+- 綠色 → proteomics  
+
+2️⃣ **連線 (edges)**  
+
+節點之間的連線代表特徵之間的相關性：
+
+- 若兩個特徵的相關係數高於設定的 `cutoff`（本例為 0.4），則會建立連線。
+- 連線越多，表示該特徵可能與更多分子具有相關關係。
+
+3️⃣ **網路結構 (network structure)**  
+
+在網路圖中：
+
+- **高度連接的節點 (hub nodes)**  
+  → 可能代表重要的 regulatory molecule  
+
+- **跨體學連線 (cross-omics links)**  
+  → 可能代表不同分子層級之間的調控關係  
+  例如 miRNA–mRNA 或 gene–protein interaction。
+
+因此，`network()` 可用於探索 **multi-omics biomarker network**，並協助發現潛在的關鍵調控分子。
+:::
 
 ```{r}
 png(filename = "./images/network.png", width = 1500, height = 1500, res = 200)
@@ -436,6 +647,51 @@ write_graph(my.network$gR, file = "data/myNetwork.gml", format = "gml")
 
 plotLoadings() 用於顯示每個 component 中對模型貢獻最大的變數。
 
+`plotLoadings()` 用於顯示每個 component 中對模型貢獻最大的變數。
+
+::: {.callout-important}
+## 目的
+
+識別在特定 component 中對模型貢獻最大的特徵，並找出可能的重要 biomarker。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 plotLoadings 圖
+
+在 `plotLoadings()` 圖中：
+
+1️⃣ **每個長條代表一個特徵 (feature)**  
+
+這些特徵是 DIABLO 在該 component 中選出的變數，例如：
+
+- gene（mRNA）
+- miRNA
+- protein
+
+2️⃣ **長條長度代表 loading 大小**  
+
+loading 表示該特徵在 component 中的權重：
+
+- **loading 越大** → 對 component 的影響越大  
+- **loading 越小** → 對模型影響較小  
+
+因此 loading 較大的特徵通常是模型中較重要的 biomarker。
+
+3️⃣ **顏色代表不同 omics block**
+
+不同顏色用來區分不同資料來源，例如：
+
+- mRNA  
+- miRNA  
+- proteomics  
+
+4️⃣ **component 的意義**
+
+每個 component 代表一組由多個特徵加權組合形成的 latent variable，因此 loading 較高的特徵通常與該 component 所代表的 biological signal 有較強的關聯。
+
+因此，`plotLoadings()` 常用於 **篩選潛在 biomarker**，並作為後續功能分析（例如 pathway analysis 或 network analysis）的候選分子。
+:::
+
 ```{r}
 png(filename = "./images/loadings.png", width = 1500, height = 1500, res = 200)
 plotLoadings(sgccda.res, comp = 2, contrib = 'max', method = 'median')
@@ -447,6 +703,48 @@ dev.off()
 ## cimDiablo
 
 最後，cimDiablo() 可以繪製 clustered image map (heatmap)，顯示不同 omics 特徵在樣本之間的表現模式。
+
+::: {.callout-important}
+## 目的
+
+整合不同 omics 所選出的特徵，並觀察這些 biomarker 在樣本之間的表現模式與群集關係。
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 cimDiablo 圖
+
+在 `cimDiablo()` 圖中：
+
+1️⃣ **列 (rows) 代表特徵 (features)**  
+
+這些特徵是 DIABLO 模型在指定 component 中選出的變數，例如：
+
+- gene（mRNA）
+- miRNA
+- protein
+
+不同顏色的區塊代表不同的 omics block。
+
+2️⃣ **欄 (columns) 代表樣本 (samples)**  
+
+每一欄代表一個樣本，通常會依據表現模式進行 **hierarchical clustering**。
+
+3️⃣ **顏色代表表現量 (expression level)**  
+
+熱圖的顏色表示特徵在不同樣本中的相對表現：
+
+- **紅色 / 暖色** → 較高表現  
+- **藍色 / 冷色** → 較低表現  
+
+4️⃣ **樣本群集 (sample clustering)**  
+
+若樣本依照 phenotype（例如癌症 subtype）形成明顯的群集，表示：
+
+- 模型選出的特徵具有良好的分類能力  
+- 這些 biomarker 能夠反映不同 biological states。
+
+因此，`cimDiablo()` 常用於 **整體檢視 multi-omics biomarker signature 在樣本之間的表現模式**。
+:::
 
 ```{r}
 png(filename = "./images/cimdiablo.png", width = 1500, height = 1500, res = 200)
