@@ -87,8 +87,13 @@ Basal  Her2  LumA
 在此範例中，三個 omics 資料（mRNA、miRNA、proteomics）之間設定為 0.1 的弱關聯，表示模型會考慮跨體學的相關性，但不會過度強制不同資料之間必須高度一致。對角線設為 0，因為每個資料區塊本身不需要與自己建立關聯。
 
 ```{r}
-design = matrix(0.1, ncol = length(data), nrow = length(data),
-                dimnames = list(names(data), names(data)))
+design <- matrix(
+  0.1,
+  ncol     = length(data),
+  nrow     = length(data),
+  dimnames = list(names(data), names(data))
+)
+
 diag(design) = 0
 design
 ```
@@ -173,6 +178,11 @@ Overall.BER        3              2                3
 
 ```{r}
 ncomp = perf.diablo$choice.ncomp$WeightedVote["Overall.BER", "centroids.dist"]
+ncomp
+```
+
+```text
+[1] 2
 ```
 
 # 特徵數量調整
@@ -198,10 +208,19 @@ test.keepX = list (mRNA = c(5:9, seq(10, 18, 2), seq(20,30,5)),
                     proteomics = c(5:9, seq(10, 18, 2), seq(20,30,5)))
 
 t1 = proc.time()
-tune.TCGA = tune.block.splsda(X = data, Y = Y, ncomp = ncomp,
-                               test.keepX = test.keepX, design = design,
-                               validation = 'Mfold', folds = 10, nrepeat = 1,
-                               BPPARAM = BPPARAM, dist = "centroids.dist")
+
+tune.TCGA <- tune.block.splsda(
+  X        = data,
+  Y        = Y,
+  ncomp    = ncomp,
+  test.keepX = test.keepX,
+  design   = design,
+  validation = "Mfold",
+  folds    = 10,
+  nrepeat  = 1,
+  BPPARAM  = BPPARAM,
+  dist     = "centroids.dist"
+)
 ```
 
 ```text
@@ -285,7 +304,39 @@ DIABLO 的視覺化主要可分為三類：sample distribution、variable relati
 
 ## plotDIABLO
 
-plotDiablo() 可用來觀察不同 omics 資料區塊在 latent component 空間中的整合情形，並顯示不同資料區塊之間的相關性。
+plotDiablo() 可用來觀察不同 omics 資料區塊在 latent component 空間中的整合情形，並顯示不同資料區塊之間的 `correlation`，通常 `component correlation > 0.7` 就算成功。
+
+::: {.callout-important}
+## 目的
+
+看不同 omics 的 component 是否真的在捕捉同一個 biological signal？
+:::
+
+::: {.callout-tip collapse="true"}
+## 如何解讀 plotDiablo 圖
+
+`plotDiablo()` 會以 **pairwise matrix** 的方式顯示不同 omics block 的 component 關係：
+
+1️⃣ **對角線 (diagonal)**  
+顯示各 omics block 的名稱，例如 `mRNA`、`miRNA`、`proteomics`。
+
+2️⃣ **右上角 (upper triangle)**  
+為 **scatter plot**，表示兩個 omics block 在指定 component（例如 component 1）上的樣本分布關係。  
+每個點代表一個樣本，顏色表示不同分類（例如 Basal、Her2、LumA）。  
+若不同 omics 的 component 捕捉到相似的 biological signal，樣本分布方向通常會呈現一致的趨勢。
+
+3️⃣ **左下角 (lower triangle)**  
+顯示兩個 omics block component 之間的 **Pearson correlation coefficient**。  
+數值越高代表不同 omics 在該 component 上的訊號越一致。
+
+一般而言：
+
+- `correlation > 0.7`：表示不同 omics 在該 component 上具有良好的整合效果  
+- `correlation 0.4–0.7`：中等相關  
+- `< 0.4`：不同 omics 捕捉到的訊號可能較不一致
+
+因此，`plotDiablo()` 主要用於評估 **DIABLO 是否成功在不同 omics 中捕捉到共同的 biological signal**。
+:::
 
 ```{r}
 png(filename = "./images/diablo.png", width = 1500, height = 1500, res = 200)
