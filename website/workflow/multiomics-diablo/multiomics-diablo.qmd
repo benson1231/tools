@@ -69,12 +69,14 @@ Cite us:  citation('mixOmics')
 使用 `mixOmics` 套件內建的 `breast.TCGA` 資料集作為範例，其中有 `mRNA`, `miRNA` 與 `proteomics` 三種體學資料的 matrix，將其整合成一個 list
 
 ```{r}
-data('breast.TCGA')
+data("breast.TCGA")
 set.seed(123)
 
-data = list(mRNA = breast.TCGA$data.train$mrna,
-            miRNA = breast.TCGA$data.train$mirna,
-            proteomics = breast.TCGA$data.train$protein)
+data <- list(
+  mRNA       = breast.TCGA$data.train$mrna,
+  miRNA      = breast.TCGA$data.train$mirna,
+  proteomics = breast.TCGA$data.train$protein
+)
 
 lapply(data, dim)
 ```
@@ -93,7 +95,7 @@ $proteomics
 `Y` 表示每個樣本的乳癌分型（Basal、Her2、LumA），作為 DIABLO 模型的分類標籤（response variable）。
 
 ```{r}
-Y = breast.TCGA$data.train$subtype
+Y <- breast.TCGA$data.train$subtype
 summary(Y)
 ```
 
@@ -120,7 +122,7 @@ design <- matrix(
   dimnames = list(names(data), names(data))
 )
 
-diag(design) = 0
+diag(design) <- 0
 design
 ```
 
@@ -148,7 +150,7 @@ sgccda.res <- block.splsda(
   design = design
 )
 
-t1 = proc.time()
+t1 <- proc.time()
 
 perf.diablo <- perf(
   sgccda.res,
@@ -203,7 +205,7 @@ Overall.BER        3              2                3
 `BER` 可以在類別數量不平衡的情況下提供較公平的分類評估，因此在多分類問題中常被用來作為模型選擇的依據。
 
 ```{r}
-ncomp = perf.diablo$choice.ncomp$WeightedVote["Overall.BER", "centroids.dist"]
+ncomp <- perf.diablo$choice.ncomp$WeightedVote["Overall.BER", "centroids.dist"]
 ncomp
 ```
 
@@ -226,14 +228,20 @@ library(BiocParallel)
 BPPARAM <- MulticoreParam(workers = 4)
 ```
 
+::: {.callout-important}
+## 如果你的系統是 **Windows**，請跳過此步驟。
+:::
+
 接著利用 `tune.block.splsda()` 進行參數調整，透過 `10-fold cross-validation` 評估不同 keepX 組合的分類表現，並找出最適合的特徵數量。
 
 ```{r}
-test.keepX = list (mRNA = c(5:9, seq(10, 18, 2), seq(20,30,5)),
-                    miRNA = c(5:9, seq(10, 18, 2), seq(20,30,5)),
-                    proteomics = c(5:9, seq(10, 18, 2), seq(20,30,5)))
+test.keepX <- list(
+  mRNA       = c(5:9, seq(10, 18, 2), seq(20, 30, 5)),
+  miRNA      = c(5:9, seq(10, 18, 2), seq(20, 30, 5)),
+  proteomics = c(5:9, seq(10, 18, 2), seq(20, 30, 5))
+)
 
-t1 = proc.time()
+t1 <- proc.time()
 
 tune.TCGA <- tune.block.splsda(
   X        = data,
@@ -260,7 +268,7 @@ This results in 2197 models being fitted for each component and each nrepeat, th
 完成 `tune.block.splsda()` 之後，可以從結果中取得每個 omics 資料區塊在不同 component 下的 最佳特徵數量 (keepX)。這些數值代表在模型中保留的變數數量，也就是最終被選出的潛在 biomarker 數量。
 
 ```{r}
-list.keepX = tune.TCGA$choice.keepX
+list.keepX <- tune.TCGA$choice.keepX
 tune.TCGA$choice.keepX
 ```
 
@@ -323,10 +331,6 @@ selectVar(sgccda.res, block = 'mRNA', comp = 1)$mRNA$name
 這些被選出的特徵即為 DIABLO 模型所識別的 `潛在 multi-omics biomarker`，可用於後續的生物學解釋或功能分析。
 
 # 視覺化
-
-::: {.callout-note}
-DIABLO 的視覺化主要可分為三類：sample distribution、variable relationship 與 biomarker importance。
-:::
 
 ## plotDIABLO
 
@@ -664,8 +668,8 @@ dev.off()
 
 ```{r}
 library(igraph)
-my.network = network(sgccda.res, blocks = c(1,2,3),
-         color.node = c('darkorchid', 'brown1', 'lightgreen'), cutoff = 0.4)
+my.network <- network(sgccda.res, blocks = c(1,2,3),
+                      color.node = c('darkorchid', 'brown1', 'lightgreen'), cutoff = 0.4)
 write_graph(my.network$gR, file = "data/myNetwork.gml", format = "gml")
 ```
 
@@ -806,10 +810,15 @@ dev.off()
 在建立最終 DIABLO 模型後，可以透過 perf() 進行模型效能評估。本範例採用 10-fold cross-validation 並重複 10 次，以評估模型在不同資料分割下的分類表現。dist = "centroids.dist" 表示使用 centroid distance 作為分類判定方式。此外，利用 proc.time() 記錄模型評估所需的運算時間。
 
 ```{r}
-set.seed(123)
-t1 = proc.time()
-perf.diablo = perf(sgccda.res, validation = 'Mfold', folds = 10, nrepeat = 10,
-                   dist = 'centroids.dist')
+t1 <- proc.time()
+
+perf.diablo <- perf(
+  sgccda.res,
+  validation = "Mfold",
+  folds      = 10,
+  nrepeat    = 10,
+  dist       = "centroids.dist"
+)
 
 running_time <- proc.time() - t1
 running_time
@@ -850,7 +859,7 @@ Overall.BER 0.06585185 0.05155556
 
 ```{r}
 png(filename = "./images/auroc.png", width = 1500, height = 1500, res = 200)
-auc.diablo = auroc(sgccda.res, roc.block = "miRNA", roc.comp = 2)
+auc.diablo <- auroc(sgccda.res, roc.block = "miRNA", roc.comp = 2)
 dev.off()
 ```
 
@@ -861,17 +870,25 @@ dev.off()
 為了評估模型在新資料上的預測能力，可以使用 獨立的測試資料（test set） 進行外部驗證。本範例使用 breast.TCGA 資料集中提供的 data.test 作為測試資料。此測試資料僅包含 mRNA 與 miRNA 兩個 omics block，而缺少 proteomics block，DIABLO 模型仍可利用現有的資料區塊進行預測。
 
 ```{r}
-data.test.TCGA = list(mRNA = breast.TCGA$data.test$mrna,
-                      miRNA = breast.TCGA$data.test$mirna)
+data.test.TCGA <- list(
+  mRNA  = breast.TCGA$data.test$mrna,
+  miRNA = breast.TCGA$data.test$mirna
+)
 
-predict.diablo = predict(sgccda.res, newdata = data.test.TCGA)
+predict.diablo <- predict(
+  sgccda.res,
+  newdata = data.test.TCGA
+)
 ```
 
 接著將模型預測結果與真實分類進行比較，建立 confusion matrix，並計算 Balanced Error Rate (BER) 來評估模型的分類表現。
 
 ```{r}
-confusion.mat = get.confusion_matrix(truth = breast.TCGA$data.test$subtype,
-                     predicted = predict.diablo$WeightedVote$centroids.dist[,2])
+confusion.mat <- get.confusion_matrix(
+  truth     = breast.TCGA$data.test$subtype,
+  predicted = predict.diablo$WeightedVote$centroids.dist[, 2]
+)
+
 confusion.mat
 get.BER(confusion.mat)
 ```
