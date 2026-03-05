@@ -154,9 +154,9 @@ Y             1  2  3  4
 
 # 初始 MINT 模型
 
-接著建立初始的 `MINT PLS-DA` 模型。此步驟的主要目的是先建立一個包含多個 component 的基礎模型，以便後續透過交叉驗證（cross-validation）評估模型表現並選擇最佳的 component 數量。
+接著建立初始的 `MINT PLS-DA` 模型。此步驟的主要目的是先建立一個包含多個 component 的基礎模型，以便後續透過 `交叉驗證（cross-validation）` 評估模型表現並選擇最佳的 component 數量。
 
-在 MINT 分析中，`study 參數`用來指定每個樣本所屬的研究來源，使模型在建立 latent components 時能同時考慮不同研究之間的變異。本範例先設定 ncomp = 5 建立初始模型，之後再透過模型評估選擇最合適的 component 數量。
+在 MINT 分析中，`study` 參數用來指定每個樣本所屬的研究來源，使模型在建立 latent components 時能同時考慮不同研究之間的變異。本範例先設定 `ncomp = 5` 建立初始模型，之後再透過模型評估選擇最合適的 component 數量。
 
 ```{r}
 basic.splsda.model <- mint.plsda(
@@ -185,8 +185,6 @@ dev.off()
 
 `perf()` 同時會提供多種距離方法（如 max.dist、centroids.dist、mahalanobis.dist）下的最佳 component 數量建議，並根據 `overall error rate` 與 `Balanced Error Rate (BER)` 進行評估。
 
-> 在本範例中，三種距離方法均建議使用 1 個 component。
-
 ```{r}
 splsda.perf$choice.ncomp
 ```
@@ -197,11 +195,15 @@ overall        1              1                1
 BER            1              1                1
 ```
 
+> 在本範例中，三種距離方法均建議使用 1 個 component。
+
 然而，在實際分析中通常仍會保留 2 個 component，以便後續進行資料視覺化（例如樣本分群圖）並捕捉更多潛在變異。因此本範例 `手動設定 optimal.ncomp = 2` 作為後續模型建立的 component 數量。
 
 ```{r}
 optimal.ncomp <- 2
 ```
+
+---
 
 # 特徵數量調整
 
@@ -210,12 +212,16 @@ optimal.ncomp <- 2
 > 在本範例中，`test.keepX = seq(1, 100, 1)` 表示`測試每個 component 保留 1 到 100 個特徵的情況`。模型評估指標使用 Balanced Error Rate (BER)，並採用 max.dist 作為分類距離方法。由於 MINT 是多研究整合方法，因此在調整過程中使用 `Leave-One-Group-Out Cross Validation (LOGOCV)`，每次將一個 study 作為測試集，以評估模型在不同研究之間的泛化能力。
 
 ```{r}
-tune.mint <- tune(X = X, Y = Y, study = study,
-                              ncomp = optimal.ncomp,
-                              test.keepX = seq(1, 100, 1),
-                              method = 'mint.splsda',
-                              measure = 'BER',
-                              dist = "max.dist")
+tune.mint <- tune(
+  X          = X,
+  Y          = Y,
+  study      = study,
+  ncomp      = optimal.ncomp,
+  test.keepX = seq(1, 100, 1),
+  method     = "mint.splsda",
+  measure    = "BER",
+  dist       = "max.dist"
+)
 ```
 
 ```text
@@ -263,6 +269,8 @@ comp1 comp2
     9    51 
 ```
 
+---
+
 # 最終 MINT 模型
 
 在完成 component 數量與特徵數量的調整後，接著建立`最終的 MINT sPLS-DA 模型`。此模型會使用先前選定的 `optimal.ncomp` 與 `optimal.keepX` 作為參數，在整合多個研究資料的同時進行特徵選擇與分類建模。
@@ -270,9 +278,16 @@ comp1 comp2
 建立完成的模型物件 `mint.splsda.res` 會包含樣本在 latent components 上的投影結果、所選出的重要特徵，以及後續視覺化與模型評估所需的相關資訊。
 
 ```{r}
-mint.splsda.res = mint.splsda(X = X, Y = Y, study = study, ncomp = optimal.ncomp,
-                              keepX = optimal.keepX)
+mint.splsda.res <- mint.splsda(
+  X     = X,
+  Y     = Y,
+  study = study,
+  ncomp = optimal.ncomp,
+  keepX = optimal.keepX
+)
 ```
+
+---
 
 # 視覺化
 
@@ -504,6 +519,8 @@ dev.off()
 
 ![](./images/network.png)
 
+---
+
 # 模型評估
 
 在建立最終 MINT sPLS-DA 模型後，可以使用 `perf()` 函式評估模型的分類表現。本範例使用 max.dist 作為分類距離方法，並計算模型在不同 component 下的錯誤率。同時利用 proc.time() 記錄模型評估所需的運算時間。
@@ -551,6 +568,8 @@ dev.off()
 ```
 
 ![](./images/predict.png)
+
+---
 
 # 外部驗證
 
