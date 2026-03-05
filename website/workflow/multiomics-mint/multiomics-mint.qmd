@@ -59,7 +59,7 @@ Cite us:  citation('mixOmics')
 
 使用 `mixOmics` 套件內建的 `stemcells 資料集`。此資料集包含 125 個樣本與 400 個基因表現特徵，並來自 `四個不同研究（studies）`
 
-`X` 為`基因表現矩陣`（gene expression matrix），包含 125 個樣本與 400 個基因。
+- `X` 為`基因表現矩陣`（gene expression matrix），包含 125 個樣本與 400 個基因。
 
 ```{r}
 data(stemcells)
@@ -73,7 +73,7 @@ dim(X)
 [1] 125 400
 ```
 
-`Y` 為樣本的`細胞類型（cell type）`，共有三種類別：Fibroblast、hESC、hiPSC。
+- `Y` 為樣本的`細胞類型（cell type）`，共有三種類別：Fibroblast、hESC、hiPSC。
 
 ```{r}
 Y = stemcells$celltype
@@ -86,7 +86,7 @@ Fibroblast       hESC      hiPSC
         30         37         58 
 ```
 
-`study` 則表示每個樣本所屬的`研究來源`，共包含 4 個不同研究資料集。
+- `study` 則表示每個樣本所屬的`研究來源`，共包含 4 個不同研究資料集。
 
 ```{r}
 study = stemcells$study
