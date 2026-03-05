@@ -17,11 +17,43 @@ F --> H[Model evaluation]
 H --> I[External validation]
 ```
 
+---
+
 # MINT 介紹
 
 `MINT（Multivariate INTegration）`是 `mixOmics` 套件中用於`整合多個研究資料（multi-study data）`的分析方法，其目的是從不同研究或不同批次的資料中找出具有一致判別能力的特徵（biomarkers）。在實際研究中，相同類型的資料常來自不同研究中心或不同實驗平台，例如多個 RNA-seq 或微陣列研究。這些資料之間通常會存在 study effect 或 batch effect，若直接合併分析，可能會影響模型的穩定性與預測能力。
 
-MINT 的核心概念是在模型中加入 `study factor`（研究來源），讓模型在建立分類與特徵選擇時，同時考慮不同研究之間的變異，並找出在多個研究中都具有一致判別能力的特徵。在分類分析中，MINT 常與 sPLS-DA 結合形成 MINT sPLS-DA，同時進行監督式分類與特徵選擇，並建立具有跨研究泛化能力的預測模型。
+MINT 的核心概念是在模型中加入 `study factor`（研究來源），讓模型在建立分類與特徵選擇時，同時考慮不同研究之間的變異，並找出在多個研究中都具有一致判別能力的特徵。在分類分析中，`MINT` 常與 `sPLS-DA` 結合形成 `MINT sPLS-DA`，同時進行監督式分類與特徵選擇，並建立具有跨研究泛化能力的預測模型。
+
+::: {.callout-tip collapse="true"}
+## PLS、PLS-DA 與 sPLS 的關係?
+
+PLS (Partial Least Squares) 是一種常用於高維資料的降維與建模方法，其核心概念是透過建立 latent components（潛在變數），將大量特徵壓縮為少數幾個 component，同時最大化 X（特徵資料）與 Y（response variable）之間的關聯。
+
+- `PLS`: 基本模型，同時考慮 X 與 Y 的關係建立 component。 (若是 PCA 只根據 X 的變異建立 component)
+- `PLS-DA`: Discriminant Analysis 版本，用於分類問題
+- `sPLS`: sparse PLS，可進行特徵選擇
+- `sPLS-DA`: 結合分類與特徵選擇
+
+在 omics 研究中，由於特徵數量通常遠大於樣本數，因此 sPLS-DA 常被用來同時進行分類與 biomarker 篩選。
+:::
+
+::: {.callout-tip collapse="true"}
+## MINT 與 sPLS-DA 的關係?
+
+MINT 是建立在 PLS 框架上的多研究整合方法。
+其主要功能是在分析時 `同時整合來自不同研究`（studies）的資料，並`找出在多個研究中都具有一致判別能力的特徵`。
+
+當 MINT 與 sPLS-DA 結合時，便形成 `MINT sPLS-DA` 方法，其同時具備三個功能：
+
+- 分類（classification）：區分不同 phenotype 或 sample group
+- 特徵選擇（feature selection）：挑選重要的 biomarker
+- 多研究整合（multi-study integration）：整合不同研究資料
+
+因此 MINT sPLS-DA 特別適合用於 `跨資料集的 biomarker discovery` 與 `建立具有泛化能力的預測模型`。
+:::
+
+---
 
 # 下載套件
 
@@ -55,11 +87,15 @@ Cite us:  citation('mixOmics')
 ```
 :::
 
+---
+
 # 範例資料
 
 使用 `mixOmics` 套件內建的 `stemcells 資料集`。此資料集包含 125 個樣本與 400 個基因表現特徵，並來自 `四個不同研究（studies）`
 
-- `X` 為`基因表現矩陣`（gene expression matrix），包含 125 個樣本與 400 個基因。
+## 基因表現矩陣
+
+`X` 為基因表現矩陣（gene expression matrix），包含 125 個樣本與 400 個基因。
 
 ```{r}
 data(stemcells)
@@ -73,7 +109,9 @@ dim(X)
 [1] 125 400
 ```
 
-- `Y` 為樣本的`細胞類型（cell type）`，共有三種類別：Fibroblast、hESC、hiPSC。
+## 細胞類型
+
+`Y` 為樣本的細胞類型（cell type），共有三種類別：Fibroblast、hESC、hiPSC。
 
 ```{r}
 Y = stemcells$celltype
@@ -86,7 +124,9 @@ Fibroblast       hESC      hiPSC
         30         37         58 
 ```
 
-- `study` 則表示每個樣本所屬的`研究來源`，共包含 4 個不同研究資料集。
+## 研究來源
+
+`study` 則表示每個樣本所屬的研究來源，共包含 4 個不同研究資料集。
 
 ```{r}
 study = stemcells$study
@@ -110,6 +150,8 @@ Y             1  2  3  4
   hiPSC      12 30 10  6
 ```
 
+---
+
 # 初始 MINT 模型
 
 接著建立初始的 `MINT PLS-DA` 模型。此步驟的主要目的是先建立一個包含多個 component 的基礎模型，以便後續透過交叉驗證（cross-validation）評估模型表現並選擇最佳的 component 數量。
@@ -117,12 +159,19 @@ Y             1  2  3  4
 在 MINT 分析中，`study 參數`用來指定每個樣本所屬的研究來源，使模型在建立 latent components 時能同時考慮不同研究之間的變異。本範例先設定 ncomp = 5 建立初始模型，之後再透過模型評估選擇最合適的 component 數量。
 
 ```{r}
-basic.splsda.model <- mint.plsda(X, Y, study = study, ncomp = 5)
+basic.splsda.model <- mint.plsda(
+  X     = X,
+  Y     = Y,
+  study = study,
+  ncomp = 5
+)
 ```
+
+---
 
 # 最佳 component 數量
 
-接著使用 `perf()` 函式對初始 MINT 模型進行 cross-validation，以評估不同 component 數量下的模型表現。此步驟會計算不同 component 的分類錯誤率，並透過圖形方式顯示模型性能隨 component 增加的變化。
+接著使用 `perf()` 函式對初始 MINT 模型進行 `cross-validation`，以評估`不同 component 數量下的模型表現`。此步驟會計算不同 component 的分類錯誤率，並透過圖形方式顯示模型性能隨 component 增加的變化。
 
 ```{r}
 splsda.perf <- perf(basic.splsda.model)
