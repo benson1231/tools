@@ -25,6 +25,15 @@ H --> I[External validation]
 
 MINT 的核心概念是在模型中加入 `study factor`（研究來源），讓模型在建立分類與特徵選擇時，同時考慮不同研究之間的變異，並找出在多個研究中都具有一致判別能力的特徵。在分類分析中，`MINT` 常與 `sPLS-DA` 結合形成 `MINT sPLS-DA`，同時進行監督式分類與特徵選擇，並建立具有跨研究泛化能力的預測模型。
 
+::: {.callout-important}
+## DIABLO vs. MINT
+
+| 方法       | 解決問題               | 整合什麼        |
+| ---------- | ----------------------- | ----------- |
+| **MINT**   | multi-study integration | 不同研究資料    |
+| **DIABLO** | multi-omics integration | 不同 omics 資料 |
+:::
+
 ::: {.callout-tip collapse="true"}
 ## PLS、PLS-DA 與 sPLS 的關係?
 
