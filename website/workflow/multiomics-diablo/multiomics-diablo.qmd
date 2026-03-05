@@ -25,6 +25,8 @@ I --> J[External validation]
 `DIABLO（Data Integration Analysis for Biomarker discovery using Latent variable approaches for Omics studies）` 是 mixOmics 套件提供的一種`監督式多體學整合方法`。其核心基於 `block sparse Partial Least Squares Discriminant Analysis (block sPLS-DA)`，透過建立 `latent components`，同時最大化不同 omics 資料之間的相關性與 phenotype 的分類能力。DIABLO 也會透過稀疏特徵選擇（sparse feature selection），挑選少量但具有代表性的分子特徵，以建立可解釋的多體學 biomarker signature。
 
 ::: {.callout-important}
+## DIABLO vs. MINT
+
 | 方法       | 解決問題               | 整合什麼        |
 | ---------- | ----------------------- | ----------- |
 | **MINT**   | multi-study integration | 不同研究資料    |
