@@ -5,20 +5,34 @@ date: "2026-03-20"
 
 # AWS 基本
 
-::: {.callout-tip collapse="true"}
-## Region & AZ
+Amazon Web Services（AWS）是一個由 Amazon 提供的雲端運算平台，提供運算（EC2）、儲存（S3）、資料庫（RDS）與網路等多種服務。使用者可以依需求彈性配置資源，避免自建伺服器的成本與維護負擔。
+
+在生物資訊與資料分析領域，AWS 常被用於處理大規模資料（如 NGS、multi-omics），並結合容器（Docker）與工作流程工具（如 Nextflow）進行自動化分析。透過雲端架構，研究人員可以快速擴展計算資源，提升分析效率與可重現性。
+
+## AWS 基礎設施
+### Region & AZ
+
+AWS 的基礎設施由多個 `Region（區域）` 與 `Availability Zone（可用區）` 組成。  
+Region 是地理上的資料中心區域（例如 ap-northeast-1 東京、us-east-1 維吉尼亞），每個 Region 彼此獨立，可用於資料隔離與降低延遲。
+
+每個 Region 內包含多個 Availability Zone（AZ），每個 AZ 由一個或多個(最多6個)獨立資料中心構成，具備獨立的電力、網路與冷卻系統。AZ 之間透過高速網路連接，但彼此隔離，可提升系統的高可用性與容錯能力。
+
+在實務應用中，服務通常會部署於多個 AZ，以避免單一資料中心故障導致系統中斷；而跨 Region 部署則可進一步提升災難復原能力與全球服務效能。
+
+## 如何使用 AWS
+### AWS CLI 
+
+::: {.callout-tip, collapse="true"}
+## 如何獲取 access key
 
 :::
 
-## MFA
+### AWS SDK
 
-## access key
+### AWS cloudshell
 
-## AWS CLI & SDK
-
-## cloudshell
-
-## AWS budget
+## 如何設定預算通知
+### AWS budget
 
 ---
 
@@ -34,6 +48,8 @@ date: "2026-03-20"
 
 ## IAM security tools
 
+## MFA
+
 ---
 
 # EC2
@@ -45,6 +61,13 @@ date: "2026-03-20"
 ## SSH EC2
 
 ## Spot instance
+
+## Private IP & Public IP
+
+::: {.callout-tip collapse="true"}
+## IPv4 & IPv6
+
+:::
 
 ## Elastic IP
 
