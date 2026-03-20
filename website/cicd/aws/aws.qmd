@@ -1,0 +1,58 @@
+---
+title: "AWS 基本介紹"
+date: "2026-03-20"
+---
+
+# AWS 基本
+
+::: {.callout-tip collapse="true"}
+## Region & AZ
+
+:::
+
+## MFA
+
+## access key
+
+## AWS CLI & SDK
+
+## cloudshell
+
+## AWS budget
+
+---
+
+# IAM
+
+## IAM users
+
+## IAM groups
+
+## IAM policies
+
+## IAM role
+
+## IAM security tools
+
+---
+
+# EC2
+
+## EC2 instance
+
+## Security group
+
+## SSH EC2
+
+## Spot instance
+
+## Elastic IP
+
+## EC2 Placement groups
+
+
+
+
+
+
+
