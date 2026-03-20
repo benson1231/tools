@@ -22,7 +22,7 @@ Region 是地理上的資料中心區域（例如 ap-northeast-1 東京、us-eas
 ## 如何使用 AWS
 ### AWS CLI 
 
-::: {.callout-tip, collapse="true"}
+:::{.callout-tip, collapse="true"}
 ## 如何獲取 access key
 
 :::
