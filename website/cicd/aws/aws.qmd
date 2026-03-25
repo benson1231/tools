@@ -100,6 +100,10 @@ root account 僅用於帳號初始化與必要的高權限設定，並應啟用 
 
 虛擬伺服器（VM），可用於部署應用程式、網站或運算任務，並可依需求調整 CPU、記憶體與儲存資源。
 
+## AMI
+
+
+
 ## Security group
 
 一種作用在 `EC2 上的虛擬防火牆`，用來控制進出流量（inbound / outbound），僅允許符合規則的連線。
@@ -186,9 +190,23 @@ ENI 可在不同 EC2 instance 之間移動，常用於故障轉移（failover）
 
 一種 Amazon Web Services Amazon EC2 的`停止模式`，會`將 instance 的記憶體（RAM）狀態保存到 EBS 磁碟中`，讓下次啟動時能快速恢復到原本執行狀態。
 
-# EBS
+## EBS volume
 
-## 
+::: {.callout-important}
+## only io1 and io2 for EBS multi-attach to EC2
+
+一次最多 16個 EC2
+:::
+
+## EBS snapshot
+
+## EBS encryption
+
+## EC2 instance store
+
+## EFS
+
+## EFS storage tiers
 
 
 
