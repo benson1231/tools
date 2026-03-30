@@ -233,7 +233,7 @@ profiles {
 }
 ```
 
-使用已下指令指定 `profile`
+使用以下指令指定 `profile`
 
 ```bash
 nextflow run main.nf -profile docker
@@ -262,6 +262,8 @@ conf/
 includeConfig 'conf/base.config'
 includeConfig 'conf/docker.config'
 ```
+
+👉 通常會搭配 profile 使用，用於切換不同環境設定
 
 ## 資源管理
 
