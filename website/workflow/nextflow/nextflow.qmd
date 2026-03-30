@@ -5,13 +5,15 @@ date: "2026-03-30"
 
 # 基本介紹
 
+Nextflow 是一套用於建立 `可重現（reproducible）`且`可擴展（scalable）`資料分析流程的 workflow 管理工具，廣泛應用於生物資訊（bioinformatics）與資料科學領域。 
 
+其核心設計採用 `資料流導向（dataflow-driven execution）`，透過 `channel` 傳遞資料，並由 `process` 負責資料處理，最終由 `workflow` 進行流程編排（orchestration）。
 
 # 基本組成
 
 以下是簡單的 nextflow 流程
 
-```{groovy}
+```groovy
 #!/usr/bin/env nextflow
 
 process sayHello {
@@ -53,7 +55,7 @@ output {
 
 在 Nextflow 中，process 是 workflow 的 `最基本執行單元`，其核心設計遵循 `資料流導向`（dataflow-driven execution） 的架構，主要關注 `接收什麼資料`、`產出什麼結果` 與 `如何轉換資料`。
 
-```{groovy}
+```groovy
 process sayHello {
 
     input:
@@ -74,7 +76,7 @@ process sayHello {
 
 首先在模組資料夾中定義 `modules/fastp/main.nf`:
 
-```{groovy}
+```groovy
 process FASTP {
 
     input:
@@ -92,7 +94,7 @@ process FASTP {
 
 接著在主程式 `main.nf` 的 `workflow` 中引入:
 
-```{groovy}
+```groovy
 include { FASTP } from './modules/fastp/main'
 
 workflow {
@@ -111,7 +113,7 @@ workflow {
 
 params 用於定義 workflow 的輸入參數（pipeline configuration），在新的 nextflow語法中，可以定義型別
 
-```{groovy}
+```groovy
 params {
     input: String
 }
@@ -130,7 +132,7 @@ nextflow run main.nf --input "Hello World"
 
 - 透過 nextflow.config 設定
 
-```{groovy}
+```groovy
 params {
     input = "Hello World"
 }
@@ -147,7 +149,7 @@ workflow 用於定義 `整個 pipeline 的流程控制（orchestration）`，負
 - `main`: 定義 pipeline 的主要執行流程
 - `publish`: 定義要對外輸出的資料（export layer）
 
-```{groovy}
+```groovy
 workflow {
 
     main:
@@ -161,7 +163,7 @@ workflow {
 ::: {.callout-note collapse="true"}
 ## 點我看更複雜的範例
 
-```{groovy}
+```groovy
 workflow {
 
     main:
@@ -193,7 +195,7 @@ workflow {
 
 output 用於 `定義 pipeline 最終結果的輸出方式（result exporting）`，將 workflow.publish 中指定的資料，實際寫入指定目錄。
 
-```{groovy}
+```groovy
 output {
     first_output {
         path '1-hello'
