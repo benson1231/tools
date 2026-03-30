@@ -51,6 +51,8 @@ output {
 }
 ```
 
+接著我們一一介紹上述流程的細節
+
 ## process
 
 在 Nextflow 中，process 是 workflow 的 `最基本執行單元`，其核心設計遵循 `資料流導向`（dataflow-driven execution） 的架構，主要關注 `接收什麼資料`、`產出什麼結果` 與 `如何轉換資料`。
@@ -206,6 +208,92 @@ output {
 
 ---
 
+# 工程化(進階版)
+
+## profile（環境管理）
+
+profile 用於`定義不同的執行環境（例如 local、docker、HPC）`，讓同一個 pipeline 可以在不同環境中執行。
+
+```groovy
+profiles {
+
+    standard {
+        process.executor = 'local'
+    }
+
+    docker {
+        process.container = 'ubuntu:22.04'
+        docker.enabled = true
+    }
+
+    slurm {
+        process.executor = 'slurm'
+        process.queue = 'normal'
+    }
+}
+```
+
+使用已下指令指定 `profile`
+
+```bash
+nextflow run main.nf -profile docker
+```
+
+## config（設定分層）
+
+在實務中，Nextflow 的設定通常會分開管理，而不是全部寫在同一個檔案。
+
+常見的結構如下：
+
+```text
+nextflow.config
+conf/
+├── base.config
+├── docker.config
+└── slurm.config
+```
+
+* `nextflow.config`：主設定檔
+* `conf/`：依環境拆分設定（docker / HPC 等）
+
+接著在 `nextflow.config` 中載入其他設定：
+
+```groovy
+includeConfig 'conf/base.config'
+includeConfig 'conf/docker.config'
+```
+
+## 資源管理
+
+Nextflow 可以`針對 process 設定 CPU、記憶體與執行時間`，以確保 pipeline 穩定運行。
+
+```groovy
+process {
+    // 預設資源（所有 process）
+    memory = 1.GB
+    cpus = 1
+
+    // 指定某個 process（例如 cowpy）
+    withName: 'cowpy' {
+        memory = 2.GB
+        cpus = 2
+    }
+
+    // 全域資源上限（避免超出系統限制）
+    resourceLimits = [
+        memory: 750.GB,
+        cpus: 200,
+        time: 30.d
+    ]
+}
+```
+
+* `process.memory / cpus`：設定預設資源
+* `withName`：針對特定 process 覆蓋設定
+* `resourceLimits`：限制整體資源使用上限
+
+---
+
 # 常用指令
 
 ## 修改輸出 log 名稱與路徑
@@ -219,4 +307,10 @@ run main.nf
 
 ```{bash}
 nextflow run main.nf -with-report report.html
+```
+
+## 跳過已完成的步驟
+
+```{bash}
+nextflow run main.nf -resume
 ```
