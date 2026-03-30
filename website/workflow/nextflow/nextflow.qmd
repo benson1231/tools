@@ -1,0 +1,220 @@
+---
+title: "nextflow 基本介紹"
+date: "2026-03-30"
+---
+
+# 基本介紹
+
+
+
+# 基本組成
+
+以下是簡單的 nextflow 流程
+
+```{groovy}
+#!/usr/bin/env nextflow
+
+process sayHello {
+
+    input:
+    val greeting
+
+    output:
+    path 'output.txt'
+
+    script:
+    """
+    echo '${greeting}' > output.txt
+    """
+}
+
+params {
+    input: String
+}
+
+workflow {
+
+    main:
+    sayHello(params.input)
+
+    publish:
+    first_output = sayHello.out
+}
+
+output {
+    first_output {
+        path '1-hello'
+        mode 'copy'
+    }
+}
+```
+
+## process
+
+在 Nextflow 中，process 是 workflow 的 `最基本執行單元`，其核心設計遵循 `資料流導向`（dataflow-driven execution） 的架構，主要關注 `接收什麼資料`、`產出什麼結果` 與 `如何轉換資料`。
+
+```{groovy}
+process sayHello {
+
+    input:
+    val greeting
+
+    output:
+    path 'output.txt'
+
+    script:
+    """
+    echo '${greeting}' > output.txt
+    """
+}
+```
+
+::: {.callout-important collapse="true"}
+## 在實務上，process 通常會拆分成可重用模組（module）
+
+首先在模組資料夾中定義 `modules/fastp/main.nf`:
+
+```{groovy}
+process FASTP {
+
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path("*.fastq.gz")
+
+    script:
+    """
+    fastp -i ${reads[0]} -o ${sample_id}_R1.fastq.gz
+    """
+}
+```
+
+接著在主程式 `main.nf` 的 `workflow` 中引入:
+
+```{groovy}
+include { FASTP } from './modules/fastp/main'
+
+workflow {
+
+    take:
+    ch_reads
+
+    main:
+    FASTP(ch_reads)
+
+}
+```
+:::
+
+## params
+
+params 用於定義 workflow 的輸入參數（pipeline configuration），在新的 nextflow語法中，可以定義型別
+
+```{groovy}
+params {
+    input: String
+}
+```
+
+::: {.callout-important collapse="true"}
+## 在實務上，params 通常使用 CLI 傳入或是 nextflow.config 帶入
+
+在實際的 pipeline 開發中，`params` 很少直接寫死在程式內，而是透過外部設定傳入，以提升彈性與可維護性。
+
+- 透過 CLI 傳入
+
+```bash
+nextflow run main.nf --input "Hello World"
+```
+
+- 透過 nextflow.config 設定
+
+```{groovy}
+params {
+    input = "Hello World"
+}
+```
+
+👉 常見做法是「config 設預設值 + CLI 覆蓋」，兼顧穩定性與彈性
+
+:::
+
+## workflow
+
+workflow 用於定義 `整個 pipeline 的流程控制（orchestration）`，負責將 `各個 process 串接` 起來，並管理資料流（dataflow）。
+
+- `main`: 定義 pipeline 的主要執行流程
+- `publish`: 定義要對外輸出的資料（export layer）
+
+```{groovy}
+workflow {
+
+    main:
+    sayHello(params.input)
+
+    publish:
+    first_output = sayHello.out
+}
+```
+
+::: {.callout-note collapse="true"}
+## 點我看更複雜的範例
+
+```{groovy}
+workflow {
+
+    main:
+    // create a channel for inputs from a CSV file
+    greeting_ch = channel.fromPath(params.input)
+                        .splitCsv()
+                        .map { line -> line[0] }
+    // emit a greeting
+    sayHello(greeting_ch)
+    // convert the greeting to uppercase
+    convertToUpper(sayHello.out)
+    // collect all the greetings into one file
+    collectGreetings(convertToUpper.out.collect(), params.batch)
+    // generate ASCII art of the greetings with cowpy
+    cowpy(collectGreetings.out.outfile, params.character)
+
+    publish:
+    first_output = sayHello.out
+    uppercased = convertToUpper.out
+    collected = collectGreetings.out.outfile
+    batch_report = collectGreetings.out.report
+    cowpy_art = cowpy.out
+}
+```
+:::
+
+
+## output
+
+output 用於 `定義 pipeline 最終結果的輸出方式（result exporting）`，將 workflow.publish 中指定的資料，實際寫入指定目錄。
+
+```{groovy}
+output {
+    first_output {
+        path '1-hello'
+        mode 'copy'
+    }
+}
+```
+
+---
+
+# 常用指令
+
+## 修改輸出 log 名稱與路徑
+
+```{bash}
+nextflow -log logs/.nextflow.$(date +%Y%m%d_%H%M%S).log \ 
+run main.nf 
+```
+
+## 輸出報告
+
+```{bash}
+nextflow run main.nf -with-report report.html
+```

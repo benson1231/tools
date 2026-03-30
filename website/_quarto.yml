@@ -114,6 +114,10 @@ website:
       - text: Workflow
         icon: diagram-3
         menu:
+          - text: workflow languages
+          - href: workflow/nextflow/nextflow.qmd
+            text: nextflow
+
           - text: RNA-Seq with replicates
           - href: workflow/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
             text: rnaseq-with-replicates-limma
