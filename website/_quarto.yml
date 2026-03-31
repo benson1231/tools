@@ -73,7 +73,7 @@ website:
           - href: cicd/aws/aws.qmd
             text: aws
 
-      - text: Data Processing
+      - text: Bioinformatics Tools
         icon: tools
         menu:
           - text: Quality Control
@@ -95,29 +95,38 @@ website:
             text: bcftools
           - href: tools/vcftools.qmd
             text: vcftools
-
+          
           - text: Supporting Utilities
           - href: tools/md5sum.qmd
             text: md5sum
 
-      - text: Omics Analysis
+      - text: Pipeline Systems
+        icon: gear
+        menu:
+          - text: Pipeline Systems
+          - href: workflow/nextflow/nextflow.qmd
+            text: Nextflow
+          - href: workflow/snakemake/snakemake.qmd
+            text: Snakemake
+
+      - text: Analysis Workflows
         icon: diagram-3
         menu:
-          - text: RNA-Seq Analysis (with replicates)
+          - text: RNA-Seq (with replicates)
           - href: workflow/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
             text: rnaseq-with-replicates-limma
           - href: workflow/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
             text: rnaseq-with-replicates-deseq2
 
-          - text: RNA-Seq Analysis (no replicates)
+          - text: RNA-Seq (no replicates)
           - href: workflow/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
             text: rnaseq-no-replicates-edger
 
-          - text: miRNA Analysis
+          - text: miRNA
           - href: workflow/mirna-quant-predict/mirna-quant-predict.qmd
             text: mirna-quant-predict
 
-          - text: Multi-omics Analysis
+          - text: Multi-omics
           - href: workflow/multiomics-diablo/multiomics-diablo.qmd
             text: multiomics-diablo
           - href: workflow/multiomics-mint/multiomics-mint.qmd
@@ -129,15 +138,6 @@ website:
           - text: Survival Analysis
           - href: workflow/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
-
-      - text: Workflow Orchestration
-        icon: gear
-        menu:
-          - text: Workflow Languages
-          - href: workflow/nextflow/nextflow.qmd
-            text: nextflow
-          - href: workflow/snakemake/snakemake.qmd
-            text: snakemake
 
       - text: Reports
         icon: file-earmark-bar-graph
