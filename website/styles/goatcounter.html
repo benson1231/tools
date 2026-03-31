@@ -1,2 +1,12 @@
 <script data-goatcounter="https://benson1231.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+
+<script>
+fetch("https://benson1231.goatcounter.com/counter//.json")
+  .then(res => res.json())
+  .then(data => {
+    const el = document.getElementById("gc-total");
+    if (el) el.innerText = data.count;
+  })
+  .catch(() => console.log("GoatCounter fetch failed"));
+</script>

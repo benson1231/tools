@@ -13,7 +13,6 @@ format:
   html:
     css: styles/styles.css
     include-in-header: styles/goatcounter.html
-    include-after-body: styles/goatcounter.js
     theme: 
       light: flatly
       dark: darkly
