@@ -69,37 +69,75 @@ website:
           - href: cicd/github-actions/github-actions.qmd
             text: github actions
 
-          - text: AWS
+          - text: Cloud
           - href: cicd/aws/aws.qmd
+            text: aws
 
-      - text: NGS Tools
+      - text: Data Processing
         icon: tools
         menu:
-          - text: preprocessing
+          - text: Quality Control
           - href: tools/fastp.qmd
             text: fastp
           - href: tools/fastqc.qmd
             text: fastqc
           - href: tools/multiqc.qmd
             text: multiqc
+
+          - text: Sequence & Alignment Utilities
           - href: tools/samtools.qmd
             text: samtools
-          - href: tools/vcftools.qmd
-            text: vcftools
-          - href: tools/bcftools.qmd
-            text: bcftools
           - href: tools/bedtools.qmd
             text: bedtools
-            
-          - text: others
+
+          - text: Variant Analysis Tools
+          - href: tools/bcftools.qmd
+            text: bcftools
+          - href: tools/vcftools.qmd
+            text: vcftools
+
+          - text: Supporting Utilities
           - href: tools/md5sum.qmd
             text: md5sum
 
-      - text: R Tools
-        icon: braces
+      - text: Omics Analysis
+        icon: diagram-3
         menu:
+          - text: RNA-Seq Analysis (with replicates)
+          - href: workflow/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
+            text: rnaseq-with-replicates-limma
+          - href: workflow/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
+            text: rnaseq-with-replicates-deseq2
+
+          - text: RNA-Seq Analysis (no replicates)
+          - href: workflow/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
+            text: rnaseq-no-replicates-edger
+
+          - text: miRNA Analysis
+          - href: workflow/mirna-quant-predict/mirna-quant-predict.qmd
+            text: mirna-quant-predict
+
+          - text: Multi-omics Analysis
+          - href: workflow/multiomics-diablo/multiomics-diablo.qmd
+            text: multiomics-diablo
+          - href: workflow/multiomics-mint/multiomics-mint.qmd
+            text: multiomics-mint
+
+          - text: Mutation Analysis
           - href: r/maftools/maftools.qmd
-            text: maftools
+
+          - text: Survival Analysis
+          - href: workflow/survival-analysis-r/survival-analysis-r.qmd
+            text: survival analysis
+
+      - text: Workflow Orchestration
+        icon: gear
+        menu:
+          - text: Workflow Languages
+          - href: workflow/nextflow/nextflow.qmd
+            text: nextflow
+          - href: workflow/snakemake/snakemake.qmd
+            text: snakemake
 
       - text: Reports
         icon: file-earmark-bar-graph
@@ -110,38 +148,6 @@ website:
             text: fastqc demo report
           - href: report/multiqc_report.qmd
             text: multiqc demo report
-
-      - text: Workflow
-        icon: diagram-3
-        menu:
-          - text: workflow languages
-          - href: workflow/nextflow/nextflow.qmd
-            text: nextflow
-
-          - text: RNA-Seq with replicates
-          - href: workflow/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
-            text: rnaseq-with-replicates-limma
-          - href: workflow/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
-            text: rnaseq-with-replicates-deseq2
-
-          - text: RNA-Seq without replicates
-          - href: workflow/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
-            text: rnaseq-no-replicates-edger
-
-          - text: miRNA
-          - href: workflow/mirna-quant-predict/mirna-quant-predict.qmd
-            text: mirna-quant-predict
-
-          - text: multiomics
-          - href: workflow/multiomics-diablo/multiomics-diablo.qmd
-            text: multiomics-diablo
-          - href: workflow/multiomics-mint/multiomics-mint.qmd
-            text: multiomics-mint
-
-          - text: Others
-          - href: workflow/survival-analysis-r/survival-analysis-r.qmd
-            text: survival analysis
-
 
     tools:
       - icon: person-circle
