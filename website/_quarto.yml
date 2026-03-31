@@ -74,7 +74,7 @@ website:
             text: aws
 
       - text: Bioinformatics Tools
-        icon: tools
+        icon: wrench
         menu:
           - text: Quality Control
           - href: tools/fastp.qmd
@@ -96,13 +96,13 @@ website:
           - href: tools/vcftools.qmd
             text: vcftools
           - href: tools/maftools/maftools.qmd
-          - text: maftools
+            text: maftools
           
           - text: Utilities
           - href: tools/md5sum.qmd
             text: md5sum
 
-      - text: orchestration
+      - text: Orchestration
         icon: gear
         menu:
           - text: Workflow Engines
@@ -113,7 +113,7 @@ website:
 
           - text: Orchestration & Scheduling
 
-      - text: workflows
+      - text: Omics Workflows
         icon: diagram-3
         menu:
           - text: RNA-Seq (with replicates)
@@ -136,11 +136,17 @@ website:
           - href: workflows/multiomics-mint/multiomics-mint.qmd
             text: multiomics-mint
 
+      - text: Statistical Methods
+        icon: graph-up
+        menu:
           - text: Survival Analysis
           - href: workflows/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
 
-      - text: reports
+      - text: Machine Learning & AI
+        icon: cpu-fill
+
+      - text: Reports
         icon: file-earmark-bar-graph
         menu:
           - href: reports/fastp_report.qmd

@@ -67,3 +67,7 @@ mamba deactivate
 # remove conda environment (replace `ENV-NAME` to your environment name)
 mamba env remove -n ENV-NAME -y
 ```
+
+# Links
+
+[icons](https://icons.getbootstrap.com/)
