@@ -45,32 +45,32 @@ website:
       - text: Platform
         icon: cpu
         menu:
-          - text: System
-          - href: cicd/linux/linux.qmd
+          - text: system
+          - href: platform/system/linux.qmd
             text: linux
 
-          - text: Environment
-          - href: cicd/conda/conda.qmd
+          - text: environment
+          - href: platform/environment/conda.qmd
             text: conda
-          - href: cicd/mamba/mamba.qmd
+          - href: platform/environment/mamba.qmd
             text: mamba
-          - href: cicd/pixi/pixi.qmd
+          - href: platform/environment/pixi/pixi.qmd
             text: pixi
-          - href: cicd/r-env/r-env.qmd
+          - href: platform/environment/r-env/r-env.qmd
             text: renv
 
-          - text: Infrastructure
-          - href: cicd/docker/docker.qmd
+          - text: infrastructure
+          - href: platform/infrastructure/docker.qmd
             text: docker
-          - href: cicd/kubernetes/kubernetes.qmd
+          - href: platform/infrastructure/kubernetes.qmd
             text: kubernetes
 
-          - text: CI/CD  
-          - href: cicd/github-actions/github-actions.qmd
+          - text: ci/cd  
+          - href: platform/cicd/github-actions.qmd
             text: github actions
 
-          - text: Cloud
-          - href: cicd/aws/aws.qmd
+          - text: cloud
+          - href: platform/cloud/aws.qmd
             text: aws
 
       - text: Bioinformatics Tools
@@ -84,69 +84,70 @@ website:
           - href: tools/multiqc.qmd
             text: multiqc
 
-          - text: Sequence & Alignment Utilities
+          - text: Sequence & Alignment
           - href: tools/samtools.qmd
             text: samtools
           - href: tools/bedtools.qmd
             text: bedtools
 
-          - text: Variant Analysis Tools
+          - text: Variant Analysis
           - href: tools/bcftools.qmd
             text: bcftools
           - href: tools/vcftools.qmd
             text: vcftools
+          - href: tools/maftools/maftools.qmd
+          - text: maftools
           
-          - text: Supporting Utilities
+          - text: Utilities
           - href: tools/md5sum.qmd
             text: md5sum
 
-      - text: Pipeline Systems
+      - text: orchestration
         icon: gear
         menu:
-          - text: Pipeline Systems
-          - href: workflow/nextflow/nextflow.qmd
+          - text: Workflow Engines
+          - href: orchestration/nextflow.qmd
             text: Nextflow
-          - href: workflow/snakemake/snakemake.qmd
+          - href: orchestration/snakemake.qmd
             text: Snakemake
 
-      - text: Analysis Workflows
+          - text: Orchestration & Scheduling
+
+      - text: workflows
         icon: diagram-3
         menu:
           - text: RNA-Seq (with replicates)
-          - href: workflow/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
+          - href: workflows/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
             text: rnaseq-with-replicates-limma
-          - href: workflow/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
+          - href: workflows/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
             text: rnaseq-with-replicates-deseq2
 
           - text: RNA-Seq (no replicates)
-          - href: workflow/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
+          - href: workflows/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
             text: rnaseq-no-replicates-edger
 
           - text: miRNA
-          - href: workflow/mirna-quant-predict/mirna-quant-predict.qmd
+          - href: workflows/mirna-quant-predict/mirna-quant-predict.qmd
             text: mirna-quant-predict
 
           - text: Multi-omics
-          - href: workflow/multiomics-diablo/multiomics-diablo.qmd
+          - href: workflows/multiomics-diablo/multiomics-diablo.qmd
             text: multiomics-diablo
-          - href: workflow/multiomics-mint/multiomics-mint.qmd
+          - href: workflows/multiomics-mint/multiomics-mint.qmd
             text: multiomics-mint
 
-          - text: Mutation Analysis
-          - href: r/maftools/maftools.qmd
-
           - text: Survival Analysis
-          - href: workflow/survival-analysis-r/survival-analysis-r.qmd
+          - href: workflows/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
 
-      - text: Reports
+      - text: reports
         icon: file-earmark-bar-graph
         menu:
-          - href: report/fastp_report.qmd
+          - href: reports/fastp_report.qmd
             text: fastp demo report
-          - href: report/fastqc_report.qmd
+          - href: reports/fastqc_report.qmd
             text: fastqc demo report
-          - href: report/multiqc_report.qmd
+          - href: reports/multiqc_report.qmd
             text: multiqc demo report
 
     tools:
