@@ -12,6 +12,7 @@ date-format: "YYYY-MM-DD"
 format:
   html:
     css: styles/styles.css
+    include-in-header: styles/goatcounter.html
     theme: 
       light: flatly
       dark: darkly
@@ -146,11 +147,6 @@ website:
           - text: Survival Analysis
           - href: stats/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
-
-      - text: AI
-        icon: cpu-fill
-        menu:
-          - text: Coming Soon
 
       - text: Reports
         icon: file-earmark-bar-graph
