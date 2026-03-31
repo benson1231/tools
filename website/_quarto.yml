@@ -73,7 +73,7 @@ website:
           - href: platform/cloud/aws.qmd
             text: aws
 
-      - text: Bioinformatics Tools
+      - text: Tools
         icon: wrench
         menu:
           - text: Quality Control
@@ -102,49 +102,55 @@ website:
           - href: tools/md5sum.qmd
             text: md5sum
 
-      - text: Orchestration
+      - text: Workflow
         icon: gear
         menu:
           - text: Workflow Engines
-          - href: orchestration/nextflow.qmd
+          - href: workflow/nextflow.qmd
             text: Nextflow
-          - href: orchestration/snakemake.qmd
+          - href: workflow/snakemake.qmd
             text: Snakemake
 
           - text: Orchestration & Scheduling
+          - href: workflow/airflow.qmd
+            text: Airflow
+          - href: workflow/kubeflow.qmd
+            text: Kubeflow
 
-      - text: Omics Workflows
+      - text: Omics
         icon: diagram-3
         menu:
           - text: RNA-Seq (with replicates)
-          - href: workflows/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
+          - href: omics/rnaseq-with-replicates-limma/rnaseq-with-replicates-limma.qmd
             text: rnaseq-with-replicates-limma
-          - href: workflows/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
+          - href: omics/rnaseq-with-replicates-deseq2/rnaseq-with-replicates-deseq2.qmd
             text: rnaseq-with-replicates-deseq2
 
           - text: RNA-Seq (no replicates)
-          - href: workflows/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
+          - href: omics/rnaseq-no-replicates-edger/rnaseq-no-replicates-edger.qmd
             text: rnaseq-no-replicates-edger
 
           - text: miRNA
-          - href: workflows/mirna-quant-predict/mirna-quant-predict.qmd
+          - href: omics/mirna-quant-predict/mirna-quant-predict.qmd
             text: mirna-quant-predict
 
           - text: Multi-omics
-          - href: workflows/multiomics-diablo/multiomics-diablo.qmd
+          - href: omics/multiomics-diablo/multiomics-diablo.qmd
             text: multiomics-diablo
-          - href: workflows/multiomics-mint/multiomics-mint.qmd
+          - href: omics/multiomics-mint/multiomics-mint.qmd
             text: multiomics-mint
 
-      - text: Statistical Methods
+      - text: Stats
         icon: graph-up
         menu:
           - text: Survival Analysis
-          - href: workflows/survival-analysis-r/survival-analysis-r.qmd
+          - href: stats/survival-analysis-r/survival-analysis-r.qmd
             text: survival analysis
 
-      - text: Machine Learning & AI
+      - text: AI
         icon: cpu-fill
+        menu:
+          - text: Coming Soon
 
       - text: Reports
         icon: file-earmark-bar-graph
