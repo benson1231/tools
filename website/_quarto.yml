@@ -13,6 +13,7 @@ format:
   html:
     css: styles/styles.css
     include-in-header: styles/goatcounter.html
+    include-after-body: styles/goatcounter.js
     theme: 
       light: flatly
       dark: darkly
@@ -35,7 +36,9 @@ website:
   site-url: "https://benson1231.github.io/tools/"
   favicon: assets/logo.svg
   back-to-top-navigation: true
-  page-footer: "Copyright 2026, benson1231"
+  page-footer: |
+    Copyright 2026, benson1231  
+    👀 Total Views: <span id="gc-total">Loading...</span>
   navbar:
     pinned: true
     left:
